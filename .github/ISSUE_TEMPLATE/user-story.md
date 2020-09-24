@@ -2,7 +2,7 @@
 name: User Story
 about: Short descriptions of a small piece of desired functionality, written in the
   user’s language.
-title: ''
+title: "[USER STORY]"
 labels: User Story
 assignees: ''
 
