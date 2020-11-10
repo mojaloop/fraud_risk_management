@@ -1,6 +1,6 @@
 This is a sample Producer, used to upload any file in the /watch folder to the configured Kafka endpoint. 
 When running, it also starts a message window where you can input any raw text, which will also be uploaded 
-to the kafka endpooint. 
+to the kafka endpoint. 
 
 To get going:
 Run "npm i"
