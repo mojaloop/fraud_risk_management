@@ -33,7 +33,8 @@ export abstract class Consumer {
             );
 
             consumer.on('message', async (message: kafka.Message) => {
-                return this.HandleMessage(message, redis);
+                console.time('message');
+                return this.HandleMessage(message, redis).then(() => console.timeEnd('message'));
             }).commit((error: any, data: any) => {
                 if (error)
                     this.log('Error while committing message: ' + error);
@@ -55,6 +56,7 @@ export abstract class Consumer {
             else {
                 this.HandleNotBlock(msisdn);
             }
+            this.log('Message Processed ' + Date.UTC);
         });
     }
 

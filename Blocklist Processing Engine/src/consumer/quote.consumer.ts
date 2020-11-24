@@ -1,4 +1,5 @@
 import { Message } from "kafka-node";
+import { resolve } from "path";
 import { Consumer } from "../base-classes/consumer";
 import { Redis } from "../redis/redis";
 
@@ -10,19 +11,24 @@ export class QuoteConsumer extends Consumer {
         let promises: Promise<any>[] = [];
 
         msisdns.forEach(msisdn => {
-            promises.push(new Promise(() => {
+            promises.push(new Promise(resolve => {
                 redis.IsBlocked(msisdn).then(isBlocked => {
                     if (isBlocked != 0) {
                         this.HandleBlock(msisdn);
+                        resolve();
                     }
                     else {
                         this.HandleNotBlock(msisdn);
+                        resolve();
                     }
                 });
             }));
         });
-
-        Promise.all(promises).then((values) => { });
+        console.time('redis');
+        await Promise.all(promises).then((values) => {
+            console.timeEnd('redis');
+            this.log('Message Processed ' + (new Date().toISOString()))
+        });
     }
 
     GetMSISDNs(message: string): string[] {
