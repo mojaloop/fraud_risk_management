@@ -6,5 +6,5 @@ interface kafkaType {
 }
 
 export {
-    kafkaType,
+  kafkaType,
 }
