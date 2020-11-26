@@ -9,6 +9,7 @@ dotenv({
 const configuration: configObj = {
     kafkaEndpoint: <string>process.env.KAFKA_ENDPOINT,
     topics: (<any>process.env.TOPICS).split(','),
+    resultTopic: <string>process.env.RESULT_TOPIC,
     partition: parseInt(<any>process.env.PARTITION),
     autoCommit: <any>process.env.AUTO_COMMIT,
     redisHost: <string>process.env.REDIS_HOST,
@@ -19,6 +20,7 @@ const configuration: configObj = {
 interface configObj {
     kafkaEndpoint: string;
     topics: string[],
+    resultTopic: string,
     partition: number,
     autoCommit: boolean,
     redisHost: string,

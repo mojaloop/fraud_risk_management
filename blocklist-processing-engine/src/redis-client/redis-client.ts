@@ -11,7 +11,7 @@ const client: RedisClient = new RedisClient({
 /**
  * Clears Redis, then loads sample data from file, then publishes all to Redis.
  */
-const initialize = async () => {
+const initializeRedis = async () => {
     client.flushall();
     let sampleData: string[] = await loadData();
     await block(sampleData);
@@ -22,7 +22,7 @@ const initialize = async () => {
  */
 const loadData = (): Promise<string[]> => {
     return new Promise(resolve => {
-        readFile('./src/data/Blocked Ghana numbers.txt', (error, data) => {
+        readFile('./src/data/BlockedDataNumbers.txt', (error, data) => {
             if (error) {
                 console.log('Error while populating sample data with message: \r\n' + error);
                 resolve([]);
@@ -93,7 +93,7 @@ const isBlocked = (msisdn: string): Promise<number> => {
 }
 
 export {
-    initialize,
+    initializeRedis,
     isBlocked,
     block
 }
