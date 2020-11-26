@@ -4,7 +4,7 @@ import { log, sanitizeNumber } from '../helper';
 
 const getMSISDN = (message: string): string => {
     // TODO parse message as json and get the msisdn
-    let msisdn = sanitizeNumber(message);
+    const msisdn = sanitizeNumber(message);
     return msisdn;
 }
 

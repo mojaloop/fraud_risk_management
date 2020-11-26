@@ -13,7 +13,7 @@ const client: RedisClient = new RedisClient({
  */
 const initializeRedis = async () => {
     client.flushall();
-    let sampleData: string[] = await loadData();
+    const sampleData: string[] = await loadData();
     await block(sampleData);
 }
 
@@ -29,7 +29,7 @@ const loadData = (): Promise<string[]> => {
             }
             else {
                 var fileData = data.toString();
-                let sampleData = fileData.split('\r\n');
+                const sampleData = fileData.split('\r\n');
                 console.log('Sample data read');
                 resolve(sampleData);
             }

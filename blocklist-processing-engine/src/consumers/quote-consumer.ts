@@ -21,7 +21,7 @@ const handleMessage = async (message: kafka.Message, topic: string, handleBlock:
 
 const getMSISDNs = (message: string): string[] => {
     let toReturn: string[] = [];
-    let jMessage = JSON.parse(message);
+    const jMessage = JSON.parse(message);
     toReturn.push(sanitizeNumber(jMessage.payer.partyIdInfo.partyIdentifier));
     toReturn.push(sanitizeNumber(jMessage.payee.partyIdInfo.partyIdentifier));
     return toReturn;

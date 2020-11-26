@@ -22,11 +22,11 @@ const initializeConsumer = () => {
 const createKafkaConsumer = (topic: string, configuration: configObj) => {
     log('Starting Blocklist Processing Engine...', topic);
     try {
-        let consumer = createConsumer(topic, configuration);
-        let handleMessage = getMessageHandler(topic); //: (message: kafka.Message, topic: string) => Promise<void>;
+        const consumer = createConsumer(topic, configuration);
+        const handleMessage = getMessageHandler(topic); //: (message: kafka.Message, topic: string) => Promise<void>;
 
         consumer.on('message', async (message: kafka.Message) => {
-            handleMessage(message, topic, handleBlock);
+            await handleMessage(message, topic, handleBlock);
         });//TODO figure out what commit does and if we should be doing it. 
 
         log('Started Blocklist Processing Engine.', topic);

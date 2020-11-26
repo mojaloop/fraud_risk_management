@@ -1,11 +1,10 @@
 import * as kafka from 'kafka-node';
 import { isBlocked } from "../redis-client/redis-client";
 import { log, sanitizeNumber } from '../helper';
-import { configObj } from '../config/config';
 
 const getMSISDN = (message: string): string => {
     // TODO parse message as json and get the msisdn
-    let msisdn = sanitizeNumber(message);
+    const msisdn = sanitizeNumber(message);
     return msisdn;
 }
 
