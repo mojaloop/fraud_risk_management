@@ -41,11 +41,6 @@ const getMessageHandler = (topic: string) => {
 };
 
 const handleBlock = (msisdn: string, topic: string, blocked: number) => {
-  if (blocked !== 0) {
-    log(`${msisdn} is blocked!`, topic);
-  } else {
-    log(`${msisdn} is not blocked.`, topic);
-  }
   const result = `[BLOCKLIST][${topic}] MSISDN: ${msisdn} ${blocked !== 0 ? 'is blocked' : 'is not blocked'}`;
   return new Promise((resolve) => {
     producer.send(
@@ -74,11 +69,11 @@ const createKafkaConsumer = (topic: string, config: ConfigObj) => {
 
     consumer.on('message', async (message: kafka.Message) => {
       await handleMessage(message, topic, handleBlock);
-    });// TODO figure out what commit does and if we should be doing it.
+    });
 
     log('Started Blocklist Processing Engine.', topic);
   } catch (e) {
-    log(`Unhandled exception with details: ${e}`, topic);
+    log(`Unhandled exception while starting consumer with details: ${e}`, topic);
   }
 };
 

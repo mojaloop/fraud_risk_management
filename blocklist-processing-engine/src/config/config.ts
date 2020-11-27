@@ -15,6 +15,7 @@ const configuration: ConfigObj = {
   redisHost: <string>process.env.REDIS_HOST,
   redisPort: <any>process.env.REDIS_PORT,
   redisDB: <any>process.env.REDIS_DB,
+  logTopic: <string> process.env.LOG_TOPIC,
 };
 
 interface ConfigObj {
@@ -25,7 +26,8 @@ interface ConfigObj {
   autoCommit: boolean,
   redisHost: string,
   redisPort: number,
-  redisDB: number
+  redisDB: number,
+  logTopic:string
 }
 
 export { configuration, ConfigObj };

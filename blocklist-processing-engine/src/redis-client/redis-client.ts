@@ -1,6 +1,7 @@
 import { RedisClient } from 'redis';
 import { readFile } from 'fs';
 import { configuration } from '../config/config';
+import { log } from '../helper';
 
 const client: RedisClient = new RedisClient({
   db: configuration.redisDB,
@@ -14,12 +15,12 @@ const client: RedisClient = new RedisClient({
 const loadData = (): Promise<string[]> => new Promise((resolve) => {
   readFile('./src/data/BlockedDataNumbers.txt', (error, data) => {
     if (error) {
-      console.log(`Error while populating sample data with message: \r\n${error}`);
+      log(`Error while populating sample data with message: \r\n${error}`, 'REDIS');
       resolve([]);
     } else {
       const fileData = data.toString();
       const sampleData = fileData.split('\r\n');
-      console.log('Sample data read');
+      log('Sample data read', 'REDIS');
       resolve(sampleData);
     }
   });
@@ -31,11 +32,11 @@ const loadData = (): Promise<string[]> => new Promise((resolve) => {
  */
 const block = (msisdn: string | string[]): Promise<boolean> => new Promise((resolve) => client.SADD('Blocklist', msisdn, (err, reply) => {
   if (err) {
-    console.log(`Error while updating Blocklist with message: \r\n${err}`);
+    log(`Error while updating Blocklist with message: \r\n${err}`, 'REDIS');
     resolve(false);
   }
   if (reply) {
-    console.log(`Redis blocklist updated with ${reply} keys`);
+    log(`Redis blocklist updated with ${reply} keys`, 'REDIS');
     resolve(true);
   }
 }));
@@ -58,7 +59,7 @@ const isBlocked = (msisdn: string): Promise<number> => new Promise((resolve) => 
   // Determine if a given value is a member of a set.
   client.SISMEMBER('Blocklist', msisdn, (err, reply) => {
     if (err) {
-      console.log(`Error while getting Blocklist from Redis with message: \r\n${err}`);
+      log(`Error while getting Blocklist from Redis with message: \r\n${err}`, 'REDIS');
       resolve(0);
     } else {
       resolve(reply);

@@ -1,3 +1,6 @@
+import { KafkaClient, Producer } from 'kafka-node';
+import { configuration } from './config/config';
+
 /**
  * Makes sure the MSISDN starts with +233
  */
@@ -12,10 +15,22 @@ const sanitizeNumber = (number: string): string => {
   return toReturn;
 };
 
-/** Logs the provided message */
-const log = (message: string, topic: string) => {
-  // TODO find a proper logger
-  console.log(`[${topic}] ${message}`);
+let producer: Producer;
+const initializeLoggingProducer = () => {
+  producer = new Producer(new KafkaClient({
+    kafkaHost: configuration.kafkaEndpoint,
+  }), {});
+  return new Promise((resolve) => {
+    producer.on('ready', () => resolve());
+  });
 };
 
-export { log, sanitizeNumber };
+/** Logs the provided message */
+const log = (message: string, topic: string) => new Promise((resolver) => {
+  producer.send([{
+    topic: configuration.logTopic,
+    messages: [`[${topic}]${message}`],
+    partition: configuration.partition,
+  }], () => resolver());
+});
+export { log, sanitizeNumber, initializeLoggingProducer };
