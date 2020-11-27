@@ -13,7 +13,7 @@ const initializeProducer = () => {
     kafkaHost: configuration.kafkaEndpoint,
   }), {});
   return new Promise((resolve) => {
-    producer.on('ready', () => resolve());
+    producer.on('ready', () => resolve(undefined));
   });
 };
 
@@ -51,7 +51,7 @@ const handleBlock = (msisdn: string, topic: string, blocked: number, txID: strin
       }],
       (err) => {
         if (err) { log(`Error while sending result of blocking with message: \r\n${err}`, topic); }
-        resolve();
+        resolve(undefined);
       },
     );
   });
