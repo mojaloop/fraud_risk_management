@@ -1,10 +1,11 @@
-interface kafkaType {
-    topic: string,
-    partition: number,
-    autoCommit: boolean,
-    kafkaEndpoint: string,
+interface KafkaType {
+  topic: string,
+  partition: number,
+  autoCommit: boolean,
+  kafkaEndpoint: string,
 }
 
 export {
-  kafkaType,
-}
+  // eslint-disable-next-line import/prefer-default-export
+  KafkaType,
+};
