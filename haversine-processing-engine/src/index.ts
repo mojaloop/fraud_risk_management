@@ -1,7 +1,20 @@
-import { log } from './utils';
 import config from './config';
-import createKafkaClient from './consumer';
+import {
+  log,
+  createKafkaClient,
+  handleKafkaConsumer,
+} from './utils';
 
 log('Starting Haversine Engine');
 
-createKafkaClient(config);
+const startKafkaListener = () => {
+  try {
+    const client = createKafkaClient(config);
+    handleKafkaConsumer(config, client);
+  } catch (e) {
+    log(e);
+  }
+};
+
+startKafkaListener();
+log('Engine started');

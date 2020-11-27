@@ -1,9 +1,16 @@
 import haversine from './haversine';
-
-// eslint-disable-next-line no-console
-const log = (data: any) => console.log(`${data}`);
+import { createKafkaConsumer, handleKafkaConsumer } from './consumer';
+import { log } from './helpers';
+import { createKafkaClient } from './kafka-helper';
+import { createProducer, createMessage, handleProducer} from './producer';
 
 export {
   log,
   haversine,
+  createKafkaClient,
+  createKafkaConsumer,
+  handleKafkaConsumer,
+  createProducer,
+  createMessage,
+  handleProducer,
 };

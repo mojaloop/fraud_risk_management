@@ -5,7 +5,13 @@ interface KafkaType {
   kafkaEndpoint: string,
 }
 
+interface KafkaMessage {
+  topic: string,
+  partition: number,
+  messages: any,
+}
+
 export {
-  // eslint-disable-next-line import/prefer-default-export
   KafkaType,
+  KafkaMessage,
 };
