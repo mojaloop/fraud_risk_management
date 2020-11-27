@@ -15,19 +15,19 @@ const sanitizeNumber = (number: string): string => {
   return toReturn;
 };
 
-let producer: Producer;
+let logProducer: Producer;
 const initializeLoggingProducer = () => {
-  producer = new Producer(new KafkaClient({
+  logProducer = new Producer(new KafkaClient({
     kafkaHost: configuration.kafkaEndpoint,
   }), {});
   return new Promise((resolve) => {
-    producer.on('ready', () => resolve());
+    logProducer.on('ready', () => resolve());
   });
 };
 
 /** Logs the provided message */
 const log = (message: string, topic: string) => new Promise((resolver) => {
-  producer.send([{
+  logProducer.send([{
     topic: configuration.logTopic,
     messages: [`[${topic}]${message}`],
     partition: configuration.partition,

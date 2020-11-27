@@ -5,9 +5,9 @@ import { initializeLoggingProducer } from './helper';
 import { initializeRedis } from './redis-client/redis-client';
 
 const start = async () => {
+  await initializeLoggingProducer();
   await initializeRedis();
   await initializeProducer();
-  await initializeLoggingProducer();
   configuration.topics.forEach((topic) => {
     createKafkaConsumer(topic, configuration);
   });

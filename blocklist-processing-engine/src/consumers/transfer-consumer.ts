@@ -11,11 +11,11 @@ const getMSISDN = (message: string): string => {
 const handleTransferMessage = async (
   message: kafka.Message,
   topic: string,
-  handleBlock: (msisdn: string, topic: string, isBlocked: number) => any,
+  handleBlock: (msisdn: string, topic: string, isBlocked: number, txID: string) => any,
 ) => {
   const msisdn = getMSISDN(message.value.toString());
   const blocked = await isBlocked(msisdn);
-  await handleBlock(msisdn, topic, blocked);
+  await handleBlock(msisdn, topic, blocked, 'N/A');
 };
 
 export default handleTransferMessage;
