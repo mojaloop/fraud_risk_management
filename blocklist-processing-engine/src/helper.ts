@@ -21,7 +21,7 @@ const initializeLoggingProducer = () => {
     kafkaHost: configuration.kafkaEndpoint,
   }), {});
   return new Promise((resolve) => {
-    logProducer.on('ready', () => resolve());
+    logProducer.on('ready', () => resolve(undefined));
   });
 };
 
@@ -31,6 +31,6 @@ const log = (message: string, topic: string) => new Promise((resolver) => {
     topic: configuration.logTopic,
     messages: [`[${topic}]${message}`],
     partition: configuration.partition,
-  }], () => resolver());
+  }], () => resolver(undefined));
 });
 export { log, sanitizeNumber, initializeLoggingProducer };

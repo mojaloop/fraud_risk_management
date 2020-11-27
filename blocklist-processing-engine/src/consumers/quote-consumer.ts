@@ -20,7 +20,7 @@ const handleQuoteMessage = async (
     promises.push(new Promise(async (resolve) => {
       const blocked = await isBlocked(msisdn);
       await handleBlock(msisdn, topic, blocked, jMessage.transactionId);
-      resolve();
+      resolve(undefined);
     }));
   });
   await Promise.all(promises);
