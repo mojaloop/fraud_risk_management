@@ -1,28 +1,15 @@
 {
-    "parser": "@typescript-eslint/parser",
-    "plugins": [
-      "@typescript-eslint"
-    ],
-    "extends": [
-      "eslint:recommended",
-      "plugin:@typescript-eslint/eslint-recommended",
-      "plugin:@typescript-eslint/recommended"
-    ],
-    "settings": {
-      "import/resolver": {
-        "node": {
-          "extensions": [".ts", ".tsx"]
-        }
-      }
-    },
-    "env": {
-      "node": true
-    },
-    "rules": {
-      "indent": [
-        "error",
-        2,
-        { "SwitchCase": 1 }
-      ]
-    }
+  "parser": "@typescript-eslint/parser",
+  "extends": [
+    "airbnb-typescript/base"
+  ],
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  },
+  "rules": {
+    "linebreak-style": [
+      "error",
+      "windows"
+    ] // changes the file to CRLF
   }
+}
