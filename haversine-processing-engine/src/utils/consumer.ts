@@ -17,6 +17,7 @@ const handleMessage = async (
     firstTransactionTime,
     secondTransactionTime,
     maxSpeed,
+    requestId,
   } = parsedData;
   log(`REQUEST: ${JSON.stringify(parsedData)}`);
   const haversineResult = haversine(
@@ -27,7 +28,7 @@ const handleMessage = async (
     maxSpeed,
   );
 
-  const logMessage = `[HAVERSINE-RESULT] ${lastLocation} and ${previousLocation} is ${haversineResult}}`;
+  const logMessage = `[HAVERSINE-RESULT] haversine for ${requestId} is ${haversineResult}}`;
   const payload = createMessage(`${config.topic}-result`, config.partition, logMessage);
   log(`RESPONSE: ${JSON.stringify(payload)}`);
   handleProducer(producer, payload);

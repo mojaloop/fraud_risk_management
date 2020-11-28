@@ -21,11 +21,14 @@ const distance = (location1: number[], location2: number[], useMiles = false): n
 const passFail = (
   firstLocation: number[],
   secondLocation: number[],
-  firstTransaction: number,
-  secondTransaction: number,
+  firstTransaction: string,
+  secondTransaction: string,
   maxSpeed: number,
 ): boolean => {
-  const elapsedTime: number = (secondTransaction - firstTransaction) / (1000); // convert to seconds
+  const firstTransactionInt = new Date(firstTransaction).getTime();
+  const secondTransactionInt = new Date(secondTransaction).getTime();
+  const elapsedTime: number = (secondTransactionInt - firstTransactionInt)
+    / (1000); // convert to seconds
   const transactionDistance: number = distance(firstLocation, secondLocation, false);
   const speed: number = transactionDistance / elapsedTime;
   if (speed > maxSpeed) {
