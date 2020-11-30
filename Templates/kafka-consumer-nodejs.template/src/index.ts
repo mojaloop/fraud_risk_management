@@ -1,4 +1,13 @@
-import { Consumer } from "./consumer/consumer";
+import { configuration } from './config/config';
+import { initializeProducer, createKafkaConsumer } from './consumers';
+import { initializeLoggingProducer } from './helper';
 
-let consumer = new Consumer();
-consumer.Start();
+const start = async () => {
+  await initializeLoggingProducer();
+  await initializeProducer();
+  configuration.topics.forEach((topic) => {
+    createKafkaConsumer(topic, configuration);
+  });
+};
+
+start();
