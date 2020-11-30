@@ -16,15 +16,6 @@ RUN apk del build-dependencies
 COPY tsconfig.json /opt/haversine-processing-engine/
 COPY src /opt/haversine-processing-engine/src
 
-FROM node:12.16.1-alpine
-
-WORKDIR /opt/haversine-processing-engine
-
-# Create a non-root user: ml-user
-RUN adduser -D ml-user 
-USER ml-user
-
-COPY --chown=ml-user --from=builder /opt/haversine-processing-engine .
 RUN npm run build
 
 CMD ["node", "build/index.js"]
