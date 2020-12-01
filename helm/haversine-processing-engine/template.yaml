@@ -1,0 +1,67 @@
+---
+# Source: haversine-processing-engine/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: test-haversine-processing-engine
+  labels:
+    helm.sh/chart: haversine-processing-engine-0.1.0
+    app.kubernetes.io/name: haversine-processing-engine
+    app.kubernetes.io/instance: test
+    app.kubernetes.io/version: "0.1.0"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: ClusterIP
+  ports:
+    - port: 
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: haversine-processing-engine
+    app.kubernetes.io/instance: test
+---
+# Source: haversine-processing-engine/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test-haversine-processing-engine
+  labels:
+    helm.sh/chart: haversine-processing-engine-0.1.0
+    app.kubernetes.io/name: haversine-processing-engine
+    app.kubernetes.io/instance: test
+    app.kubernetes.io/version: "0.1.0"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: haversine-processing-engine
+      app.kubernetes.io/instance: test
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: haversine-processing-engine
+        app.kubernetes.io/instance: test
+    spec:
+      serviceAccountName: default
+      securityContext:
+        {}
+      containers:
+        - name: haversine-processing-engine
+          securityContext:
+            {}
+          image: "mojaloop/haversine-processing-engine:0.1.0"
+          imagePullPolicy: always
+          ports:
+          env:
+            - name: TOPIC
+              value: "example-topic"
+            - name: KAFKA_ENDPOINT
+              value: "localhost:9090"
+            - name: PARTITION
+              value: "0"
+            - name: AUTO_COMMIT
+              value: "false"
+          resources:
+            {}
