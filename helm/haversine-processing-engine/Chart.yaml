@@ -1,0 +1,12 @@
+apiVersion: v1
+description: Haversine Processing Engine Helm chart for Kubernetes
+name: haversine-processing-engine
+version: 0.1.0
+appVersion: "0.1.0"
+home: http://mojaloop.io
+icon: http://mojaloop.io/images/logo.png
+sources:
+  - https://github.com/mojaloop/fraud_risk_management/helm
+maintainers:
+  - name: Aaron Reynoza
+    email: aaron.alejandro.reynoza@gmail.com
