@@ -8,14 +8,16 @@ dotenv({
 
 const configuration: ConfigObj = {
   redisHost: <string>process.env.REDIS_HOST,
-  redisPort: <any>process.env.REDIS_PORT,
-  redisDB: <any>process.env.REDIS_DB,
+  redisPort: <number>parseInt(process.env.REDIS_PORT!, 10),
+  redisDB: <number>parseInt(process.env.REDIS_DB!, 10),
+  loadFromLocal: <boolean>(process.env.LOAD_FROM_FILE === 'true'),
 };
 
 interface ConfigObj {
   redisHost: string,
   redisPort: number,
   redisDB: number,
+  loadFromLocal: boolean,
 }
 
 export { configuration, ConfigObj };
