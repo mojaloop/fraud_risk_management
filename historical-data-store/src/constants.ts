@@ -40,5 +40,21 @@ interface HistoricalDataType {
   TransactionAuthenticationType: string,
 }
 
+interface AzureType {
+  azureAccount: string,
+  azureKey: string,
+  azureShare: string,
+  azureDirectory: string,
+}
+
+interface ConfigType {
+  redisHost: string,
+  redisPort: number,
+  redisDB: number,
+  reloadTime: number,
+  loadFromLocal: boolean,
+  azureConfig: AzureType,
+}
+
 // eslint-disable-next-line import/prefer-default-export
-export { HistoricalDataType };
+export { HistoricalDataType, ConfigType, AzureType };
