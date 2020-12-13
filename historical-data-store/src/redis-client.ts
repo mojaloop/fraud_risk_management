@@ -3,6 +3,7 @@ import csv from 'csvtojson';
 import { ShareDirectoryClient, ShareServiceClient, StorageSharedKeyCredential } from '@azure/storage-file-share';
 import { HistoricalDataType, AzureType } from './constants';
 import { createDirectory, listFiles } from './azure-client';
+import { log } from './helper';
 
 // A helper method used to read a Node.js readable stream into a Buffer
 async function streamToBuffer(readableStream: NodeJS.ReadableStream): Promise<Buffer> {
@@ -17,8 +18,6 @@ async function streamToBuffer(readableStream: NodeJS.ReadableStream): Promise<Bu
     readableStream.on('error', reject);
   });
 }
-
-const log = (data) => console.log(data);
 
 /**
  * Clears Redis, then loads sample data from file, then publishes all to Redis.
@@ -122,7 +121,7 @@ const loadData = async (
   azureConfig: AzureType,
 ): Promise<HistoricalDataType[] | boolean> => {
   if (loadFromLocal) {
-    return csv().fromFile('./src/data/historical-data-19283483.csv');
+    return csv().fromFile('./src/data/historical-data-1607569708.csv');
   }
   const {
     azureAccount,

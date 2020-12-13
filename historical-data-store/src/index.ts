@@ -5,6 +5,7 @@ import {
   logAllkeys,
 } from './redis-client';
 import { configuration } from './config';
+import { log } from './helper';
 
 const {
   redisDB,
@@ -27,7 +28,7 @@ const init = async () => {
         await insertHistoricalData(client, historicalData);
         await logAllkeys(client);
       } catch (e) {
-        console.error('unable to insert data into redis store', e);
+        log(`unable to insert data into redis store ${e}`);
       }
     }
   }, reloadTime);

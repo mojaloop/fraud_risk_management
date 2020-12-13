@@ -1,5 +1,5 @@
 import { ShareServiceClient, ShareDirectoryClient } from '@azure/storage-file-share';
-import { stringify } from 'querystring';
+import { log } from './helper';
 
 const createDirectory = async (
   serviceClient: ShareServiceClient,
@@ -10,27 +10,13 @@ const createDirectory = async (
   const directoryClient = shareClient.getDirectoryClient(azureDirectory);
   try {
     await directoryClient.create();
-    console.log(`Share ${azureShare} create succesfully`);
+    log(`Share ${azureShare} create succesfully`);
   } catch (e) {
     if (!e.details.message.includes('The specified resource already exists')) {
-      console.log(e.details.message);
+      log(e.details.message);
     }
   }
   return directoryClient;
-};
-
-const createFile = async (directoryClient: ShareDirectoryClient) => {
-  const content = 'Hello World!你好';
-  // Get its length in bytes.
-  const contentByteLength = Buffer.byteLength(content);
-  const fileName = `newfile ${new Date().getTime()}`;
-  const fileClient = directoryClient.getFileClient(fileName);
-  try {
-    await fileClient.create(contentByteLength);
-    console.log(`Create file ${fileName} successfully`);
-  } catch (e) {
-    console.log(e);
-  }
 };
 
 const listFiles = async (directoryClient: ShareDirectoryClient): Promise<string[]> => {
@@ -44,4 +30,4 @@ const listFiles = async (directoryClient: ShareDirectoryClient): Promise<string[
   return fileNames;
 };
 
-export { createDirectory, listFiles, createFile };
+export { createDirectory, listFiles };
