@@ -1,8 +1,8 @@
 import * as kafka from 'kafka-node';
+import { RedisClient } from 'redis';
 import { ConfigObj } from './config/config';
 import { log } from './helper';
 import handleQuoteMessage from './quote-consumer';
-import { RedisClient } from 'redis';
 
 const createConsumer = (topic: string, config: ConfigObj) => new kafka.Consumer(
   new kafka.KafkaClient({ kafkaHost: config.kafkaEndpoint, autoConnect: true }),

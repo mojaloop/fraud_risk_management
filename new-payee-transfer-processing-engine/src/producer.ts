@@ -14,7 +14,7 @@ const initializeProducer = () => {
 };
 
 const publish = (topic: string, message: string) => {
-  const result = `[NewPayeeIndividual][${topic}]${message}`;
+  const result = `[NewILPTransaction][${topic}]${message}`;
   log(result, topic);
   return new Promise((resolve) => {
     producer.send(

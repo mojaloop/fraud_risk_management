@@ -14,12 +14,16 @@ const handleQuoteMessage = async (
   await log(`Handling message with TXID ${txID}`, topic);
   const payerPartyIdInfo = jMessage.payer.partyIdInfo;
   const payeePartyIdInfo = jMessage.payee.partyIdInfo;
+
   const sourceILP = `g.tz.${payerPartyIdInfo.fspId}.msisdn.${payerPartyIdInfo.partyIdentifier}`;
   const targetILP = `g.tz.${payeePartyIdInfo.fspId}.msisdn.${payeePartyIdInfo.partyIdentifier}`;
   const ILPList = await getILPList(redisClient, sourceILP);
-  console.log(sourceILP, targetILP);
-  console.log(JSON.parse(ILPList));
-  // await publish(topic, `[${PartyIsIndividual}] Transaction: ${txID} is ${(PartyIsIndividual) ? '' : 'not '}an Individual`);
+
+  const sourceILPTransactions = JSON.parse(ILPList);
+  const ILPCount = sourceILPTransactions
+    .filter((transaction: any) => targetILP !== transaction.ILPDestinationAccountAddress);
+  const isNewILP = ILPCount.length > 0;
+  await publish(topic, `[${isNewILP}] Transaction: ${txID} from ${sourceILP} to ${targetILP} is ${(isNewILP) ? '' : 'not '} a new ILP transaction`);
 };
 
 export default handleQuoteMessage;
