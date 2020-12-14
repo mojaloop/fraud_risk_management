@@ -16,23 +16,6 @@ const initializeRedis = async () => {
 };
 
 /**
- * Checks whether or not the provided value is in the redis set
- * or not.
- * @param value the value to check
- */
-const isInSet = (value: string): Promise<number> => new Promise((resolve) => {
-  // Determine if a given value is a member of a set.
-  client.SISMEMBER('SetName', value, (err, reply) => {
-    if (err) {
-      log(`Error from Redis with message: \r\n${err}`, 'REDIS');
-      resolve(0);
-    } else {
-      resolve(reply);
-    }
-  });
-});
-
-/**
  * Get the value of a key.
  * @param key the key to check
  */
@@ -50,6 +33,5 @@ const get = (key: string): Promise<string> => new Promise((resolve) => {
 
 export {
   initializeRedis,
-  isInSet,
   get,
 };

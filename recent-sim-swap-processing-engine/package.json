@@ -1,7 +1,7 @@
 {
-  "name": "blocklist-processing-engine",
+  "name": "recent-sim-swap-processing-engine",
   "version": "1.0.0",
-  "description": "This is a Blocklist Processing Engine. It will start a client listening to the configured Kafka endpoint, then check the MSISDN for all the different transactions on a Redis Blocklist, and then output the result to Tremor (block or no-block).",
+  "description": "This processing engine will check if the Payer's current Quote transaction has the same ICCID than the last transaction processed. The engine will subscribe to configured Kafka topics, connect to a Redis server to check the last transaction, then post the result to a configured Kafka topic.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

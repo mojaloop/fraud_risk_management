@@ -1,5 +1,6 @@
-This is a NodeJS template that will subscribe to configured Kafka topics, connect to a Redis server to check if a value is in a set
-and post the result of the "template processing" to a configured Kafka topic.
+This processing engine will check if the Payer's current Quote transaction has the same ICCID than the last transaction processed.
+The engine will subscribe to configured Kafka topics, connect to a Redis server to check the last transaction, then post the 
+result to a configured Kafka topic.
 
 To get going:
 Run "npm i"
