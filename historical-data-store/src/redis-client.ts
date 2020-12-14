@@ -39,9 +39,19 @@ const initializeRedis = async (
   return client;
 };
 
-const insertHistoricalData = async (client: RedisClient, data: any) => {
-  data.forEach((transfer) => {
-    client.append(transfer.ILPSourceAccountAddress, JSON.stringify(transfer));
+const insertHistoricalData = async (client: RedisClient, transfers) => {
+  let ILPS = transfers.reduce((ILPAccumulator, transfer) => {
+    const ILPNames: string[] = Object.keys(ILPAccumulator);
+    if (ILPNames.includes(transfer.ILPSourceAccountAddress)) {
+      ILPAccumulator[transfer.ILPSourceAccountAddress].push(transfer);
+    } else {
+      ILPAccumulator[transfer.ILPSourceAccountAddress] = [transfer];
+    }
+    return ILPAccumulator;
+  }, {});
+  const names = Object.keys(ILPS);
+  names.forEach((ILP) => {
+    client.set(ILP, JSON.stringify(ILPS[ILP]));
   });
 };
 
