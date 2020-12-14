@@ -15,7 +15,7 @@ const initializeLoggingProducer = () => {
 const log = (message: string, topic: string) => new Promise((resolver) => {
   logProducer.send([{
     topic: configuration.logTopic,
-    messages: [`['RecentSimSwap'][${topic}]${message}`],
+    messages: [`[RecentSimSwap][${topic}]${message}`],
     partition: configuration.partition,
   }], () => resolver(undefined));
 });

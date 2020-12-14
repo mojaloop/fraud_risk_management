@@ -33,16 +33,15 @@ const isInSet = (value: string): Promise<number> => new Promise((resolve) => {
 });
 
 /**
- * Get all fields and values in a hash.
- * @param value the value to check
+ * Get the value of a key.
+ * @param key the key to check
  */
 const get = (key: string): Promise<string> => new Promise((resolve) => {
-// Determine if a given value is a member of a set.
-
+  // Get the value of a key.
   client.GET(key, (err, reply) => {
     if (err) {
       log(`Error from Redis with message: \r\n${err}`, 'REDIS');
-      resolve(undefined);
+      resolve('');
     } else {
       resolve(reply!);
     }

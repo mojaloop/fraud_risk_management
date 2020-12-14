@@ -1,24 +1,27 @@
+/* eslint-disable eqeqeq */
 import * as kafka from 'kafka-node';
 import { log } from '../helper';
 import { publish } from '../producer/producer';
-import { hGetAll } from '../redis-client/redis-client';
+import { get } from '../redis-client/redis-client';
 
 const handleQuoteMessage = async (
   message: kafka.Message,
   topic: string,
 ) => {
   const jMessage = JSON.parse(message.value.toString());
-  const sourceMSIDN: string = `g.tz.${payerPartyIdInfo.fspId}.msisdn.${payerPartyIdInfo.partyIdentifier}`;
-  const currentICCID: string = jMessage.payer.partyIdInfo.ICCID;
   log(`Handling quote message with TXID ${jMessage.transactionId}`, topic);
+  const sourceMSIDN: string = `g.tz.${jMessage.payer.partyIdInfo.fspId}.msisdn.${jMessage.payer.partyIdInfo.partyIdentifier}`;
+  const currentICCID: string = jMessage.payer.partyIdInfo.ICCID;
   // Write required logic here
-  const oldICCID = (await hGetAll(sourceMSIDN));
-  if (oldICCID === undefined
-    || oldICCID[0] === undefined
-    || currentICCID === oldICCID[0]) {
-    publish(topic, `[FALSE] Transaction: ${jMessage.transactionId} passes Recent SIM swap check. `);
+  const oldTransactions = await get(sourceMSIDN);
+  const sourceILPTransactions = JSON.parse(oldTransactions);
+
+  if (sourceILPTransactions == undefined
+    || sourceILPTransactions[0] == undefined
+    || currentICCID === sourceILPTransactions[0].PayerICCID) {
+    publish(topic, `[FALSE] Transaction: ${jMessage.transactionId} passed Recent SIM swap check.`);
   } else {
-    publish(topic, `[TRUE] Transaction: ${jMessage.transactionId} ${sourceMSIDN} is ${(oldICCID) ? '' : 'not'} in set`);
+    publish(topic, `[TRUE] Transaction: ${jMessage.transactionId} failed Recent SIM swap check.`);
   }
 };
 
