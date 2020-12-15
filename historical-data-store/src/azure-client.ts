@@ -5,15 +5,16 @@ const createDirectory = async (
   serviceClient: ShareServiceClient,
   azureShare: string,
   azureDirectory: string,
+  topic: string,
 ): Promise<ShareDirectoryClient> => {
   const shareClient = serviceClient.getShareClient(azureShare);
   const directoryClient = shareClient.getDirectoryClient(azureDirectory);
   try {
     await directoryClient.create();
-    log(`Share ${azureShare} create succesfully`);
+    log(`Share ${azureShare} create succesfully`, topic);
   } catch (e) {
     if (!e.details.message.includes('The specified resource already exists')) {
-      log(e.details.message);
+      log(e.details.message, topic);
     }
   }
   return directoryClient;

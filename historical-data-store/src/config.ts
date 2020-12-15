@@ -13,6 +13,9 @@ const configuration: ConfigType = {
   redisDB: <number>parseInt(process.env.REDIS_DB!, 10),
   loadFromLocal: <boolean>(process.env.LOAD_FROM_FILE === 'true'),
   reloadTime: <number>parseInt(process.env.RELOAD_TIME!, 10),
+  kafkaEndpoint: <string>process.env.KAFKA_ENDPOINT,
+  partition: <number>parseInt(process.env.PARTITION!, 10),
+  logTopic: <string>process.env.LOG_TOPIC,
   azureConfig: {
     azureAccount: <string>process.env.AZURE_ACCOUNT,
     azureKey: <string>process.env.AZURE_KEY,

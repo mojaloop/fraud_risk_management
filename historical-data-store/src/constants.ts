@@ -52,6 +52,9 @@ interface ConfigType {
   redisPort: number,
   redisDB: number,
   reloadTime: number,
+  partition: number,
+  kafkaEndpoint: string,
+  logTopic: string,
   loadFromLocal: boolean,
   azureConfig: AzureType,
 }

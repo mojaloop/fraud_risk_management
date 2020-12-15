@@ -26,7 +26,7 @@ const initializeRedis = async (
   redisHost: string,
   redisPort: number,
   redisDB: number,
-
+  logTopic: string,
 ): Promise<RedisClient> => {
   const client: RedisClient = new RedisClient({
     db: redisDB,
@@ -34,17 +34,18 @@ const initializeRedis = async (
     port: redisPort,
   });
   client.on('error', (error) => {
-    log(error);
+    log(error, logTopic);
   });
   return client;
 };
 
 const insertHistoricalData = async (client: RedisClient, transfers) => {
-  let ILPS = transfers.reduce((ILPAccumulator, transfer) => {
+  const ILPS = transfers.reduce((ILPAccumulator, transfer) => {
     const ILPNames: string[] = Object.keys(ILPAccumulator);
     if (ILPNames.includes(transfer.ILPSourceAccountAddress)) {
       ILPAccumulator[transfer.ILPSourceAccountAddress].push(transfer);
     } else {
+      // eslint-disable-next-line no-param-reassign
       ILPAccumulator[transfer.ILPSourceAccountAddress] = [transfer];
     }
     return ILPAccumulator;
@@ -65,21 +66,24 @@ const insertFilesNames = async (client: RedisClient, data: string[]) => {
   });
 };
 
-const getFilesNames = async (client: RedisClient): Promise<any> => new Promise((resolve) => {
+const getFilesNames = async (
+  client: RedisClient,
+  topic: string,
+): Promise<any> => new Promise((resolve) => {
   client.get('files-names', (err, data) => {
     if (err) {
-      log(`Error while retrieving file names: ${err}`);
+      log(`Error while retrieving file names: ${err}`, topic);
       resolve(0);
     }
     resolve(data);
   });
 });
 
-const logAllkeys = async (client: RedisClient) => client.keys('*', (err, keys) => {
+const logAllkeys = async (client: RedisClient, topic: string) => client.keys('*', (err) => {
   if (err) {
-    log(err);
+    log(err, topic);
   } else {
-    log(`stored keys are: ${JSON.stringify(keys)}`);
+    log('Historical data has being stored.', topic);
   }
 });
 
@@ -112,8 +116,9 @@ const processNewData = async (
   client: RedisClient,
   azureFileNames: string[],
   directoryClient: ShareDirectoryClient,
+  topic: string,
 ) => {
-  log(`found new file: ${historicDataFile}`);
+  log(`found new file: ${historicDataFile}`, topic);
   await cleanStore(client);
   await insertFilesNames(client, azureFileNames);
   const fileClient = directoryClient.getFileClient(historicDataFile!);
@@ -129,6 +134,7 @@ const loadData = async (
   client: RedisClient,
   loadFromLocal: boolean,
   azureConfig: AzureType,
+  topic: string,
 ): Promise<HistoricalDataType[] | boolean> => {
   if (loadFromLocal) {
     return csv().fromFile('./src/data/historical-data-1607569708.csv');
@@ -144,14 +150,14 @@ const loadData = async (
     `https://${azureAccount}.file.core.windows.net`,
     sharedKeyCredential,
   );
-  const directoryClient = await createDirectory(serviceClient, azureShare, azureDirectory);
+  const directoryClient = await createDirectory(serviceClient, azureShare, azureDirectory, topic);
   const azureFileNames = await listFiles(directoryClient);
-  const redisFileNames = await getFilesNames(client);
+  const redisFileNames = await getFilesNames(client, topic);
   const historicDataFile = redisFileNames
     ? findNewFileName(azureFileNames, redisFileNames.split(','))
     : azureFileNames[azureFileNames.length - 1]; // grab the last file uploaded
   if (historicDataFile) {
-    return processNewData(historicDataFile, client, azureFileNames, directoryClient);
+    return processNewData(historicDataFile, client, azureFileNames, directoryClient, topic);
   }
   return false;
 };

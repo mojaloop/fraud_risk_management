@@ -1,8 +1,8 @@
 {
-  "name": "blocklist-processing-engine",
-  "version": "1.0.0",
-  "description": "This is a Blocklist Processing Engine. It will start a client listening to the configured Kafka endpoint, then check the MSISDN for all the different transactions on a Redis Blocklist, and then output the result to Tremor (block or no-block).",
-  "main": "index.js",
+  "name": "historical-data-store",
+  "version": "0.1.0",
+  "description": "This service checks for new CSV files updates in a Azure file storage, then fetches the new file and inserts the historical data for transactions in redis",
+  "main": "src/index.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start:dev": "nodemon",
@@ -30,6 +30,7 @@
     "@types/redis": "^2.8.28",
     "csvtojson": "^2.0.10",
     "dotenv": "^8.2.0",
+    "kafka-node": "^5.0.0",
     "redis": "^3.0.2"
   }
 }
