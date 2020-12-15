@@ -41,7 +41,8 @@ const getMessageHandler = (topic: string) => {
 };
 
 const handleBlock = (msisdn: string, topic: string, blocked: number, txID: string) => {
-  const result = `[BLOCKLIST][${topic}] TransactionID: ${txID} MSISDN: ${msisdn} ${blocked !== 0 ? 'is blocked' : 'is not blocked'}`;
+  const isBlocked = blocked !== 0;
+  const result = `[BLOCKLIST][${topic}][${isBlocked}] TransactionID: ${txID} MSISDN: ${msisdn} ${isBlocked ? 'is blocked' : 'is not blocked'}`;
   return new Promise((resolve) => {
     producer.send(
       [{

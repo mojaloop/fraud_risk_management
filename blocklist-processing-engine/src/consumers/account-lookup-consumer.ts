@@ -4,7 +4,7 @@ import { sanitizeNumber } from '../helper';
 
 const getMSISDN = (message: string): string => {
   const jMessage = JSON.parse(message);
-  return sanitizeNumber(jMessage.accountno);
+  return sanitizeNumber(jMessage.PayerContactNo);
 };
 
 const handleAccountLookupMessage = async (

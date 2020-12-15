@@ -3,8 +3,8 @@ import { isBlocked } from '../redis-client/redis-client';
 import { sanitizeNumber } from '../helper';
 
 const getMSISDNs = (jsonMessage: any): string[] => [
-  sanitizeNumber(jsonMessage.payer.partyIdInfo.partyIdentifier),
-  sanitizeNumber(jsonMessage.payee.partyIdInfo.partyIdentifier),
+  sanitizeNumber(jsonMessage.PayerContactNo),
+  sanitizeNumber(jsonMessage.PayeeContactNo),
 ];
 
 const handleQuoteMessage = async (
@@ -19,7 +19,7 @@ const handleQuoteMessage = async (
   msisdns.forEach((msisdn) => {
     promises.push(new Promise(async (resolve) => {
       const blocked = await isBlocked(msisdn);
-      await handleBlock(msisdn, topic, blocked, jMessage.transactionId);
+      await handleBlock(msisdn, topic, blocked, jMessage.TransactionID);
       resolve(undefined);
     }));
   });
