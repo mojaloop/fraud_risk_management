@@ -4,24 +4,31 @@ import { log } from '../helper';
 import { publish } from '../producer/producer';
 import { get } from '../redis-client/redis-client';
 
+const processResult = async (topic: string, txID:string, success:boolean) => {
+  await publish(topic, `[${success}] Transaction: ${txID} ${success ? 'failed' : 'passed'} Recent SIM swap check.`);
+};
+
 const handleQuoteMessage = async (
   message: kafka.Message,
   topic: string,
 ) => {
   const jMessage = JSON.parse(message.value.toString());
-  log(`Handling quote message with TXID ${jMessage.transactionId}`, topic);
-  const sourceMSIDN: string = `g.tz.${jMessage.payer.partyIdInfo.fspId}.msisdn.${jMessage.payer.partyIdInfo.partyIdentifier}`;
-  const currentICCID: string = jMessage.payer.partyIdInfo.ICCID;
+  log(`Handling quote message with TXID ${jMessage.TransactionID}`, topic);
+  const sourceMSIDN: string = jMessage.ILPSourceAccountAddress;
+  const currentICCID: string = jMessage.PayerICCID;
   // Write required logic here
   const oldTransactions = await get(sourceMSIDN);
   const sourceILPTransactions = JSON.parse(oldTransactions);
 
   if (sourceILPTransactions == undefined
-    || sourceILPTransactions[0] == undefined
-    || currentICCID === sourceILPTransactions[0].PayerICCID) {
-    publish(topic, `[FALSE] Transaction: ${jMessage.transactionId} passed Recent SIM swap check.`);
+    || sourceILPTransactions[0] == undefined) {
+    await processResult(topic, jMessage.TransactionID, false);
+  }
+
+  if (currentICCID === sourceILPTransactions[0].PayerICCID) {
+    await processResult(topic, jMessage.TransactionID, false);
   } else {
-    publish(topic, `[TRUE] Transaction: ${jMessage.transactionId} failed Recent SIM swap check.`);
+    await processResult(topic, jMessage.TransactionID, true);
   }
 };
 
