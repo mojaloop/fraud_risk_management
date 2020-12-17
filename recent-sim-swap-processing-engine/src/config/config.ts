@@ -15,6 +15,7 @@ const configuration: ConfigObj = {
   redisHost: <string>process.env.REDIS_HOST,
   redisPort: <any>process.env.REDIS_PORT,
   redisDB: <any>process.env.REDIS_DB,
+  redisAuth: <string>process.env.REDIS_AUTH,
   logTopic: <string> process.env.LOG_TOPIC,
 };
 
@@ -27,6 +28,7 @@ interface ConfigObj {
   redisHost: string,
   redisPort: number,
   redisDB: number,
+  redisAuth: string,
   logTopic:string
 }
 

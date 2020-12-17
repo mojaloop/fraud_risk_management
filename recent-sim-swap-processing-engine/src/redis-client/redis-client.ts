@@ -6,6 +6,7 @@ const client: RedisClient = new RedisClient({
   db: configuration.redisDB,
   host: configuration.redisHost,
   port: configuration.redisPort,
+  auth_pass: configuration.redisAuth
 });
 
 /**

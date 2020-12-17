@@ -25,6 +25,16 @@ const createKafkaConsumer = (topic: string, config: ConfigObj) => {
       await handleQuoteMessage(message, topic);
     });
 
+    consumer.on('error', (error) => {
+      log(`Error with Kafka consumer:
+      ${error}`, topic);
+      // try {
+      //   consumer.close(() => { });
+      // } catch (error) {
+      // }
+      // createKafkaConsumer(topic, config);
+    });
+
     log('Started Processing Engine.', topic);
   } catch (e) {
     log(`Unhandled exception while starting consumer with details: ${e}`, topic);
