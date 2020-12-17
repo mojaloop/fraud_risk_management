@@ -8,6 +8,7 @@ const initializeLoggingProducer = (kafkaEndpoint: string) => {
   }), {});
   return new Promise((resolve) => {
     logProducer.on('ready', () => resolve(undefined));
+    logProducer.on('error', (error) => resolve(error));
   });
 };
 

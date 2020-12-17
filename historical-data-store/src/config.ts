@@ -11,6 +11,7 @@ const configuration: ConfigType = {
   redisHost: <string>process.env.REDIS_HOST,
   redisPort: <number>parseInt(process.env.REDIS_PORT!, 10),
   redisDB: <number>parseInt(process.env.REDIS_DB!, 10),
+  redisAuth: <string>process.env.REDIS_AUTH,
   loadFromLocal: <boolean>(process.env.LOAD_FROM_FILE === 'true'),
   reloadTime: <number>parseInt(process.env.RELOAD_TIME!, 10),
   kafkaEndpoint: <string>process.env.KAFKA_ENDPOINT,

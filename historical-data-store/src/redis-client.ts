@@ -26,12 +26,14 @@ const initializeRedis = async (
   redisHost: string,
   redisPort: number,
   redisDB: number,
+  redisAuth: string,
   logTopic: string,
 ): Promise<RedisClient> => {
   const client: RedisClient = new RedisClient({
     db: redisDB,
     host: redisHost,
     port: redisPort,
+    auth_pass: redisAuth
   });
   client.on('error', (error) => {
     log(error, logTopic);

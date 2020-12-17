@@ -11,6 +11,7 @@ const {
   redisDB,
   redisHost,
   redisPort,
+  redisAuth,
   loadFromLocal,
   azureConfig,
   reloadTime,
@@ -21,8 +22,8 @@ const {
  */
 const init = async () => {
   const { logTopic, kafkaEndpoint } = configuration;
-  const client = await initializeRedis(redisHost, redisPort, redisDB, logTopic);
   await initializeLoggingProducer(kafkaEndpoint);
+  const client = await initializeRedis(redisHost, redisPort, redisDB, redisAuth, logTopic);
   setInterval(async () => {
     const historicalData = await loadData(client, loadFromLocal, azureConfig, logTopic);
     if (historicalData) {
