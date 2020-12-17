@@ -51,6 +51,7 @@ interface ConfigType {
   redisHost: string,
   redisPort: number,
   redisDB: number,
+  redisAuth: string,
   reloadTime: number,
   partition: number,
   kafkaEndpoint: string,
