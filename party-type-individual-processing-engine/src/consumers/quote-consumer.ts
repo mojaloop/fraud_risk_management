@@ -7,9 +7,9 @@ const handleQuoteMessage = async (
   topic: string,
 ) => {
   const jMessage = JSON.parse(message.value.toString());
-  const txID: string = jMessage.transactionId;
+  const txID: string = jMessage.TransactionID;
   await log(`Handling message with TXID ${txID}`, topic);
-  const { partyIdType } = jMessage.payer.partyIdInfo;
+  const partyIdType = jMessage.Payer.PartyIDType;
   const PartyIsIndividual = partyIdType === 'PERSONAL_ID';
   await publish(topic, `[${PartyIsIndividual}] Transaction: ${txID} is ${(PartyIsIndividual) ? '' : 'not '}an Individual`);
 };
