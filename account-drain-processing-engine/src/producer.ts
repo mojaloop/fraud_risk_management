@@ -24,7 +24,7 @@ const publish = (topic: string, message: string) => {
         partition: configuration.partition,
       }],
       (err) => {
-        if (err) { log(`Error while sending result of blocking with message: \r\n${err}`, topic); }
+        if (err) { log(`Error while sending result of account drain with message: \r\n${err}`, topic); }
         resolve(undefined);
       },
     );
