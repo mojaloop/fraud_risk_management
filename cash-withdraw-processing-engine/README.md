@@ -1,5 +1,4 @@
-This is the rules engine that will determine if this is the first transaction made to a Payee. It will start a client listening to the configured 
-Kafka endpoint, then output the result to the configured Kafka topic. 
+This is the rules engine that will determine if this transaction is a cash withdraw instead of other type of transaction.
 
 To get going:
 Run "npm i"
