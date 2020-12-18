@@ -3,7 +3,6 @@ import { RedisClient } from 'redis';
 import { ConfigObj } from './config/config';
 import { log } from './helper';
 import handleTransferMessage from './transfer-consumer';
-import handleQuoteMessage from './quote-consumer';
 
 const createConsumer = (topic: string, config: ConfigObj) => new kafka.Consumer(
   new kafka.KafkaClient({ kafkaHost: config.kafkaEndpoint, autoConnect: true }),
@@ -14,12 +13,11 @@ const createConsumer = (topic: string, config: ConfigObj) => new kafka.Consumer(
   { autoCommit: config.autoCommit },
 );
 
-const onMessage = async (topic: string, message: kafka.Message, redisClient: RedisClient) => {
-  if (topic.includes('transfer')) {
-    await handleTransferMessage(message, topic, redisClient);
-  }
-  await handleQuoteMessage(message, topic, redisClient);
-};
+const onMessage = async (
+  topic: string,
+  message: kafka.Message,
+  redisClient: RedisClient,
+) => handleTransferMessage(message, topic, redisClient);
 
 /**
 * Subscribe to the configured Kafka server

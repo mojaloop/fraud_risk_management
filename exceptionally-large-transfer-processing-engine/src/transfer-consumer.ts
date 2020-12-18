@@ -4,31 +4,24 @@ import { log } from './helper';
 import { publish } from './producer';
 import { getILPList } from './redis-client';
 
-const handleTransferMessage = async (
+const handleQuoteMessage = async (
   message: kafka.Message,
   topic: string,
   redisClient: RedisClient,
 ) => {
   const jMessage = JSON.parse(message.value.toString());
-  const txID: string = jMessage.transactionId;
-  await log(`Handling message with TXID ${txID}`, topic);
-  console.log('receiving transfer');
-  console.log(jMessage);
+  const { TransactionID } = jMessage;
+  log(`Handling message with quote ID ${TransactionID}`, topic);
+  const { amount } = jMessage.amount;
+  const sourceILP = jMessage.ILPSourceAccountAddress;
+  const targetILP = jMessage.ILPDestinationAccountAddress;
+  const ILPList = await getILPList(redisClient, sourceILP);
 
-  // TODO: Verify how to handle transactions
-
-  // const payerPartyIdInfo = jMessage.payer.partyIdInfo;
-  // const payeePartyIdInfo = jMessage.payee.partyIdInfo;
-
-  // const sourceILP = `g.tz.${payerPartyIdInfo.fspId}.msisdn.${payerPartyIdInfo.partyIdentifier}`;
-  // const targetILP = `g.tz.${payeePartyIdInfo.fspId}.msisdn.${payeePartyIdInfo.partyIdentifier}`;
-  // const ILPList = await getILPList(redisClient, sourceILP);
-
-  // const sourceILPTransactions = JSON.parse(ILPList);
-  // const ILPCount = sourceILPTransactions
-  //   .filter((transaction: any) => targetILP !== transaction.ILPDestinationAccountAddress);
-  // const isNewILP = ILPCount.length > 0;
-  // await publish(topic, `[${isNewILP}] Transaction: ${txID} from ${sourceILP} to ${targetILP} is ${(isNewILP) ? '' : 'not '} a new ILP transaction`);
+  const sourceILPTransactions = JSON.parse(ILPList);
+  const biggestTransactionAmount = Math.max(...sourceILPTransactions
+    .map((transaction: any) => transaction.Amount));
+  const isBigger = biggestTransactionAmount + biggestTransactionAmount * 0.5 < amount;
+  await publish(topic, `[${isBigger}] Transaction: ${TransactionID} from ${sourceILP} to ${targetILP} is ${(isBigger) ? 'bigger' : 'not bigger'} than the max recorded transaction`);
 };
 
-export default handleTransferMessage;
+export default handleQuoteMessage;

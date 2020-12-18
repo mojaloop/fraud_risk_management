@@ -1,5 +1,5 @@
 version: "1"
 services:
   node:
-    image: new-payee-transfer-processing-engine
+    image: exceptionally-large-transfer-processing-engine
     restart: "no"
