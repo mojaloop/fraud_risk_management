@@ -14,6 +14,7 @@ const configuration: ConfigObj = {
   autoCommit: <any>process.env.AUTO_COMMIT,
   logTopic: <string> process.env.LOG_TOPIC,
   redisDB: <number>parseInt(process.env.REDIS_DB!, 10),
+  redisAuth: <string>process.env.REDIS_AUTH,
   redisHost: <string>process.env.REDIS_HOST,
   redisPort: <number>parseInt(process.env.REDIS_PORT!, 10),
 };
@@ -26,6 +27,7 @@ interface ConfigObj {
   autoCommit: boolean,
   logTopic:string
   redisDB: number,
+  redisAuth: string,
   redisHost: string,
   redisPort: number,
 }
