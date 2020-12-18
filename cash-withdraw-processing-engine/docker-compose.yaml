@@ -1,0 +1,5 @@
+version: "1"
+services:
+  node:
+    image: exceptionally-large-transfer-processing-engine
+    restart: "no"
