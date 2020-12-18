@@ -7,6 +7,7 @@ const initializeRedis = async (configuration: ConfigObj): Promise<RedisClient> =
     db: configuration.redisDB,
     host: configuration.redisHost,
     port: configuration.redisPort,
+    auth_pass: configuration.redisAuth,
   });
   return client;
 };
