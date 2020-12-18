@@ -1,7 +1,7 @@
 {
   "name": "account-drain-processing-engine",
   "version": "0.1.0",
-  "description": "This engine validates if the incoming transaction is is more than the 90% of the source acount balance",
+  "description": "This engine validates if the incoming transaction is is more than the 90% of the source account balance",
   "main": "src/index.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
