@@ -1,7 +1,7 @@
 {
-  "name": "exceptionally-large-transfer-processing-engine",
+  "name": "cash-withdraw-processing-engine",
   "version": "0.1.0",
-  "description": "This engine validates if a Payer submits a transfer request for an amount that exceeds their maximum historical amount for the past 3 months by more than 50%",
+  "description": "This engine validates if the transaction is a cash withdraw",
   "main": "src/index.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -15,7 +15,6 @@
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^14.14.6",
-    "@types/redis": "^2.8.28",
     "@typescript-eslint/eslint-plugin": "^4.8.2",
     "@typescript-eslint/parser": "^4.8.2",
     "eslint": "^7.14.0",
@@ -28,7 +27,6 @@
   },
   "dependencies": {
     "dotenv": "^8.2.0",
-    "kafka-node": "^5.0.0",
-    "redis": "^3.0.2"
+    "kafka-node": "^5.0.0"
   }
 }
