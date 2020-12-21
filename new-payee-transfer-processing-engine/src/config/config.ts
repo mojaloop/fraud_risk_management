@@ -13,6 +13,7 @@ const configuration: ConfigObj = {
   partition: parseInt(process.env.PARTITION!, 10),
   autoCommit: <any>process.env.AUTO_COMMIT,
   logTopic: <string> process.env.LOG_TOPIC,
+  redisAuth: <string>process.env.REDIS_AUTH,
   redisDB: <number>parseInt(process.env.REDIS_DB!, 10),
   redisHost: <string>process.env.REDIS_HOST,
   redisPort: <number>parseInt(process.env.REDIS_PORT!, 10),
@@ -28,6 +29,7 @@ interface ConfigObj {
   redisDB: number,
   redisHost: string,
   redisPort: number,
+  redisAuth: string
 }
 
 export { configuration, ConfigObj };
