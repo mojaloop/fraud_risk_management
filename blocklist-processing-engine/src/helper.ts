@@ -22,6 +22,7 @@ const initializeLoggingProducer = () => {
   }), {});
   return new Promise((resolve) => {
     logProducer.on('ready', () => resolve(undefined));
+    logProducer.on('error', (error: any) => resolve(error));
   });
 };
 
