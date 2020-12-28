@@ -1,7 +1,7 @@
 {
-  "name": "historical-data-store",
+  "name": "typology-register",
   "version": "0.1.0",
-  "description": "This service checks for new CSV files updates in a Azure file storage, then fetches the new file and inserts the historical data for transactions in redis",
+  "description": "This service checks for new CSV files updates in a Azure file storage, then fetches the new file and inserts the typology registry for transactions in redis",
   "main": "src/index.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
