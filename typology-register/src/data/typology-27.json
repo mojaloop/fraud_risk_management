@@ -1,0 +1,25 @@
+{
+  "typologyid": 27,
+  "rules": [
+    {
+      "ruleid": 1,
+      "weight": 8.0,
+      "score": 10.0
+    },
+    {
+      "ruleid": 2,
+      "weight": 2.0,
+      "score": 10.0
+    }
+  ],
+  "combinations": [
+    {
+      "key": 5,
+      "weight": 10
+    },
+    {
+      "key": 10,
+      "weight": 5
+    }
+  ]
+}
