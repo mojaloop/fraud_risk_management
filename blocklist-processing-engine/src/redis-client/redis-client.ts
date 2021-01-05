@@ -46,7 +46,7 @@ const block = (msisdn: string | string[]): Promise<boolean> => new Promise((reso
  * Clears Redis, then loads sample data from file, then publishes all to Redis.
  */
 const initializeRedis = async () => {
-  client.flushall();
+  client.flushdb();
   const sampleData: string[] = await loadData();
   await block(sampleData);
 };
