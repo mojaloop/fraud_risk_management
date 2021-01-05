@@ -13,7 +13,7 @@ const client: RedisClient = new RedisClient({
  * Clears Redis, then loads sample data from file, then publishes all to Redis.
  */
 const initializeRedis = async () => {
-  client.flushall();
+  client.flushdb();
 };
 
 /**

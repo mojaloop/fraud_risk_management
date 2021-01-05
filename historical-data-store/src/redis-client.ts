@@ -105,7 +105,7 @@ const findNewFileName = (
 };
 
 const cleanStore = async (client: RedisClient): Promise<any> => new Promise((resolve) => {
-  client.flushall(((err) => {
+  client.flushdb(((err) => {
     if (err) {
       resolve(0);
     }
