@@ -1,7 +1,7 @@
 # TYPOLOGY REGISTER INGESTION SERVICE
 
 ## Description
-This service actively listens to updates in a Files Shares folder in Azure. when a new file with the format `typology` is uploaded, this service will read that CSV file and iterate throught ILP source and store them in redis.  
+This service actively listens to updates in a Files Shares folder in Azure. When a new file with the format `typology` is uploaded, this service will read that CSV file and iterate through ILP source and store them in redis.  
 Alternatively, it can also upload a sample file stored inside the data folder in the service to facilitate a local run.
 
 
