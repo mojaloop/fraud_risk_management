@@ -9,7 +9,11 @@ const initializeProducer = () => {
     kafkaHost: configuration.kafkaEndpoint,
   }), {});
   return new Promise((resolve) => {
-    producer.on('ready', () => resolve(undefined));
+    producer.on('ready', () => {
+      log('Kafka producer initialized.', 'Startup');
+      resolve(undefined);
+    }
+    );
   });
 };
 

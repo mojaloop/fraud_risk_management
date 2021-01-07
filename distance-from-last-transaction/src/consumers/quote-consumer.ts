@@ -3,7 +3,7 @@ import { log } from '../helper';
 import { publish } from '../producer/producer';
 import { isInSet } from '../redis-client/redis-client';
 
-const handleQuoteMessage = async (
+const handleQuoteMessage = (
   message: kafka.Message,
   topic: string,
 ) => {
@@ -11,7 +11,7 @@ const handleQuoteMessage = async (
   const txID: string = jMessage.transactionId;
   log(`Handling quote message with TXID ${jMessage.transactionId}`, topic);
   // Write required logic here
-  const txInSet = await isInSet(txID);
+  const txInSet = false;
   publish(topic, `Transaction: ${txID} is ${(txInSet && (txInSet > 0)) ? '' : 'not'} in set`);
 };
 

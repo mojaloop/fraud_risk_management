@@ -8,6 +8,7 @@ const initializeLoggingProducer = () => {
   }), {});
   return new Promise((resolve) => {
     logProducer.on('ready', () => resolve(undefined));
+    logProducer.on('error', (error: any) => resolve(error));
   });
 };
 
@@ -15,8 +16,11 @@ const initializeLoggingProducer = () => {
 const log = (message: string, topic: string) => new Promise((resolver) => {
   logProducer.send([{
     topic: configuration.logTopic,
-    messages: [`['TEMPLATE'][${topic}]${message}`],
+    messages: [`[DISTANCEFROMLASTTRANSACTION][${topic}]${message}`],
     partition: configuration.partition,
-  }], () => resolver(undefined));
+  }], (error, data) => {
+    if (error) throw error;
+    resolver(data);
+  });
 });
 export { log, initializeLoggingProducer };

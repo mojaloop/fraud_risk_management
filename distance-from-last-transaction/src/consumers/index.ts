@@ -39,8 +39,11 @@ const createKafkaConsumer = (topic: string, config: ConfigObj) => {
     const consumer = createConsumer(topic, config);
     const handleMessage = getMessageHandler(topic);
 
-    consumer.on('message', async (message: kafka.Message) => {
-      await handleMessage(message, topic);
+    consumer.on('message', (message: kafka.Message) => {
+      handleMessage(message, topic);
+    });
+    consumer.on('error', (error) => {
+      log('Error while retrieving messages from Kafka', topic);
     });
 
     log('Started Processing Engine.', topic);
