@@ -6,13 +6,14 @@ import handleQuoteMessage from './quote-consumer';
 import handleTransferMessage from './transfer-consumer';
 import handlePartyMessage from './party-consumer';
 
-const createConsumer = (topic: string, config: ConfigObj) => new kafka.Consumer(
-  new kafka.KafkaClient({ kafkaHost: config.kafkaEndpoint }),
-  [{
-    topic,
-    partition: config.partition,
-  }],
-  { autoCommit: config.autoCommit },
+const createConsumer = (topic: string, config: ConfigObj) => new kafka.ConsumerGroup(
+  {
+    kafkaHost: config.kafkaEndpoint,
+    groupId: 'FoleyTest',
+    autoCommit: config.autoCommit,
+  }, [
+  topic
+]
 );
 
 const getMessageHandler = (topic: string) => {
