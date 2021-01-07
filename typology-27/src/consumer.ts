@@ -5,13 +5,14 @@ import { ConfigObj, config } from './config/config';
 import { log } from './helper';
 import handleTransferMessage from './scoring-process';
 
-const createConsumer = (config: ConfigObj) => new kafka.Consumer(
-  new kafka.KafkaClient({ kafkaHost: config.kafkaEndpoint, autoConnect: true }),
-  [{
-    topic: config.topic,
-    partition: config.partition,
-  }],
-  { autoCommit: config.autoCommit },
+const createConsumer = (config: ConfigObj) => new kafka.ConsumerGroup(
+
+  {
+    kafkaHost: config.kafkaEndpoint,
+    groupId: config.consumerGroup,
+    autoCommit: config.autoCommit,
+  },
+  [config.topic]
 );
 
 /**
@@ -34,21 +35,21 @@ const createKafkaConsumer = async (client: RedisClient) => {
       await handleCB(data, onData);
       done();
     }, config.maxParallelHandles);
-    
+
     msgQueue.drain(async () => {
       if (paused) {
-        consumer.resumeTopics([topic]);
+        consumer.resume();
         paused = false;
       }
     });
 
-    const handleCB = async(data: any, handler: any) => {
+    const handleCB = async (data: any, handler: any) => {
       await handler(data);
     }
 
     consumer.on('error', (error) => console.log(error));
 
-    consumer.on('message', (message: kafka.Message) => { 
+    consumer.on('message', (message: kafka.Message) => {
       msgQueue.push(message);
       if (msgQueue.length() > config.maxQueueSize) {
         consumer.pauseTopics([topic]);

@@ -10,6 +10,7 @@ const config: ConfigObj = {
   kafkaEndpoint: <string>process.env.KAFKA_ENDPOINT,
   topic: <string>process.env.TOPIC,
   resultTopic: <string>process.env.RESULT_TOPIC,
+  consumerGroup: <string>process.env.CONSUMER_GROUP,
   partition: parseInt(process.env.PARTITION!, 10),
   autoCommit: <any>process.env.AUTO_COMMIT,
   logTopic: <string> process.env.LOG_TOPIC,
@@ -25,6 +26,7 @@ interface ConfigObj {
   kafkaEndpoint: string;
   topic: string,
   resultTopic: string,
+  consumerGroup: string,
   partition: number,
   autoCommit: boolean,
   logTopic: string,
