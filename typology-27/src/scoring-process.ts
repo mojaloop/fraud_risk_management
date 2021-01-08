@@ -4,6 +4,7 @@ import { RedisClient } from 'redis';
 import rules from './rules';
 import { publish } from './producer';
 import { get } from './redis-client';
+import { log } from './helper';
 
 class typology27Type {
   rule9: boolean | undefined;
@@ -28,7 +29,15 @@ const handleScores = (scores: any, topic: string, TransactionID: string) => {
       + (scores.rule78 ? 0.2 : 0)
     );
 
-  publish(topic, `[typology-27][${TransactionID}][${score}] Typology 27 score is ${score}`);
+  publish(topic, `[typology-27][${TransactionID}][${score}] Typology 27 score is ${score}, Reason: ${
+    (scores.rule9 ? 'Recent Sim Swap, ' : '')
+    + (scores.rule12 ? 'Party Type Individual, ' : '')
+    + (scores.rule14 ? 'Recent Password Reset, ' : '')
+    + (scores.rule18 ? 'Exceptionally Large Transfer, ' : '')
+    + (scores.rule30 ? 'New Payee, ' : '')
+    + (scores.rule32 ? 'Account Drain, ' : '')
+    + (scores.rule78 ? 'Cash Withdrawal,' : '')
+    }`);
 }
 
 const handleQuoteMessage = async (
@@ -44,14 +53,28 @@ const handleQuoteMessage = async (
     const historicalData = JSON.parse(ILPList);
     const scores: typology27Type = new typology27Type();
 
-    scores.rule9 = rules.handleRecentSimSwap({ transfer, historicalData });
-    scores.rule12 = rules.handlePartyTypeIndividual(transfer);
-    scores.rule14 = rules.handleRecentPasswordReset(transfer);
-    scores.rule18 = rules.handleExceptionallyLargeTransfer({ transfer, historicalData });
-    scores.rule30 = rules.handleNewPayeeTransfer({ transfer, historicalData });
-    scores.rule32 = rules.handleAccountDrain(transfer);
-    scores.rule78 = rules.handleCashWithdraw(transfer);
-
+    try { scores.rule9 = rules.handleRecentSimSwap({ transfer, historicalData }); }
+    catch (error) {
+      log(`Error while handling Recent Sim Swap for transaction ${TransactionID}, with message: \r\n${error}`, topic)
+    }
+    try { scores.rule12 = rules.handlePartyTypeIndividual(transfer); } catch (error) {
+      log(`Error while handling Party Type Individual for transaction ${TransactionID}, with message: \r\n${error}`, topic)
+    }
+    try { scores.rule14 = rules.handleRecentPasswordReset(transfer); } catch (error) {
+      log(`Error while handling Recent Password Reset for transaction ${TransactionID}, with message: \r\n${error}`, topic)
+    }
+    try { scores.rule18 = rules.handleExceptionallyLargeTransfer({ transfer, historicalData }); } catch (error) {
+      log(`Error while handling Exceptionally Large Transfer for transaction ${TransactionID}, with message: \r\n${error}`, topic)
+    }
+    try { scores.rule30 = rules.handleNewPayeeTransfer({ transfer, historicalData }); } catch (error) {
+      log(`Error while handling New Payee Transfer for transaction ${TransactionID}, with message: \r\n${error}`, topic)
+    }
+    try { scores.rule32 = rules.handleAccountDrain(transfer); } catch (error) {
+      log(`Error while handling Account Drain for transaction ${TransactionID}, with message: \r\n${error}`, topic)
+    }
+    try { scores.rule78 = rules.handleCashWithdraw(transfer); } catch (error) {
+      log(`Error while handling Cash Withdraw for transaction ${TransactionID}, with message: \r\n${error}`, topic)
+    }
     handleScores(scores, topic, TransactionID);
   } catch (e) {
     console.error(e);
