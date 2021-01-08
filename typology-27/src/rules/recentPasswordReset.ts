@@ -1,6 +1,6 @@
-const handleRecentPasswordReset = async (
+const handleRecentPasswordReset = (
   message: any,
-) => {
+): boolean => {
   const sourceAccountPINDate = message.SourceAccountPINDate;
 
   if (!sourceAccountPINDate) {

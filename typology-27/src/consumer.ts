@@ -52,7 +52,7 @@ const createKafkaConsumer = async (client: RedisClient) => {
     consumer.on('message', (message: kafka.Message) => {
       msgQueue.push(message);
       if (msgQueue.length() > config.maxQueueSize) {
-        consumer.pauseTopics([topic]);
+        consumer.pause();
         paused = true;
       }
     });

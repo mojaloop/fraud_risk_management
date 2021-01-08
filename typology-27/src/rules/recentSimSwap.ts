@@ -1,22 +1,16 @@
-import { RedisClient } from 'redis';
-import { get } from '../redis-client';
+const handleSimSwap = (
+  message: any,
+): boolean => {
+  const currentICCID: string = message.transfer.PayerICCID;
 
-const handleSimSwap = async (
-  message: any, // TODO: create a transaction interface so we can use that here
-  client: RedisClient,
-) => {
-  const sourceMSIDN: string = message.ILPSourceAccountAddress;
-  const currentICCID: string = message.PayerICCID;
 
-  const oldTransactions = await get(client, sourceMSIDN);
-  const sourceILPTransactions = JSON.parse(oldTransactions);
+  const { historicalData } = message;
 
-  if (sourceILPTransactions == undefined
-    || sourceILPTransactions[0] == undefined) {
+  if (historicalData == undefined
+    || historicalData[0] == undefined) {
     return false;
   }
-
-  if (currentICCID === sourceILPTransactions[0].PayerICCID) {
+  if (currentICCID === historicalData[0].PayerICCID) {
     return false;
   } else {
     return true;

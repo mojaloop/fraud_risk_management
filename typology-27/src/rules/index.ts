@@ -1,7 +1,17 @@
+import handleRecentPasswordReset from './recentPasswordReset';
+import handleRecentSimSwap from './recentSimSwap';
+import handlePartyTypeIndividual from './partyTypeIndividual';
+import handleExceptionallyLargeTransfer from './exceptionallyLargeTransfer';
+import handleNewPayeeTransfer from './newPayeeTransfer';
+import handleAccountDrain from './accountDrain';
+import handleCashWithdraw from './cashWithdraw';
 
-/*
-TODO: Write some logic to run all rules and return an array which will be evaluated in scoring-process.ts
-Things like:
-  const oldTransactions = await get(client, sourceMSIDN); // recentSimSwap rule
-can be resolved here once and been provided to rules as needed.
-*/
+export default {
+  handleRecentPasswordReset,
+  handleRecentSimSwap,
+  handlePartyTypeIndividual,
+  handleExceptionallyLargeTransfer,
+  handleNewPayeeTransfer,
+  handleAccountDrain,
+  handleCashWithdraw,
+}

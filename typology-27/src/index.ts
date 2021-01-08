@@ -5,10 +5,14 @@ import { initializeProducer } from './producer';
 import { initializeRedis } from './redis-client';
 
 const start = async () => {
-  await initializeLoggingProducer();
-  await initializeProducer();
-  const redisClient = await initializeRedis(config);
-  await runConsumer(redisClient);
+  try {
+    await initializeLoggingProducer();
+    await initializeProducer();
+    const redisClient = await initializeRedis(config);
+    await runConsumer(redisClient);
+  } catch (e) {
+    console.error(e);
+  }
 };
 
 start();

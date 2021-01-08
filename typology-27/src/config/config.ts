@@ -13,7 +13,7 @@ const config: ConfigObj = {
   consumerGroup: <string>process.env.CONSUMER_GROUP,
   partition: parseInt(process.env.PARTITION!, 10),
   autoCommit: <any>process.env.AUTO_COMMIT,
-  logTopic: <string> process.env.LOG_TOPIC,
+  logTopic: <string>process.env.LOG_TOPIC,
   maxQueueSize: parseInt(process.env.MAX_QUEUE_SIZE!, 10),
   maxParallelHandles: parseInt(process.env.MAX_PARALLEL_HANDLES!, 10),
   redisDB: <string>process.env.REDIS_DB,
