@@ -15,7 +15,7 @@ const initializeLoggingProducer = () => {
 const log = (message: string, topic: string) => new Promise((resolver) => {
   logProducer.send([{
     topic: config.logTopic,
-    messages: [`[ExceptionallyLargeTransfer][${topic}] ${message}`],
+    messages: [`[Typology27][${topic}] ${message}`],
     partition: config.partition,
   }], () => resolver(undefined));
 });

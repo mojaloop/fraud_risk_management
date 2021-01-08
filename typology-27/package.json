@@ -31,8 +31,6 @@
     "async": "^3.2.0",
     "dotenv": "^8.2.0",
     "kafka-node": "^5.0.0",
-    "kafkajs": "^1.15.0",
-    "node-rdkafka": "^2.10.0",
     "redis": "^3.0.2"
   }
 }
