@@ -1,0 +1,4 @@
+coverage
+templates
+build
+**/node_modules 
