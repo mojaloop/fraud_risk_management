@@ -41,8 +41,8 @@ const initializeRedis = async (
   return client;
 };
 
-const insertHistoricalData = async (client: RedisClient, transfers) => {
-  const ILPS = transfers.reduce((ILPAccumulator, transfer) => {
+const insertHistoricalData = async (sourceClient: RedisClient, destinationClient: RedisClient, transfers) => {
+  const sourceILPS = transfers.reduce((ILPAccumulator, transfer) => {
     const ILPNames: string[] = Object.keys(ILPAccumulator);
     if (ILPNames.includes(transfer.ILPSourceAccountAddress)) {
       ILPAccumulator[transfer.ILPSourceAccountAddress].push(transfer);
@@ -52,9 +52,23 @@ const insertHistoricalData = async (client: RedisClient, transfers) => {
     }
     return ILPAccumulator;
   }, {});
-  const names = Object.keys(ILPS);
-  names.forEach((ILP) => {
-    client.set(ILP, JSON.stringify(ILPS[ILP]));
+  const destinationILPS = transfers.reduce((ILPAccumulator, transfer) => {
+    const ILPNames: string[] = Object.keys(ILPAccumulator);
+    if (ILPNames.includes(transfer.ILPDestinationAccountAddress)) {
+      ILPAccumulator[transfer.ILPDestinationAccountAddress].push(transfer);
+    } else {
+      // eslint-disable-next-line no-param-reassign
+      ILPAccumulator[transfer.ILPDestinationAccountAddress] = [transfer];
+    }
+    return ILPAccumulator;
+  }, {});
+  const sourceNames = Object.keys(sourceILPS);
+  sourceNames.forEach((ILP) => {
+    sourceClient.set(ILP, JSON.stringify(sourceILPS[ILP]));
+  });
+  const destinationNames = Object.keys(destinationILPS);
+  destinationNames.forEach((ILP) => {
+    destinationClient.set(ILP, JSON.stringify(destinationILPS[ILP]));
   });
 };
 
@@ -81,13 +95,14 @@ const getFilesNames = async (
   });
 });
 
-const logAllkeys = async (client: RedisClient, topic: string) => client.keys('*', (err) => {
-  if (err) {
-    log(err, topic);
-  } else {
-    log('Historical data has being stored.', topic);
-  }
-});
+const getAllKeys = async (client: RedisClient, topic: string) =>
+  new Promise((resolve, reject) => client.keys('*', (err, reply) => {
+    if (err) {
+      log(err, topic);
+      reject(err);
+    }
+    resolve(reply);
+  }));
 
 const findNewFileName = (
   azureFilesNames: string[],
@@ -115,14 +130,16 @@ const cleanStore = async (client: RedisClient): Promise<any> => new Promise((res
 
 const processNewData = async (
   historicDataFile: string,
-  client: RedisClient,
+  sourceClient: RedisClient,
+  destinationClient: RedisClient,
   azureFileNames: string[],
   directoryClient: ShareDirectoryClient,
   topic: string,
 ) => {
   log(`found new file: ${historicDataFile}`, topic);
-  await cleanStore(client);
-  await insertFilesNames(client, azureFileNames);
+  await cleanStore(sourceClient);
+  await cleanStore(destinationClient);
+  await insertFilesNames(sourceClient, azureFileNames);
   const fileClient = directoryClient.getFileClient(historicDataFile!);
   const downloadFileResponse = await fileClient.download(0);
   const historicalFileBuffer = await streamToBuffer(downloadFileResponse.readableStreamBody!);
@@ -133,7 +150,8 @@ const processNewData = async (
  * Load all data from the file to Redis
  */
 const loadData = async (
-  client: RedisClient,
+  SourceClient: RedisClient,
+  DestinationClient: RedisClient,
   loadFromLocal: boolean,
   azureConfig: AzureType,
   topic: string,
@@ -154,12 +172,12 @@ const loadData = async (
   );
   const directoryClient = await createDirectory(serviceClient, azureShare, azureDirectory, topic);
   const azureFileNames = await listFiles(directoryClient);
-  const redisFileNames = await getFilesNames(client, topic);
+  const redisFileNames = await getFilesNames(SourceClient, topic);
   const historicDataFile = redisFileNames
     ? findNewFileName(azureFileNames, redisFileNames.split(','))
     : azureFileNames[azureFileNames.length - 1]; // grab the last file uploaded
   if (historicDataFile) {
-    return processNewData(historicDataFile, client, azureFileNames, directoryClient, topic);
+    return processNewData(historicDataFile, SourceClient, DestinationClient, azureFileNames, directoryClient, topic);
   }
   return false;
 };
@@ -168,5 +186,5 @@ export {
   initializeRedis,
   loadData,
   insertHistoricalData,
-  logAllkeys,
+  getAllKeys,
 };

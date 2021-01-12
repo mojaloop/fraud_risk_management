@@ -10,10 +10,11 @@ dotenv({
 const configuration: ConfigType = {
   redisHost: <string>process.env.REDIS_HOST,
   redisPort: <number>parseInt(process.env.REDIS_PORT!, 10),
-  redisDB: <number>parseInt(process.env.REDIS_DB!, 10),
+  redisSenderDB: <number>parseInt(process.env.REDIS_SENDER_DB!, 10),
+  redisReceiverDB: <number>parseInt(process.env.REDIS_RECEIVER_DB!, 10),
   redisAuth: <string>process.env.REDIS_AUTH,
   loadFromLocal: <boolean>(process.env.LOAD_FROM_FILE === 'true'),
-  reloadTime: <number>parseInt(process.env.RELOAD_TIME!, 10),
+  port: <number>parseInt(process.env.PORT!, 10),
   kafkaEndpoint: <string>process.env.KAFKA_ENDPOINT,
   partition: <number>parseInt(process.env.PARTITION!, 10),
   logTopic: <string>process.env.LOG_TOPIC,
