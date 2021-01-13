@@ -50,9 +50,10 @@ interface AzureType {
 interface ConfigType {
   redisHost: string,
   redisPort: number,
-  redisDB: number,
+  redisSenderDB: number,
+  redisReceiverDB: number,
   redisAuth: string,
-  reloadTime: number,
+  port: number,
   partition: number,
   kafkaEndpoint: string,
   logTopic: string,
