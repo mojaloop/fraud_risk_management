@@ -9,8 +9,8 @@ import { get } from './redis-client';
 import { log } from './helper';
 
 class typology28Type {
-  rule9: boolean | undefined;
-  rule12: boolean | undefined;
+  rule17: boolean | undefined;
+  rule27: boolean | undefined;
   rule14: boolean | undefined;
   rule18: boolean | undefined;
   rule30: boolean | undefined;
@@ -61,9 +61,13 @@ const handleQuoteMessage = async (
 
     const scores: typology28Type = new typology28Type();
 
-    try { scores.rule9 = rules.handleTransactionMirroring(transfer, payeeHistoricalSendData, payeeHistoricalReceiveData); }
+    try { scores.rule17 = rules.handleTransactionDivergence({ transfer, payeeHistoricalSendData }); }
     catch (error) {
-      log(`Error while handling Recent Sim Swap for transaction ${TransactionID}, with message: \r\n${error}`, topic)
+      log(`Error while handling transaction divergence for ${TransactionID}, with message: \r\n${error}`, topic)
+    }
+    try { scores.rule27 = rules.handleTransactionMirroring(transfer, payeeHistoricalSendData, payeeHistoricalReceiveData); }
+    catch (error) {
+      log(`Error while handling Transaction mirroring ${TransactionID}, with message: \r\n${error}`, topic)
     }
 
     // handleScores(scores, topic, TransactionID);
