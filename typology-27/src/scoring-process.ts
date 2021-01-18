@@ -29,14 +29,14 @@ const handleScores = (scores: any, topic: string, TransactionID: string) => {
       + (scores.rule78 ? 0.2 : 0)
     );
 
-  publish(topic, `[typology-27][${TransactionID}][${score}] Typology 27 score is ${score}, Reason: ${
-    (scores.rule9 ? 'Recent Sim Swap, ' : '')
+  publish(topic, `{"typology":"typology-27","transactionID":"${TransactionID}","score":"${score}","textResult":"Typology 27 score is ${score}, Reason: ${(scores.rule9 ? 'Recent Sim Swap, ' : '')
     + (scores.rule12 ? 'Party Type Individual, ' : '')
     + (scores.rule14 ? 'Recent Password Reset, ' : '')
     + (scores.rule18 ? 'Exceptionally Large Transfer, ' : '')
     + (scores.rule30 ? 'New Payee, ' : '')
     + (scores.rule32 ? 'Account Drain, ' : '')
     + (scores.rule78 ? 'Cash Withdrawal,' : '')
+    + '"}'
     }`);
 }
 
