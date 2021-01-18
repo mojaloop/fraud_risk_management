@@ -9,35 +9,36 @@ import { get } from './redis-client';
 import { log } from './helper';
 
 class typology28Type {
-  rule17: boolean | undefined;
+  rule2: boolean | undefined;
+  rule12: boolean | undefined;
+  rule16: boolean | undefined;
   rule27: boolean | undefined;
-  rule14: boolean | undefined;
-  rule18: boolean | undefined;
   rule30: boolean | undefined;
-  rule32: boolean | undefined;
-  rule78: boolean | undefined;
+  rule63: boolean | undefined;
+  rule64: boolean | undefined;
 }
 
 // Composed probability for typology 28 = (009.p)*(012.p)*(014.p+018.p+030.p+032.p+078.p)
 const handleScores = (scores: any, topic: string, TransactionID: string) => {
   const score =
-    (scores.rule9 ? 1 : 0)
-    * (scores.rule12 ? 1 : 0)
-    * (
-      (scores.rule14 ? 0.2 : 0)
-      + (scores.rule18 ? 0.2 : 0)
-      + (scores.rule30 ? 0.2 : 0)
-      + (scores.rule32 ? 0.2 : 0)
-      + (scores.rule78 ? 0.2 : 0)
-    );
+  (  scores.rule2 ? 0.14 : 0)
+  + (scores.rule12 ? 0.14 : 0)
+  + (scores.rule16 ? 0.14 : 0)
+  + (scores.rule27 ? 0.14 : 0)
+  + (scores.rule30 ? 0.14 : 0)
+  + (scores.rule63 ? 0.15 : 0)
+  + (scores.rule64 ? 0.15 : 0)
+;
 
-  publish(topic, `[typology-28][${TransactionID}][${score}] Typology 28 score is ${score}, Reason: ${(scores.rule9 ? 'Recent Sim Swap, ' : '')
+  publish(topic, `"typology":"typology-28","transactionID":"${TransactionID}","score":"${score}","textResult":"Typology 28 score is ${score}, Reason: ${
+      (scores.rule2 ? 'Velocity (incoming), ' : '')
     + (scores.rule12 ? 'Party Type Individual, ' : '')
-    + (scores.rule14 ? 'Recent Password Reset, ' : '')
-    + (scores.rule18 ? 'Exceptionally Large Transfer, ' : '')
+    + (scores.rule16 ? 'Transaction Convergence, ' : '')
+    + (scores.rule27 ? 'Transaction Mirroring, ' : '')
     + (scores.rule30 ? 'New Payee, ' : '')
-    + (scores.rule32 ? 'Account Drain, ' : '')
-    + (scores.rule78 ? 'Cash Withdrawal,' : '')
+    + (scores.rule63 ? "Benford's Law, " : '')
+    + (scores.rule64 ? 'Uniform Distribution - Payee' : '')
+    + '"}'
     }`);
 }
 
@@ -58,18 +59,23 @@ const handleQuoteMessage = async (
     const payeeHistoricalSendData = JSON.parse(payeeHistoricalSendDataJSON);
     const payeeHistoricalReceiveData = JSON.parse(payeeHistoricalReceiveDataJSON);
 
+    // See https://lextego.atlassian.net/browse/ACTIO-197
     const scores: typology28Type = new typology28Type();
 
-    try { scores.rule17 = rules.handleTransactionDivergence(transfer, payeeHistoricalSendData); }
-    catch (error) {
-      log(`Error while handling transaction divergence for ${TransactionID}, with message: \r\n${error}`, topic)
-    }
+    // try { scores.rule17 = rules.handleTransactionDivergence(transfer, payeeHistoricalSendData); }
+    // catch (error) {
+    //   log(`Error while handling transaction divergence for ${TransactionID}, with message: \r\n${error}`, topic)
+    // }
     try { scores.rule27 = rules.handleTransactionMirroring(transfer, payeeHistoricalSendData, payeeHistoricalReceiveData); }
     catch (error) {
-      log(`Error while handling Transaction mirroring ${TransactionID}, with message: \r\n${error}`, topic)
+      log(`Error while handling Transaction Mirroring ${TransactionID}, with message: \r\n${error}`, topic)
     }
-    console.log(scores.rule27);
-    // handleScores(scores, topic, TransactionID);
+    try { scores.rule63 = rules.handleBenfordsLaw(transfer, payeeHistoricalReceiveData); }
+    catch (error) {
+      log(`Error while handling Benford's Law ${TransactionID}, with message: \r\n${error}`, topic)
+    }
+    
+    handleScores(scores, topic, TransactionID);
   } catch (e) {
     console.error(e);
   }
