@@ -14,7 +14,7 @@ const initializeProducer = () => {
 };
 
 const publish = (topic: string, message: string) => {
-  const result = `[${topic}]${message}`;
+  const result = `{"topic":"${topic}",${message}`;
   log(result, topic);
   return new Promise((resolve) => {
     producer.send(
