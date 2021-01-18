@@ -5,11 +5,14 @@ import { initializeProducer } from './producer';
 import { initializeRedis } from './redis-client';
 
 const start = async () => {
+  const { redisSenderDB, redisReceiverDB, redisHost, redisPort, redisAuth } = config;
   try {
     await initializeLoggingProducer();
     await initializeProducer();
-    const redisClient = await initializeRedis(config);
-    await runConsumer(redisClient);
+    const redisSenderClient = await initializeRedis(redisSenderDB, redisHost, redisPort, redisAuth);
+    const redisReceiverClient = await initializeRedis(redisReceiverDB, redisHost, redisPort, redisAuth);
+
+    await runConsumer(redisSenderClient, redisReceiverClient);
   } catch (e) {
     console.error(e);
   }

@@ -19,7 +19,7 @@ const createConsumer = (config: ConfigObj) => new kafka.ConsumerGroup(
 * Subscribe to the configured Kafka server
 * to the selected Kafka topic
 */
-const createKafkaConsumer = async (client: RedisClient) => {
+const createKafkaConsumer = async (senderClient: RedisClient, receiverClient: RedisClient) => {
   const { topic } = config;
   log('Starting Typology 28 engine...', topic);
   try {
@@ -27,7 +27,7 @@ const createKafkaConsumer = async (client: RedisClient) => {
     let paused = false;
 
     const onData = async (message: any) => {
-      handleTransferMessage(message, topic, client);
+      handleTransferMessage(message, topic, senderClient, receiverClient);
       return Promise.resolve();
     }
 

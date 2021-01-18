@@ -2,12 +2,17 @@ import { RedisClient } from 'redis';
 import { ConfigObj } from './config/config';
 import { log } from './helper';
 
-const initializeRedis = async (configuration: ConfigObj): Promise<RedisClient> => {
+const initializeRedis = async (
+  redisDB: string,
+  redisHost: string,
+  redisPort: number,
+  redisAuth: string,
+): Promise<RedisClient> => {
   const client: RedisClient = new RedisClient({
-    db: configuration.redisDB,
-    host: configuration.redisHost,
-    port: configuration.redisPort,
-    auth_pass: configuration.redisAuth,
+    db: redisDB,
+    host: redisHost,
+    port: redisPort,
+    auth_pass: redisAuth,
   });
   return client;
 };
@@ -16,6 +21,7 @@ const get = (client: RedisClient, key: string): Promise<string> => new Promise((
   // Get the value of a key.
   client.GET(key, (err, reply) => {
     if (err) {
+      console.log(err);
       log(`Error from Redis with message: \r\n${err}`, 'REDIS');
       resolve('');
     } else {
