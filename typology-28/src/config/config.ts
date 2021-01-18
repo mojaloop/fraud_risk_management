@@ -16,7 +16,7 @@ const config: ConfigObj = {
   logTopic: <string>process.env.LOG_TOPIC,
   maxQueueSize: parseInt(process.env.MAX_QUEUE_SIZE!, 10),
   maxParallelHandles: parseInt(process.env.MAX_PARALLEL_HANDLES!, 10),
-  redisSenderDB: <string>process.env.REDIS_RECEIVER_DB,
+  redisSenderDB: <string>process.env.REDIS_SENDER_DB,
   redisReceiverDB: <string>process.env.REDIS_RECEIVER_DB,
   redisAuth: <string>process.env.REDIS_AUTH,
   redisHost: <string>process.env.REDIS_HOST,

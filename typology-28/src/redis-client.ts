@@ -21,6 +21,7 @@ const get = (client: RedisClient, key: string): Promise<string> => new Promise((
   // Get the value of a key.
   client.GET(key, (err, reply) => {
     if (err) {
+      console.log(err);
       log(`Error from Redis with message: \r\n${err}`, 'REDIS');
       resolve('');
     } else {

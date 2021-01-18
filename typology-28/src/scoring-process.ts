@@ -49,11 +49,10 @@ const handleQuoteMessage = async (
 ) => {
   try {
     const transfer = JSON.parse(message.value.toString());
-    const { TransactionID, ILPSourceAccountAddress } = transfer;
-
+    const { TransactionID, ILPSourceAccountAddress, ILPDestinationAccountAddress } = transfer;
     const sourceHistoricalSendDataJSON = await get(senderClient, ILPSourceAccountAddress);
-    const payeeHistoricalReceiveDataJSON = await get(receiverClient, ILPSourceAccountAddress);
-    const payeeHistoricalSendDataJSON = await get(senderClient, ILPSourceAccountAddress);
+    const payeeHistoricalReceiveDataJSON = await get(receiverClient, ILPDestinationAccountAddress);
+    const payeeHistoricalSendDataJSON = await get(senderClient, ILPDestinationAccountAddress);
 
     const sourceHistoricalSendData = JSON.parse(sourceHistoricalSendDataJSON);
     const payeeHistoricalSendData = JSON.parse(payeeHistoricalSendDataJSON);
@@ -61,7 +60,7 @@ const handleQuoteMessage = async (
 
     const scores: typology28Type = new typology28Type();
 
-    try { scores.rule17 = rules.handleTransactionDivergence({ transfer, payeeHistoricalSendData }); }
+    try { scores.rule17 = rules.handleTransactionDivergence(transfer, payeeHistoricalSendData); }
     catch (error) {
       log(`Error while handling transaction divergence for ${TransactionID}, with message: \r\n${error}`, topic)
     }
@@ -69,7 +68,7 @@ const handleQuoteMessage = async (
     catch (error) {
       log(`Error while handling Transaction mirroring ${TransactionID}, with message: \r\n${error}`, topic)
     }
-
+    console.log(scores.rule27);
     // handleScores(scores, topic, TransactionID);
   } catch (e) {
     console.error(e);
