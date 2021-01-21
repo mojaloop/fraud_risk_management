@@ -67,7 +67,7 @@ const handleQuoteMessage = async (
     // }
     try { scores.rule16 = rules.handleTransactionConvergence(transfer, payeeHistoricalReceiveData); }
     catch (error) {
-      log(`Error while handling Benford's Law ${TransactionID}, with message: \r\n${error}`, topic)
+      log(`Error while handling Transaction Convergence ${TransactionID}, with message: \r\n${error}`, topic)
     }
     try { scores.rule27 = rules.handleTransactionMirroring(transfer, payeeHistoricalSendData, payeeHistoricalReceiveData); }
     catch (error) {
