@@ -21,17 +21,16 @@ class typology28Type {
 // Composed probability for typology 28 = (009.p)*(012.p)*(014.p+018.p+030.p+032.p+078.p)
 const handleScores = (scores: any, topic: string, TransactionID: string) => {
   const score =
-  (  scores.rule2 ? 0.14 : 0)
-  + (scores.rule12 ? 0.14 : 0)
-  + (scores.rule16 ? 0.14 : 0)
-  + (scores.rule27 ? 0.14 : 0)
-  + (scores.rule30 ? 0.14 : 0)
-  + (scores.rule63 ? 0.15 : 0)
-  + (scores.rule64 ? 0.15 : 0)
-;
+    (scores.rule2 ? 0.14 : 0)
+    + (scores.rule12 ? 0.14 : 0)
+    + (scores.rule16 ? 0.14 : 0)
+    + (scores.rule27 ? 0.14 : 0)
+    + (scores.rule30 ? 0.14 : 0)
+    + (scores.rule63 ? 0.15 : 0)
+    + (scores.rule64 ? 0.15 : 0)
+    ;
 
-  publish(topic, `"typology":"typology-28","transactionID":"${TransactionID}","score":${score},"textResult":"Typology 28 score is ${score}, Reason: ${
-      (scores.rule2 ? 'Velocity (incoming), ' : '')
+  publish(topic, `"typology":"typology-28","transactionID":"${TransactionID}","score":${score},"textResult":"Typology 28 score is ${score}, Reason: ${(scores.rule2 ? 'Velocity (incoming), ' : '')
     + (scores.rule12 ? 'Party Type Individual, ' : '')
     + (scores.rule16 ? 'Transaction Convergence, ' : '')
     + (scores.rule27 ? 'Transaction Mirroring, ' : '')
@@ -66,6 +65,10 @@ const handleQuoteMessage = async (
     // catch (error) {
     //   log(`Error while handling transaction divergence for ${TransactionID}, with message: \r\n${error}`, topic)
     // }
+    try { scores.rule16 = rules.handleTransactionConvergence(transfer, payeeHistoricalReceiveData); }
+    catch (error) {
+      log(`Error while handling Transaction Convergence ${TransactionID}, with message: \r\n${error}`, topic)
+    }
     try { scores.rule27 = rules.handleTransactionMirroring(transfer, payeeHistoricalSendData, payeeHistoricalReceiveData); }
     catch (error) {
       log(`Error while handling Transaction Mirroring ${TransactionID}, with message: \r\n${error}`, topic)
@@ -74,7 +77,7 @@ const handleQuoteMessage = async (
     catch (error) {
       log(`Error while handling Benford's Law ${TransactionID}, with message: \r\n${error}`, topic)
     }
-    
+
     handleScores(scores, topic, TransactionID);
   } catch (e) {
     console.error(e);
