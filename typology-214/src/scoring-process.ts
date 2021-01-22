@@ -14,7 +14,7 @@ class typology214Type {
 }
 
 // Composed probability for typology 214 = (012.p+027.p+030.p+048.p+078.p)
-const handleScores = (scores: any, topic: string, TransactionID: string) => {
+const handleScores = (scores: any, topic: string, TransactionID: string, transactionDate: string) => {
   const score =
     (scores.rule12 ? 0.2 : 0)
     + (scores.rule27 ? 0.2 : 0)
@@ -22,7 +22,8 @@ const handleScores = (scores: any, topic: string, TransactionID: string) => {
     + (scores.rule48 ? 0.2 : 0)
     + (scores.rule78 ? 0.2 : 0);
 
-  publish(topic, `"typology":"typology-214","transactionID":"${TransactionID}","score":"${score}","textResult":"Typology 214 score is ${score}, Reason: ${(scores.rule3 ? 'Account Dormancy - Payee, ' : '')
+  publish(topic, `"typology":"typology-214","transactionID":"${TransactionID}","score":"${score}","createDate":"${transactionDate}",
+  "textResult":"Typology 214 score is ${score}, Reason: ${(scores.rule3 ? 'Account Dormancy - Payee, ' : '')
     + (scores.rule12 ? 'Party Type Individual, ' : '')
     + (scores.rule27 ? 'Transaction Mirroring, ' : '')
     + (scores.rule30 ? 'New Payee, ' : '')
@@ -40,7 +41,7 @@ const handleQuoteMessage = async (
 ) => {
   try {
     const transfer = JSON.parse(message.value.toString());
-    const { TransactionID, ILPSourceAccountAddress, ILPDestinationAccountAddress } = transfer;
+    const { TransactionID, ILPSourceAccountAddress, ILPDestinationAccountAddress, HTTPTransactionDate } = transfer;
     const sourceHistoricalSendDataJSON = await get(senderClient, ILPSourceAccountAddress);
     const payeeHistoricalReceiveDataJSON = await get(receiverClient, ILPDestinationAccountAddress);
     const payeeHistoricalSendDataJSON = await get(senderClient, ILPDestinationAccountAddress);
@@ -72,7 +73,7 @@ const handleQuoteMessage = async (
       log(`Error while handling Cash Withdraw ${TransactionID}, with message: \r\n${error}`, topic)
     }
 
-    handleScores(scores, topic, TransactionID);
+    handleScores(scores, topic, TransactionID, HTTPTransactionDate);
   } catch (e) {
     console.error(e);
   }
