@@ -1,6 +1,8 @@
 import { RedisClient } from 'redis';
 import { get } from '../redis-client';
 
+// Move to typology 11
+
 const getPayeesFromILPsArray = async (outgoingTransfersClient: RedisClient, ILPS: string[]): Promise<any> => {
   const accountsTransfers = await Promise.all(
     ILPS.map((ILP: string) => new Promise((resolve) => {

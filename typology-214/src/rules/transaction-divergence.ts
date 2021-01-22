@@ -1,3 +1,5 @@
+// move to typology 11
+
 const handleTransactionDivergence = (transaction: any, payeeHistoricalSendData: any) => {
   if (payeeHistoricalSendData.length < 10) return false;
 
@@ -11,4 +13,4 @@ const handleTransactionDivergence = (transaction: any, payeeHistoricalSendData: 
   return latestTransactions.length > 10 ? true : false;
 }
 
-export default handleTransactionDivergence;
+export default handleTransactionDivergence; 

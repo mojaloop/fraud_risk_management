@@ -1,11 +1,17 @@
 import handleTransactionMirroring from './transaction-mirroring';
-import handleTransactionDivergence from './transaction-divergence';
 import handleTransactionsBetweenParties from './transactions-between-parties';
-import handleLargeTransactionPayer from './large-transaction-payer'
+import handleLargeTransactionPayer from './large-transaction-payer';
+import handleAccountDormancy from './account-dormancy';
+import handleCashWithdraw from './cashWithdraw';
+import handleNewPayeeTransfer from './newPayeeTransfer';
+import handleIndividual from './partyTypeIndividual';
 
 export default {
   handleTransactionMirroring,
-  handleTransactionDivergence,
   handleTransactionsBetweenParties,
   handleLargeTransactionPayer,
+  handleAccountDormancy,
+  handleCashWithdraw,
+  handleNewPayeeTransfer,
+  handleIndividual
 }
