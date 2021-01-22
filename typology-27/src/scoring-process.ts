@@ -17,7 +17,7 @@ class typology27Type {
 }
 
 // Composed probability for typology 27 = (009.p)*(012.p)*(014.p+018.p+030.p+032.p+078.p)
-const handleScores = (scores: any, topic: string, TransactionID: string) => {
+const handleScores = (scores: any, topic: string, TransactionID: string, transactionDate: string) => {
   const score =
     (scores.rule9 ? 1 : 0)
     * (scores.rule12 ? 1 : 0)
@@ -29,7 +29,8 @@ const handleScores = (scores: any, topic: string, TransactionID: string) => {
       + (scores.rule78 ? 0.2 : 0)
     );
 
-  publish(topic, `"typology":"typology-27","transactionID":"${TransactionID}","score":${score},"textResult":"Typology 27 score is ${score}, Reason: ${(scores.rule9 ? 'Recent Sim Swap, ' : '')
+  publish(topic, `"typology":"typology-27","transactionID":"${TransactionID}","score":${score},"createDate":"${transactionDate}",
+  "textResult":"Typology 27 score is ${score}, Reason: ${(scores.rule9 ? 'Recent Sim Swap, ' : '')
     + (scores.rule12 ? 'Party Type Individual, ' : '')
     + (scores.rule14 ? 'Recent Password Reset, ' : '')
     + (scores.rule18 ? 'Exceptionally Large Transfer, ' : '')
@@ -47,10 +48,10 @@ const handleQuoteMessage = async (
 ) => {
   try {
     const transfer = JSON.parse(message.value.toString());
-    const { TransactionID, ILPSourceAccountAddress } = transfer;
+    const { TransactionID, ILPSourceAccountAddress, HTTPTransactionDate } = transfer;
 
     const ILPList = await get(client, ILPSourceAccountAddress);
-    const historicalData = JSON.parse(ILPList);
+    const historicalData = ILPList == undefined ? undefined : JSON.parse(ILPList);
     const scores: typology27Type = new typology27Type();
 
     try { scores.rule9 = rules.handleRecentSimSwap({ transfer, historicalData }); }
@@ -75,7 +76,7 @@ const handleQuoteMessage = async (
     try { scores.rule78 = rules.handleCashWithdraw(transfer); } catch (error) {
       log(`Error while handling Cash Withdraw for transaction ${TransactionID}, with message: \r\n${error}`, topic)
     }
-    handleScores(scores, topic, TransactionID);
+    handleScores(scores, topic, TransactionID, HTTPTransactionDate);
   } catch (e) {
     console.error(e);
   }
