@@ -29,7 +29,7 @@ const handleScores = (scores: any, topic: string, TransactionID: string, transac
       + (scores.rule78 ? 0.2 : 0)
     );
 
-  publish(topic, `"typology":"typology-27","transactionID":"${TransactionID}","score":${score},"createDate":"${transactionDate}",
+  publish(topic, `"typology":"typology-27","transactionID":"${TransactionID}","score":${score},"createDate":${transactionDate},
   "textResult":"Typology 27 score is ${score}, Reason: ${(scores.rule9 ? 'Recent Sim Swap, ' : '')
     + (scores.rule12 ? 'Party Type Individual, ' : '')
     + (scores.rule14 ? 'Recent Password Reset, ' : '')

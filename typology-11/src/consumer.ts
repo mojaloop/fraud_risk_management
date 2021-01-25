@@ -21,7 +21,7 @@ const createConsumer = (config: ConfigObj) => new kafka.ConsumerGroup(
 */
 const createKafkaConsumer = async (senderClient: RedisClient, receiverClient: RedisClient) => {
   const { topic } = config;
-  log('Starting Typology 214 engine...', topic);
+  log('Starting Typology 11 engine...', topic);
   try {
     const consumer = createConsumer(config);
     let paused = false;
@@ -56,7 +56,7 @@ const createKafkaConsumer = async (senderClient: RedisClient, receiverClient: Re
         paused = true;
       }
     });
-    log('Started Typology 214 engine.', topic);
+    log('Started Typology 11 engine.', topic);
   } catch (e) {
     log(`Unhandled exception while starting consumer with details: ${e}`, topic);
   }

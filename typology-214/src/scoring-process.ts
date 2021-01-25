@@ -22,7 +22,7 @@ const handleScores = (scores: any, topic: string, TransactionID: string, transac
     + (scores.rule48 ? 0.2 : 0)
     + (scores.rule78 ? 0.2 : 0);
 
-  publish(topic, `"typology":"typology-214","transactionID":"${TransactionID}","score":"${score}","createDate":"${transactionDate}",
+  publish(topic, `"typology":"typology-214","transactionID":"${TransactionID}","score":"${score}","createDate":${transactionDate},
   "textResult":"Typology 214 score is ${score}, Reason: ${(scores.rule3 ? 'Account Dormancy - Payee, ' : '')
     + (scores.rule12 ? 'Party Type Individual, ' : '')
     + (scores.rule27 ? 'Transaction Mirroring, ' : '')
