@@ -27,7 +27,8 @@ const handleTransactionMirroring = (
   payeeHistoricalSendData: any,
   payeeHistoricalReceiveData: any,
 ): boolean => {
-  if (payeeHistoricalSendData.length < 1) return false;
+  if (payeeHistoricalSendData == undefined || payeeHistoricalSendData.length < 1) return false;
+  if (payeeHistoricalReceiveData == undefined || payeeHistoricalReceiveData.length < 1) return false;
   const { HTTPTransactionDate } = transfer;
   const currentTransferDate = new Date(HTTPTransactionDate);
 

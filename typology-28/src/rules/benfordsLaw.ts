@@ -3,6 +3,7 @@ const handleBenfordsLaw = (
   historicalData: any,
 ): boolean => {
   if (historicalData == undefined
+    || historicalData.length == 0
     || historicalData[0] == undefined) {
     return false;
   }

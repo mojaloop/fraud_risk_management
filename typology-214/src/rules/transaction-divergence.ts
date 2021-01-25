@@ -1,8 +1,8 @@
 // move to typology 11
 
 const handleTransactionDivergence = (transaction: any, payeeHistoricalSendData: any) => {
-  if (payeeHistoricalSendData.length < 10) return false;
-
+  if (payeeHistoricalSendData == undefined || payeeHistoricalSendData.length < 10) return false;
+  
   const transactionDate = new Date(transaction.HTTPTransactionDate);
   // Count transaction over the last 8 hours
   const latestTransactions = payeeHistoricalSendData.filter((transfer: any) => {
