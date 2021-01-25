@@ -7,6 +7,7 @@ const handleSimSwap = (
   const { historicalData } = message;
 
   if (historicalData == undefined
+    || historicalData.length == 0
     || historicalData[0] == undefined) {
     return false;
   }

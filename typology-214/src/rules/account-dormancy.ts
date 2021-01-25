@@ -1,5 +1,5 @@
 const handleAccountDormancy = (transfer: any, payeeHistoricalReceiveData: any, payeeHistoricalSendData: any): boolean => {
-  if (payeeHistoricalReceiveData.length < 1 && payeeHistoricalSendData.length < 1) return false;
+  if (payeeHistoricalReceiveData.length < 1 && payeeHistoricalReceiveData.length < 1) return false;
   const currentTransferDate = new Date(transfer.HTTPTransactionDate);
   const lastTransferReceivedDate = payeeHistoricalReceiveData.length >= 1 ? payeeHistoricalReceiveData.reduce((latestDate: any, transaction: any) => {
     if (!latestDate) {

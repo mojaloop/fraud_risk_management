@@ -10,6 +10,8 @@ const getPayeesFromILPsArray = async (outgoingTransfersClient: RedisClient, ILPS
     }))
   );
 
+  if (accountsTransfers == undefined || accountsTransfers.length == 0) return undefined;
+
   return accountsTransfers.reduce((payeesAcc: any, payee: any) => {
     if (payee === null) return payeesAcc;
     const payeeTransfers = JSON.parse(payee);
@@ -33,26 +35,34 @@ const handleTransactionsBetweenParties = async (
   outgoingTransfersClient: RedisClient,
   historicalData: any
 ) => {
+  if (historicalData == undefined || historicalData.length < 1) return false;
+
   const payeesList = historicalData.map((transfer: any) => transfer.ILPDestinationAccountAddress);
   payeesList.push(transfer.ILPDestinationAccountAddress);
   const uniqueNames = removeDuplicates(payeesList);
 
   // get Payess names - tier 1
   const tier1Payees = await getPayeesFromILPsArray(outgoingTransfersClient, uniqueNames);
-  payeesList.push(tier1Payees);
-  uniqueNames.push(removeDuplicates(tier1Payees));
+  if (tier1Payees != undefined && tier1Payees.length > 0) {
+    payeesList.push(tier1Payees);
+    uniqueNames.push(removeDuplicates(tier1Payees));
+  }
 
   // get Payess names - tier 2
   const uniqueTier2Names = removeValuesFromSecondArray(uniqueNames, tier1Payees);
   const tier2Payees = await getPayeesFromILPsArray(outgoingTransfersClient, removeDuplicates(uniqueTier2Names));
-  payeesList.push(tier2Payees);
-  uniqueNames.push(removeDuplicates(tier2Payees));
+  if (tier2Payees != undefined && tier2Payees.length > 0) {
+    payeesList.push(tier2Payees);
+    uniqueNames.push(removeDuplicates(tier2Payees));
+  }
 
   // get Payess names - tier 3
   const uniqueTier3Names = removeValuesFromSecondArray(uniqueNames, tier2Payees);
   const tier3Payees = await getPayeesFromILPsArray(outgoingTransfersClient, removeDuplicates(uniqueTier3Names));
-  payeesList.push(tier3Payees);
-  uniqueNames.push(removeDuplicates(tier3Payees));
+  if (tier3Payees != undefined && tier3Payees.length > 0) {
+    payeesList.push(tier3Payees);
+    uniqueNames.push(removeDuplicates(tier3Payees));
+  }
 
   if (payeesList.length < 8) return false;
   const uniqueEntitiesPercentage = uniqueNames.length / payeesList.length * 100;
