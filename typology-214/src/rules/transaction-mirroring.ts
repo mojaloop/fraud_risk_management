@@ -62,7 +62,7 @@ const handleTransactionMirroring = (
     });
 
     const trueMirroringTransfers = possibleMirroringTransfers
-      .filter((result: any) => result && result.is90Percentile ? true : false);
+      .filter((result: any) => (result && result.is90Percentile) ? true : false);
     if (trueMirroringTransfers.length > 0) {
       trueMirroringTransfers.forEach((mirroringResult: any) => acc.push(mirroringResult))
     }
