@@ -30,7 +30,7 @@ const handleScores = (scores: any, topic: string, TransactionID: string, transac
     + (scores.rule64 ? 0.15 : 0)
     ;
 
-  publish(topic, `"typology":"typology-28","transactionID":"${TransactionID}","createDate":${transactionDate},
+  publish(topic, `"typology":"typology-28","transactionID":"${TransactionID}","createDate":${transactionDate},"processedDate":${Date.now()},
   "score":${score},"textResult":"Typology 28 score is ${score}, Reason: ${(scores.rule2 ? 'Rule 2, ' : '')
     + (scores.rule12 ? 'Rule 12, ' : '')
     + (scores.rule16 ? 'Rule 16, ' : '')
