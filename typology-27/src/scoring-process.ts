@@ -64,10 +64,10 @@ const handleQuoteMessage = async (
     try { scores.rule14 = rules.handleRecentPasswordReset(transfer); } catch (error) {
       log(`Error while handling Recent Password Reset for transaction ${TransactionID}, with message: \r\n${error}`, topic)
     }
-    try { scores.rule18 = rules.handleExceptionallyLargeTransfer({ transfer, historicalData }); } catch (error) {
+    try { scores.rule18 = rules.handleExceptionallyLargeTransfer(transfer, historicalData); } catch (error) {
       log(`Error while handling Exceptionally Large Transfer for transaction ${TransactionID}, with message: \r\n${error}`, topic)
     }
-    try { scores.rule30 = rules.handleNewPayeeTransfer({ transfer, historicalData }); } catch (error) {
+    try { scores.rule30 = rules.handleNewPayeeTransfer(transfer, historicalData); } catch (error) {
       log(`Error while handling New Payee Transfer for transaction ${TransactionID}, with message: \r\n${error}`, topic)
     }
     try { scores.rule32 = rules.handleAccountDrain(transfer); } catch (error) {
@@ -76,6 +76,7 @@ const handleQuoteMessage = async (
     try { scores.rule78 = rules.handleCashWithdraw(transfer); } catch (error) {
       log(`Error while handling Cash Withdraw for transaction ${TransactionID}, with message: \r\n${error}`, topic)
     }
+
     handleScores(scores, topic, TransactionID, HTTPTransactionDate);
   } catch (e) {
     console.error(e);

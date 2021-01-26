@@ -50,12 +50,10 @@ const handleQuoteMessage = async (
 ) => {
   try {
     const transfer = JSON.parse(message.value.toString());
-    const { TransactionID, ILPSourceAccountAddress, ILPDestinationAccountAddress, HTTPTransactionDate } = transfer;
-    const sourceHistoricalSendDataJSON = await get(senderClient, ILPSourceAccountAddress);
+    const { TransactionID, ILPDestinationAccountAddress, HTTPTransactionDate } = transfer;
     const payeeHistoricalReceiveDataJSON = await get(receiverClient, ILPDestinationAccountAddress);
     const payeeHistoricalSendDataJSON = await get(senderClient, ILPDestinationAccountAddress);
 
-    const sourceHistoricalSendData = JSON.parse(sourceHistoricalSendDataJSON);
     const payeeHistoricalSendData = JSON.parse(payeeHistoricalSendDataJSON);
     const payeeHistoricalReceiveData = JSON.parse(payeeHistoricalReceiveDataJSON);
 
@@ -78,7 +76,6 @@ const handleQuoteMessage = async (
     catch (error) {
       log(`Error while handling Benford's Law ${TransactionID}, with message: \r\n${error}`, topic)
     }
-
     handleScores(scores, topic, TransactionID, HTTPTransactionDate);
   } catch (e) {
     console.error(e);
