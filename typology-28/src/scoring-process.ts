@@ -61,11 +61,13 @@ const handleQuoteMessage = async (
 ) => {
   try {
     const transfer = JSON.parse(message.value.toString());
-    const { TransactionID, ILPDestinationAccountAddress, HTTPTransactionDate } = transfer;
+    const { TransactionID, ILPDestinationAccountAddress, HTTPTransactionDate, ILPSourceAccountAddress } = transfer;
     const payeeHistoricalReceiveDataJSON = await get(receiverClient, ILPDestinationAccountAddress);
+    const payerHistoricalSendDataJSON = await get(senderClient, ILPSourceAccountAddress);
     const payeeHistoricalSendDataJSON = await get(senderClient, ILPDestinationAccountAddress);
 
     const payeeHistoricalSendData = JSON.parse(payeeHistoricalSendDataJSON);
+    const payerHistoricalSendData = JSON.parse(payerHistoricalSendDataJSON);
     const payeeHistoricalReceiveData = JSON.parse(payeeHistoricalReceiveDataJSON);
 
     // See https://lextego.atlassian.net/browse/ACTIO-197
@@ -75,6 +77,10 @@ const handleQuoteMessage = async (
     // catch (error) {
     //   log(`Error while handling transaction divergence for ${TransactionID}, with message: \r\n${error}`, topic)
     // }
+    try { scores.rule12 = rules.handlePartyTypeIndividual(transfer); }
+    catch (error) {
+      log(`Error while handling Party Type Individual ${TransactionID}, with message: \r\n${error}`, topic)
+    }
     try { scores.rule16 = rules.handleTransactionConvergence(transfer, payeeHistoricalReceiveData); }
     catch (error) {
       log(`Error while handling Transaction Convergence ${TransactionID}, with message: \r\n${error}`, topic)
@@ -82,6 +88,10 @@ const handleQuoteMessage = async (
     try { scores.rule27 = rules.handleTransactionMirroring(transfer, payeeHistoricalSendData, payeeHistoricalReceiveData); }
     catch (error) {
       log(`Error while handling Transaction Mirroring ${TransactionID}, with message: \r\n${error}`, topic)
+    }
+    try { scores.rule30 = rules.handleNewPayeeTransfer(transfer, payerHistoricalSendData); }
+    catch (error) {
+      log(`Error while handling New Payee ${TransactionID}, with message: \r\n${error}`, topic)
     }
     try { scores.rule63 = rules.handleBenfordsLaw(transfer, payeeHistoricalReceiveData); }
     catch (error) {
