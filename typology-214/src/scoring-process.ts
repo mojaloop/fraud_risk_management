@@ -23,14 +23,24 @@ const handleScores = (scores: any, topic: string, TransactionID: string, transac
     + (scores.rule78 ? 0.2 : 0);
 
   publish(topic, `"typology":"typology-214","transactionID":"${TransactionID}","score":${score},"createDate":${transactionDate},
-  "textResult":"Typology 214 score is ${score}, Reason: ${(scores.rule3 ? 'Account Dormancy - Payee, ' : '')
-    + (scores.rule12 ? 'Party Type Individual, ' : '')
-    + (scores.rule27 ? 'Transaction Mirroring, ' : '')
-    + (scores.rule30 ? 'New Payee, ' : '')
-    + (scores.rule48 ? 'Large Transaction - Payer, ' : '')
-    + (scores.rule78 ? 'Cash Withdrawl' : '')
+  "textResult":"Typology 214 score is ${score}, Reason: ${(scores.rule3 ? 'Rule 3, ' : '')
+    + (scores.rule12 ? 'Rule 12, ' : '')
+    + (scores.rule27 ? 'Rule 27, ' : '')
+    + (scores.rule30 ? 'Rule 30, ' : '')
+    + (scores.rule48 ? 'Rule 48, ' : '')
+    + (scores.rule78 ? 'Rule 78' : '')
     + '"}'
     }`);
+
+  // publish(topic, `"typology":"typology-214","transactionID":"${TransactionID}","score":${score},"createDate":${transactionDate},
+  // "textResult":"Typology 214 score is ${score}, Reason: ${(scores.rule3 ? 'Account Dormancy - Payee, ' : '')
+  //   + (scores.rule12 ? 'Party Type Individual, ' : '')
+  //   + (scores.rule27 ? 'Transaction Mirroring, ' : '')
+  //   + (scores.rule30 ? 'New Payee, ' : '')
+  //   + (scores.rule48 ? 'Large Transaction - Payer, ' : '')
+  //   + (scores.rule78 ? 'Cash Withdrawl' : '')
+  //   + '"}'
+  //   }`);
 }
 
 const handleQuoteMessage = async (
