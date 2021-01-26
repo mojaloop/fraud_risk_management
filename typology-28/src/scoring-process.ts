@@ -31,15 +31,26 @@ const handleScores = (scores: any, topic: string, TransactionID: string, transac
     ;
 
   publish(topic, `"typology":"typology-28","transactionID":"${TransactionID}","createDate":${transactionDate},
-  "score":${score},"textResult":"Typology 28 score is ${score}, Reason: ${(scores.rule2 ? 'Velocity (incoming), ' : '')
-    + (scores.rule12 ? 'Party Type Individual, ' : '')
-    + (scores.rule16 ? 'Transaction Convergence, ' : '')
-    + (scores.rule27 ? 'Transaction Mirroring, ' : '')
-    + (scores.rule30 ? 'New Payee, ' : '')
-    + (scores.rule63 ? "Benford's Law, " : '')
-    + (scores.rule64 ? 'Uniform Distribution - Payee' : '')
+  "score":${score},"textResult":"Typology 28 score is ${score}, Reason: ${(scores.rule2 ? 'Rule 2, ' : '')
+    + (scores.rule12 ? 'Rule 12, ' : '')
+    + (scores.rule16 ? 'Rule 16, ' : '')
+    + (scores.rule27 ? 'Rule 27, ' : '')
+    + (scores.rule30 ? 'Rule 30, ' : '')
+    + (scores.rule63 ? "Rule 63, " : '')
+    + (scores.rule64 ? 'Rule 64' : '')
     + '"}'
     }`);
+
+  // publish(topic, `"typology":"typology-28","transactionID":"${TransactionID}","createDate":${transactionDate},
+  // "score":${score},"textResult":"Typology 28 score is ${score}, Reason: ${(scores.rule2 ? 'Velocity (incoming), ' : '')
+  //   + (scores.rule12 ? 'Party Type Individual, ' : '')
+  //   + (scores.rule16 ? 'Transaction Convergence, ' : '')
+  //   + (scores.rule27 ? 'Transaction Mirroring, ' : '')
+  //   + (scores.rule30 ? 'New Payee, ' : '')
+  //   + (scores.rule63 ? "Benford's Law, " : '')
+  //   + (scores.rule64 ? 'Uniform Distribution - Payee' : '')
+  //   + '"}'
+  //   }`);
 }
 
 const handleQuoteMessage = async (

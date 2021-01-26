@@ -30,15 +30,26 @@ const handleScores = (scores: any, topic: string, TransactionID: string, transac
     );
 
   publish(topic, `"typology":"typology-27","transactionID":"${TransactionID}","score":${score},"createDate":${transactionDate},
-  "textResult":"Typology 27 score is ${score}, Reason: ${(scores.rule9 ? 'Recent Sim Swap, ' : '')
-    + (scores.rule12 ? 'Party Type Individual, ' : '')
-    + (scores.rule14 ? 'Recent Password Reset, ' : '')
-    + (scores.rule18 ? 'Exceptionally Large Transfer, ' : '')
-    + (scores.rule30 ? 'New Payee, ' : '')
-    + (scores.rule32 ? 'Account Drain, ' : '')
-    + (scores.rule78 ? 'Cash Withdrawal,' : '')
+  "textResult":"Typology 27 score is ${score}, Reason: ${(scores.rule9 ? 'Rule 9, ' : '')
+    + (scores.rule12 ? 'Rule 12, ' : '')
+    + (scores.rule14 ? 'Rule 14, ' : '')
+    + (scores.rule18 ? 'Rule 18, ' : '')
+    + (scores.rule30 ? 'Rule 30, ' : '')
+    + (scores.rule32 ? 'Rule 32, ' : '')
+    + (scores.rule78 ? 'Rule 78' : '')
     + '"}'
     }`);
+    
+  // publish(topic, `"typology":"typology-27","transactionID":"${TransactionID}","score":${score},"createDate":${transactionDate},
+  // "textResult":"Typology 27 score is ${score}, Reason: ${(scores.rule9 ? 'Recent Sim Swap, ' : '')
+  //   + (scores.rule12 ? 'Party Type Individual, ' : '')
+  //   + (scores.rule14 ? 'Recent Password Reset, ' : '')
+  //   + (scores.rule18 ? 'Exceptionally Large Transfer, ' : '')
+  //   + (scores.rule30 ? 'New Payee, ' : '')
+  //   + (scores.rule32 ? 'Account Drain, ' : '')
+  //   + (scores.rule78 ? 'Cash Withdrawal,' : '')
+  //   + '"}'
+  //   }`);
 }
 
 const handleQuoteMessage = async (
