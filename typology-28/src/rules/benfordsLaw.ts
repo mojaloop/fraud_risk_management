@@ -40,7 +40,7 @@ const handleBenfordsLaw = (
     chiSquare += Math.pow(observed[index] - expected[index], 2) / expected[index];
   }
 
-  if (chiSquare < 15.507) {
+  if (chiSquare > 15.507) {
     return true;
   } else {
     return false;
