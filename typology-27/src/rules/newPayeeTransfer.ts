@@ -1,11 +1,11 @@
 const handleNewPayeeTransfer = (
-  message: any,
+  transfer: any,
+  historicalData: any
 ): boolean => {
-  const { historicalData, transfer } = message;
-  if(historicalData == undefined || historicalData.length == 0) return false;
+  if (historicalData == undefined || historicalData.length == 0) return false;
   const ILPCount = historicalData
     .filter((transaction: any) => transfer.ILPDestinationAccountAddress !== transaction.ILPDestinationAccountAddress);
-  return ILPCount.length <= 0;
+  return ILPCount.length > 0;
 };
 
 export default handleNewPayeeTransfer;

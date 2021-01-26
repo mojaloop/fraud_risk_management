@@ -10,14 +10,13 @@ const getTransfersFromILPsArray = async (outgoingTransfersClient: RedisClient, I
 
   if (accountsTransfers == undefined || accountsTransfers.length == 0) return undefined;
 
-  const payees = accountsTransfers.reduce((payeesAcc: any, payee: any) => {
+  return accountsTransfers.reduce((payeesAcc: any, payee: any) => {
     if (payee === null) return payeesAcc;
     const payeeTransfers = JSON.parse(payee);
     if (payeeTransfers.length < 1) return payeesAcc;
     const payeeNames = payeeTransfers.map((transfer: any) => transfer.ILPDestinationAccountAddress);
     return [...payeesAcc, ...payeeNames];
   }, []);
-  return { payees, accountsTransfers };
 }
 
 const removeDuplicates = (names: any) => names.filter((c: any, index: number) => {
@@ -37,30 +36,30 @@ const handleTransactionsBetweenParties = async (
   if (historicalData == undefined || historicalData.length == 0) return false;
 
   const payeesList = historicalData.map((transfer: any) => transfer.ILPDestinationAccountAddress);
-  payeesList.push(transfer.d);
+  payeesList.push(transfer.ILPDestinationAccountAddress);
   const uniqueNames = removeDuplicates(payeesList);
 
   // get Payess names - tier 1
   const tier1Payees = await getTransfersFromILPsArray(outgoingTransfersClient, uniqueNames);
-  if (tier1Payees != undefined) {
-    payeesList.push(tier1Payees.payees);
-    uniqueNames.push(removeDuplicates(tier1Payees.payees));
-  }
+  if (tier1Payees !== undefined) {
+    payeesList.push(tier1Payees);
+    uniqueNames.push(removeDuplicates(tier1Payees));
 
-  // get Payess names - tier 2
-  const uniqueTier2Names = removeValuesFromSecondArray(uniqueNames, tier1Payees.payees);
-  const tier2Payees = await getTransfersFromILPsArray(outgoingTransfersClient, removeDuplicates(uniqueTier2Names));
-  if (tier2Payees != undefined) {
-    payeesList.push(tier2Payees.payees);
-    uniqueNames.push(removeDuplicates(tier2Payees.payees));
-  }
+    // get Payess names - tier 2
+    const uniqueTier2Names = removeValuesFromSecondArray(uniqueNames, tier1Payees);
+    const tier2Payees = await getTransfersFromILPsArray(outgoingTransfersClient, removeDuplicates(uniqueTier2Names));
+    if (tier2Payees !== undefined) {
+      payeesList.push(tier2Payees);
+      uniqueNames.push(removeDuplicates(tier2Payees));
 
-  // get Payess names - tier 3
-  const uniqueTier3Names = removeValuesFromSecondArray(uniqueNames, tier2Payees.payees);
-  const tier3Payees = await getTransfersFromILPsArray(outgoingTransfersClient, removeDuplicates(uniqueTier3Names));
-  if (tier3Payees != undefined) {
-    payeesList.push(tier3Payees.payees);
-    uniqueNames.push(removeDuplicates(tier3Payees.payees));
+      // get Payess names - tier 3
+      const uniqueTier3Names = removeValuesFromSecondArray(uniqueNames, tier2Payees);
+      const tier3Payees = await getTransfersFromILPsArray(outgoingTransfersClient, removeDuplicates(uniqueTier3Names));
+      if (tier3Payees != undefined) {
+        payeesList.push(tier3Payees);
+        uniqueNames.push(removeDuplicates(tier3Payees));
+      }
+    }
   }
 
   if (payeesList.length < 8) return false;

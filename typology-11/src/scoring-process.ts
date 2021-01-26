@@ -25,8 +25,7 @@ const handleScores = (scores: any, topic: string, TransactionID: string, transac
 
 
   publish(topic, `"typology":"typology-11","transactionID":"${TransactionID}","score":${score},"createDate":${transactionDate},
-    "textResult":"Typology 11 score is ${score}, Reason: ${
-    + (scores.rule17 ? 'Transaction Divergence, ' : '')
+    "textResult":"Typology 11 score is ${score}, Reason: ${+ (scores.rule17 ? 'Transaction Divergence, ' : '')
     + (scores.rule27 ? 'Transaction Mirroring, ' : '')
     + (scores.rule86 ? 'Transaction Between Parties, ' : '')
     + (scores.rule87 ? 'Co-located Parties' : '')
