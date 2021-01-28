@@ -11,7 +11,7 @@ const start = async () => {
     await initializeProducer();
     const redisSenderClient = await initializeRedis(redisSenderDB, redisHost, redisPort, redisAuth);
     const redisReceiverClient = await initializeRedis(redisReceiverDB, redisHost, redisPort, redisAuth);
-
+    // This method will kick off the consumer that will handle any new transactions coming in. 
     await runConsumer(redisSenderClient, redisReceiverClient);
   } catch (e) {
     console.error(e);
