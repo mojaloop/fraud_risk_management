@@ -1,0 +1,41 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "type": "typescript",
+            "tsconfig": "typology-11/tsconfig.json",
+            "problemMatcher": [
+                "$tsc"
+            ],
+            "group": "build",
+            "label": "tsc:typology-11"
+        },
+        {
+            "type": "typescript",
+            "tsconfig": "typology-27/tsconfig.json",
+            "problemMatcher": [
+                "$tsc"
+            ],
+            "group": "build",
+            "label": "tsc:typology-27"
+        },
+        {
+            "type": "typescript",
+            "tsconfig": "typology-28/tsconfig.json",
+            "problemMatcher": [
+                "$tsc"
+            ],
+            "group": "build",
+            "label": "tsc:typology-28"
+        },
+        {
+            "type": "typescript",
+            "tsconfig": "typology-214/tsconfig.json",
+            "problemMatcher": [
+                "$tsc"
+            ],
+            "group": "build",
+            "label": "tsc:typology-214"
+        }
+    ]
+}

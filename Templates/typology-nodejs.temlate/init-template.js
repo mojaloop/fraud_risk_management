@@ -65,6 +65,8 @@ Could not initialize the template because no typology number was not provided.`;
 
     cleanUp();
 
+    updateGlobalLaunchSettings();
+
     console.log(`Done initialization ${typologyName} ready for development.`);
 }
 
@@ -100,6 +102,7 @@ function updateTypologyNameInCode() {
         ".env.template",
         "docker-compose.yaml",
         "dockerfile",
+        ".vscode/launch.json",
     ];
 
     // Go through specific files to replace the typology name
@@ -214,13 +217,15 @@ Other handy commands - while debugging, if you want the app to reload, just type
 }
 
 function createEnvFile() {
-    logDebug('\nCreating .env file from .env.template')
+    logDebug("\nCreating .env file from .env.template");
     fs.createReadStream("./.env.template").pipe(fs.createWriteStream("./.env"));
 }
 
 function cleanUp() {
-    logDebug('\nRemoving init-template.js because it is no longer needed for typology.\n')
-    
+    logDebug(
+        "\nRemoving init-template.js because it is no longer needed for typology.\n"
+    );
+
     if (removeInitJs) {
         fs.unlinkSync("./init-template.js");
     }
@@ -240,6 +245,64 @@ function cleanUp() {
     // }
 
     // console.log(`Successfully renamed the template directory to the correct typology name: "${typologyName}".`);
+}
+
+function updateGlobalLaunchSettings() {
+    try {
+        const launchConfig = {
+            type: "node",
+            request: "launch",
+            name: `Launch Typology-${typologyNumber}-Engine`,
+            skipFiles: ["<node_internals>\\**"],
+            program:
+                "${workspaceFolder}\\typology-" +
+                typologyNumber +
+                "\\src\\index.ts",
+            preLaunchTask: `tsc:typology-${typologyNumber}`,
+            outFiles: [
+                "${workspaceFolder}\\typology-" +
+                    typologyNumber +
+                    "\\build\\**\\*.js",
+            ],
+            cwd: "${workspaceFolder}\\typology-" + typologyNumber + "",
+        };
+
+        const taskConfig = {
+            type: "typescript",
+            tsconfig: `typology-${typologyNumber}/tsconfig.json`,
+            problemMatcher: ["$tsc"],
+            group: "build",
+            label: `tsc:typology-${typologyNumber}`,
+        };
+
+        const globLaunchSettingsString = fs.readFileSync(
+            "../.vscode/launch.json",
+            "utf-8"
+        );
+        const globTasksSettingsString = fs.readFileSync(
+            "../.vscode/tasks.json",
+            "utf-8"
+        );
+
+        const globLaunchSettings = JSON.parse(globLaunchSettingsString);
+        const globTasksSettings = JSON.parse(globTasksSettingsString);
+        // Add the project to the launch settings and tasks
+        globLaunchSettings.configurations.push(launchConfig);
+        globTasksSettings.tasks.push(taskConfig);
+
+        fs.writeFileSync(
+            "../.vscode/launch.json",
+            JSON.stringify(globLaunchSettings, null, 4)
+        );
+        fs.writeFileSync(
+            "../.vscode/tasks.json",
+            JSON.stringify(globTasksSettings, null, 4)
+        );
+    } catch (err) {
+        console.error(
+            `Failed to updated global launch.json and tasks.json, continuing due to non-lethal failure.\n${err}`
+        );
+    }
 }
 
 initTemplate();
