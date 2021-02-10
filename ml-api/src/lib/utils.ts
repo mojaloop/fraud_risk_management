@@ -1,6 +1,11 @@
 /* eslint-disable no-console */
 import util from 'util';
-const fetch = require('node-fetch');
+import fetch, {
+  BodyInit,
+  HeadersInit,
+  RequestInit,
+  Response,
+} from 'node-fetch';
 
 const { NIFI_ENDPOINT, NIFI_PORT } = require('../config');
 
@@ -9,9 +14,13 @@ const DEFAULT_HEADERS = {
   'content-type': 'application/json',
 };
 
-const buildUrl = (path: any) => `${NIFI_ENDPOINT}:${NIFI_PORT}${path}`;
+const buildUrl = (path: string): string =>
+  `${NIFI_ENDPOINT}:${NIFI_PORT}${path}`;
 
-const throwOrJson = async (res: any, message = `HTTP request ${res.url} returned error response ${res.status}`) => {
+const throwOrJson = async (
+  res: Response,
+  message = `HTTP rpequest ${res.url} returned error response ${res.status}`,
+) => {
   const resp = await res.json();
   if (res.headers.get('content-length') === '0' || res.status === 204) {
     return null;
@@ -22,21 +31,34 @@ const throwOrJson = async (res: any, message = `HTTP request ${res.url} returned
   throw new Error(JSON.stringify({ message, res, jsonResponse: resp }));
 };
 
-async function get(path: any, opts: any) {
+async function get(path: string, opts: { headers: HeadersInit }) {
   try {
-    const reqOpts = {
+    const reqOpts: RequestInit = {
       method: 'GET',
       headers: (opts && opts.headers) || DEFAULT_HEADERS,
     };
     const url = buildUrl(path);
     return await fetch(url, reqOpts).then(throwOrJson);
   } catch (e) {
-    console.log(util.format('Error attempting GET. URL:', path, 'Opts:', opts, 'Error:', JSON.stringify(e)));
+    console.log(
+      util.format(
+        'Error attempting GET. URL:',
+        path,
+        'Opts:',
+        opts,
+        'Error:',
+        JSON.stringify(e),
+      ),
+    );
     throw e;
   }
 }
 
-async function put(path: any, body: any, opts: any) {
+async function put(
+  path: string,
+  body: BodyInit,
+  opts: { headers: HeadersInit; json: boolean },
+) {
   try {
     const reqOpts = {
       method: 'PUT',
@@ -46,12 +68,27 @@ async function put(path: any, body: any, opts: any) {
     const url = buildUrl(path);
     return await fetch(url, reqOpts).then(throwOrJson);
   } catch (e) {
-    console.log(util.format('Error attempting PUT. URL:', path, 'Opts:', opts, 'Body:', body, 'Error:', e));
+    console.log(
+      util.format(
+        'Error attempting PUT. URL:',
+        path,
+        'Opts:',
+        opts,
+        'Body:',
+        body,
+        'Error:',
+        e,
+      ),
+    );
     throw e;
   }
 }
 
-async function post(path: any, body: any, opts: any) {
+async function post(
+  path: string,
+  body: BodyInit,
+  opts: { headers: HeadersInit; json: boolean },
+) {
   try {
     const reqOpts = {
       method: 'POST',
@@ -61,12 +98,26 @@ async function post(path: any, body: any, opts: any) {
     const url = buildUrl(path);
     return await fetch(url, reqOpts).then(throwOrJson);
   } catch (e) {
-    console.log(util.format('Error attempting POST. URL:', path, 'Opts:', opts, 'Body:', body, 'Error:', e));
+    console.log(
+      util.format(
+        'Error attempting POST. URL:',
+        path,
+        'Opts:',
+        opts,
+        'Body:',
+        body,
+        'Error:',
+        e,
+      ),
+    );
     throw e;
   }
 }
 
-async function del(path: any, opts: any) {
+async function del(
+  path: string,
+  opts: { headers: HeadersInit; json: boolean },
+) {
   try {
     const reqOpts = {
       method: 'DELETE',
@@ -75,14 +126,18 @@ async function del(path: any, opts: any) {
     const url = buildUrl(path);
     return await fetch(url, reqOpts).then(throwOrJson);
   } catch (e) {
-    console.log(util.format('Error attempting DELETE. URL:', path, 'Opts:', opts, 'Error:', e));
+    console.log(
+      util.format(
+        'Error attempting DELETE. URL:',
+        path,
+        'Opts:',
+        opts,
+        'Error:',
+        e,
+      ),
+    );
     throw e;
   }
 }
 
-export {
-  get,
-  put,
-  post,
-  del,
-};
+export { get, put, post, del };
