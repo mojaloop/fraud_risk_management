@@ -20,10 +20,17 @@ const handleQuoteMessage = async (
   const ILPList = await getILPList(redisClient, sourceILP);
 
   const sourceILPTransactions = JSON.parse(ILPList);
-  const ILPCount = sourceILPTransactions
-    .filter((transaction: any) => targetILP !== transaction.ILPDestinationAccountAddress);
+  const ILPCount = sourceILPTransactions.filter(
+    (transaction: any) =>
+      targetILP !== transaction.ILPDestinationAccountAddress,
+  );
   const isNewILP = ILPCount.length > 0;
-  await publish(topic, `[${isNewILP}] Transaction: ${txID} from ${sourceILP} to ${targetILP} is ${(isNewILP) ? '' : 'not '} a new ILP transaction`);
+  await publish(
+    topic,
+    `[${isNewILP}] Transaction: ${txID} from ${sourceILP} to ${targetILP} is ${
+      isNewILP ? '' : 'not '
+    } a new ILP transaction`,
+  );
 };
 
 export default handleQuoteMessage;

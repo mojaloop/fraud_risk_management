@@ -1,4 +1,7 @@
-import { ShareServiceClient, ShareDirectoryClient } from '@azure/storage-file-share';
+import {
+  ShareServiceClient,
+  ShareDirectoryClient,
+} from '@azure/storage-file-share';
 import { log } from './helper';
 
 const createDirectory = async (
@@ -20,7 +23,9 @@ const createDirectory = async (
   return directoryClient;
 };
 
-const listFiles = async (directoryClient: ShareDirectoryClient): Promise<string[]> => {
+const listFiles = async (
+  directoryClient: ShareDirectoryClient,
+): Promise<string[]> => {
   const fileNames: string[] = [];
   // eslint-disable-next-line no-restricted-syntax
   for await (const entity of directoryClient.listFilesAndDirectories()) {

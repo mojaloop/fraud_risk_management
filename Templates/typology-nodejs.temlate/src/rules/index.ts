@@ -3,5 +3,5 @@ import hasRuleYName from './has-rule-y-name';
 
 export default {
   hasRuleXName,
-  hasRuleYName
-}
+  hasRuleYName,
+};

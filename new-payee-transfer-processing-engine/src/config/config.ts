@@ -12,7 +12,7 @@ const configuration: ConfigObj = {
   resultTopic: <string>process.env.RESULT_TOPIC,
   partition: parseInt(process.env.PARTITION!, 10),
   autoCommit: <any>process.env.AUTO_COMMIT,
-  logTopic: <string> process.env.LOG_TOPIC,
+  logTopic: <string>process.env.LOG_TOPIC,
   redisAuth: <string>process.env.REDIS_AUTH,
   redisDB: <number>parseInt(process.env.REDIS_DB!, 10),
   redisHost: <string>process.env.REDIS_HOST,
@@ -21,15 +21,15 @@ const configuration: ConfigObj = {
 
 interface ConfigObj {
   kafkaEndpoint: string;
-  topics: string[],
-  resultTopic: string,
-  partition: number,
-  autoCommit: boolean,
-  logTopic:string
-  redisDB: number,
-  redisHost: string,
-  redisPort: number,
-  redisAuth: string
+  topics: string[];
+  resultTopic: string;
+  partition: number;
+  autoCommit: boolean;
+  logTopic: string;
+  redisDB: number;
+  redisHost: string;
+  redisPort: number;
+  redisAuth: string;
 }
 
 export { configuration, ConfigObj };

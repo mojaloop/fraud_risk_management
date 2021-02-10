@@ -1,12 +1,18 @@
 import { RedisClient } from 'redis';
 import csv from 'csvtojson';
-import { ShareDirectoryClient, ShareServiceClient, StorageSharedKeyCredential } from '@azure/storage-file-share';
+import {
+  ShareDirectoryClient,
+  ShareServiceClient,
+  StorageSharedKeyCredential,
+} from '@azure/storage-file-share';
 import { HistoricalDataType, AzureType } from './constants';
 import { createDirectory, listFiles } from './azure-client';
 import { log } from './helper';
 
 // A helper method used to read a Node.js readable stream into a Buffer
-async function streamToBuffer(readableStream: NodeJS.ReadableStream): Promise<Buffer> {
+async function streamToBuffer(
+  readableStream: NodeJS.ReadableStream,
+): Promise<Buffer> {
   return new Promise((resolve, reject) => {
     const chunks: Buffer[] = [];
     readableStream.on('data', (data: Buffer | string) => {
@@ -33,7 +39,7 @@ const initializeRedis = async (
     db: redisDB,
     host: redisHost,
     port: redisPort,
-    auth_pass: redisAuth
+    auth_pass: redisAuth,
   });
   client.on('error', (error) => {
     log(error, logTopic);
@@ -41,7 +47,11 @@ const initializeRedis = async (
   return client;
 };
 
-const insertHistoricalData = async (sourceClient: RedisClient, destinationClient: RedisClient, transfers) => {
+const insertHistoricalData = async (
+  sourceClient: RedisClient,
+  destinationClient: RedisClient,
+  transfers,
+) => {
   const sourceILPS = transfers.reduce((ILPAccumulator, transfer) => {
     const ILPNames: string[] = Object.keys(ILPAccumulator);
     if (ILPNames.includes(transfer.ILPSourceAccountAddress)) {
@@ -85,24 +95,27 @@ const insertFilesNames = async (client: RedisClient, data: string[]) => {
 const getFilesNames = async (
   client: RedisClient,
   topic: string,
-): Promise<any> => new Promise((resolve) => {
-  client.get('files-names', (err, data) => {
-    if (err) {
-      log(`Error while retrieving file names: ${err}`, topic);
-      resolve(0);
-    }
-    resolve(data);
+): Promise<any> =>
+  new Promise((resolve) => {
+    client.get('files-names', (err, data) => {
+      if (err) {
+        log(`Error while retrieving file names: ${err}`, topic);
+        resolve(0);
+      }
+      resolve(data);
+    });
   });
-});
 
 const getAllKeys = async (client: RedisClient, topic: string) =>
-  new Promise((resolve, reject) => client.keys('*', (err, reply) => {
-    if (err) {
-      log(err, topic);
-      reject(err);
-    }
-    resolve(reply);
-  }));
+  new Promise((resolve, reject) =>
+    client.keys('*', (err, reply) => {
+      if (err) {
+        log(err, topic);
+        reject(err);
+      }
+      resolve(reply);
+    }),
+  );
 
 const findNewFileName = (
   azureFilesNames: string[],
@@ -114,19 +127,21 @@ const findNewFileName = (
   if (redisFilesnames && redisFilesnames.constructor !== Array) {
     return azureFilesNames[0];
   }
-  const newFileName = azureFilesNames.filter((azureFileName) => !redisFilesnames
-    ?.includes(azureFileName));
+  const newFileName = azureFilesNames.filter(
+    (azureFileName) => !redisFilesnames?.includes(azureFileName),
+  );
   return newFileName[0];
 };
 
-const cleanStore = async (client: RedisClient): Promise<any> => new Promise((resolve) => {
-  client.flushdb(((err) => {
-    if (err) {
+const cleanStore = async (client: RedisClient): Promise<any> =>
+  new Promise((resolve) => {
+    client.flushdb((err) => {
+      if (err) {
+        resolve(0);
+      }
       resolve(0);
-    }
-    resolve(0);
-  }));
-});
+    });
+  });
 
 const processNewData = async (
   historicDataFile: string,
@@ -142,7 +157,9 @@ const processNewData = async (
   await insertFilesNames(sourceClient, azureFileNames);
   const fileClient = directoryClient.getFileClient(historicDataFile!);
   const downloadFileResponse = await fileClient.download(0);
-  const historicalFileBuffer = await streamToBuffer(downloadFileResponse.readableStreamBody!);
+  const historicalFileBuffer = await streamToBuffer(
+    downloadFileResponse.readableStreamBody!,
+  );
   return csv().fromString(historicalFileBuffer.toString());
 };
 
@@ -159,32 +176,37 @@ const loadData = async (
   if (loadFromLocal) {
     return csv().fromFile('./src/data/historical-data-1607569708.csv');
   }
-  const {
+  const { azureAccount, azureKey, azureShare, azureDirectory } = azureConfig;
+  const sharedKeyCredential = new StorageSharedKeyCredential(
     azureAccount,
     azureKey,
-    azureShare,
-    azureDirectory,
-  } = azureConfig;
-  const sharedKeyCredential = new StorageSharedKeyCredential(azureAccount, azureKey);
+  );
   const serviceClient = new ShareServiceClient(
     `https://${azureAccount}.file.core.windows.net`,
     sharedKeyCredential,
   );
-  const directoryClient = await createDirectory(serviceClient, azureShare, azureDirectory, topic);
+  const directoryClient = await createDirectory(
+    serviceClient,
+    azureShare,
+    azureDirectory,
+    topic,
+  );
   const azureFileNames = await listFiles(directoryClient);
   const redisFileNames = await getFilesNames(SourceClient, topic);
   const historicDataFile = redisFileNames
     ? findNewFileName(azureFileNames, redisFileNames.split(','))
     : azureFileNames[azureFileNames.length - 1]; // grab the last file uploaded
   if (historicDataFile) {
-    return processNewData(historicDataFile, SourceClient, DestinationClient, azureFileNames, directoryClient, topic);
+    return processNewData(
+      historicDataFile,
+      SourceClient,
+      DestinationClient,
+      azureFileNames,
+      directoryClient,
+      topic,
+    );
   }
   return false;
 };
 
-export {
-  initializeRedis,
-  loadData,
-  insertHistoricalData,
-  getAllKeys,
-};
+export { initializeRedis, loadData, insertHistoricalData, getAllKeys };

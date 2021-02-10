@@ -4,12 +4,15 @@
   "description": "",
   "main": "src/index.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start:dev": "nodemon",
     "start": "npm run build && node build/index.js",
     "build": "rimraf ./build && tsc",
-    "lint": "eslint . --ext .ts",
-    "lint:fix": "eslint --cache --fix ."
+    "fix": "yarn fix:prettier && yarn fix:eslint",
+    "fix:eslint": "eslint --fix \"**/*.ts\"",
+    "fix:prettier": "prettier --write \"**/*.ts\"",
+    "lint": "yarn lint:eslint && yarn lint:prettier",
+    "lint:eslint": "eslint \"**/*.ts\"",
+    "lint:prettier": "prettier --check \"**/*.ts\""
   },
   "keywords": [],
   "author": "",

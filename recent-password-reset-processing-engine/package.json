@@ -4,11 +4,15 @@
   "description": "This rules engine will verify if your PIN was recently changed, by subscribing to configured Kafka topics, connect to a Redis server to check if a value is in a set and post the result of the processing engine to a configured Kafka topic.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start:dev": "nodemon",
     "build": "rimraf ./build && tsc",
     "start": "npm run build && node build/index.js",
-    "lint:fix": "eslint --cache --fix ."
+    "fix": "yarn fix:prettier && yarn fix:eslint",
+    "fix:eslint": "eslint --fix \"**/*.ts\"",
+    "fix:prettier": "prettier --write \"**/*.ts\"",
+    "lint": "yarn lint:eslint && yarn lint:prettier",
+    "lint:eslint": "eslint \"**/*.ts\"",
+    "lint:prettier": "prettier --check \"**/*.ts\""
   },
   "keywords": [],
   "author": "johanfol",

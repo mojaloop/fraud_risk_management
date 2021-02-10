@@ -4,11 +4,15 @@
   "description": "This is a Blocklist Processing Engine. It will start a client listening to the configured Kafka endpoint, then check the MSISDN for all the different transactions on a Redis Blocklist, and then output the result to Tremor (block or no-block).",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start:dev": "nodemon",
     "build": "rimraf ./build && tsc",
     "start": "npm run build && node build/index.js",
-    "lint:fix": "eslint --cache --fix ."
+    "fix": "yarn fix:prettier && yarn fix:eslint",
+    "fix:eslint": "eslint --fix \"**/*.ts\"",
+    "fix:prettier": "prettier --write \"**/*.ts\"",
+    "lint": "yarn lint:eslint && yarn lint:prettier",
+    "lint:eslint": "eslint \"**/*.ts\"",
+    "lint:prettier": "prettier --check \"**/*.ts\""
   },
   "keywords": [],
   "author": "johanfol",
@@ -46,6 +50,6 @@
     }
   },
   "lint-staged": {
-    "*.{js,ts}": "eslint --cache --fix"
+    "*.{js,ts}": "yarn fix"
   }
 }

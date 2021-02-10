@@ -1,17 +1,14 @@
 interface KafkaType {
-  topic: string,
-  partition: number,
-  autoCommit: boolean,
-  kafkaEndpoint: string,
+  topic: string;
+  partition: number;
+  autoCommit: boolean;
+  kafkaEndpoint: string;
 }
 
 interface KafkaMessage {
-  topic: string,
-  partition: number,
-  messages: any,
+  topic: string;
+  partition: number;
+  messages: any;
 }
 
-export {
-  KafkaType,
-  KafkaMessage,
-};
+export { KafkaType, KafkaMessage };

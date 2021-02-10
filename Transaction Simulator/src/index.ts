@@ -1,4 +1,4 @@
-import { Producer } from "./producer/producer";
+import { Producer } from './producer/producer';
 
-let producer = new Producer();
+const producer = new Producer();
 producer.Start();
