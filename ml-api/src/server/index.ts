@@ -1,8 +1,8 @@
+import routes from '../routes';
+
 const bodyParser = require('body-parser');
 const express = require('express');
 const nocache = require('nocache');
-
-import routes from '../routes';
 
 function mountMiddlewares(serverInstance: any) {
   serverInstance.use(bodyParser.json());
