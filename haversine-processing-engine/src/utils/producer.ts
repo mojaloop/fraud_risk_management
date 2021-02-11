@@ -11,7 +11,11 @@ const createProducer = (client: kafka.KafkaClient): kafka.Producer => {
   return producer;
 };
 
-const createMessage = (topic: string, partition: number, messages: any): KafkaMessage => {
+const createMessage = (
+  topic: string,
+  partition: number,
+  messages: any,
+): KafkaMessage => {
   const payload: KafkaMessage = {
     topic,
     partition,
@@ -26,8 +30,4 @@ const handleProducer = (producer: kafka.Producer, payload: KafkaMessage) => {
   });
 };
 
-export {
-  createProducer,
-  createMessage,
-  handleProducer,
-};
+export { createProducer, createMessage, handleProducer };

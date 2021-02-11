@@ -1,13 +1,19 @@
 import fs from 'fs';
 import { RedisClient } from 'redis';
 import csv from 'csvtojson';
-import { ShareDirectoryClient, ShareServiceClient, StorageSharedKeyCredential } from '@azure/storage-file-share';
+import {
+  ShareDirectoryClient,
+  ShareServiceClient,
+  StorageSharedKeyCredential,
+} from '@azure/storage-file-share';
 import { AzureType } from './constants';
 import { createDirectory, listFiles } from './azure-client';
 import { log } from './helper';
 
 // A helper method used to read a Node.js readable stream into a Buffer
-async function streamToBuffer(readableStream: NodeJS.ReadableStream): Promise<Buffer> {
+async function streamToBuffer(
+  readableStream: NodeJS.ReadableStream,
+): Promise<Buffer> {
   return new Promise((resolve, reject) => {
     const chunks: Buffer[] = [];
     readableStream.on('data', (data: Buffer | string) => {
@@ -39,14 +45,15 @@ const initializeRedis = async (
   return client;
 };
 
-const cleanStore = async (client: RedisClient): Promise<any> => new Promise((resolve) => {
-  client.flushdb(((err) => {
-    if (err) {
+const cleanStore = async (client: RedisClient): Promise<any> =>
+  new Promise((resolve) => {
+    client.flushdb((err) => {
+      if (err) {
+        resolve(0);
+      }
       resolve(0);
-    }
-    resolve(0);
-  }));
-});
+    });
+  });
 
 const processNewData = async (
   typologyFile: string,
@@ -58,7 +65,9 @@ const processNewData = async (
   log(`inserting file: ${typologyFile}`, topic);
   const fileClient = directoryClient.getFileClient(typologyFile!);
   const downloadFileResponse = await fileClient.download(0);
-  const typologyBuffer = await streamToBuffer(downloadFileResponse.readableStreamBody!);
+  const typologyBuffer = await streamToBuffer(
+    downloadFileResponse.readableStreamBody!,
+  );
   const typology = typologyBuffer.toString();
   client.append(typologyFile, typology);
 };
@@ -88,24 +97,26 @@ const loadData = async (
   if (loadFromLocal) {
     return loadLocalFiles(topic);
   }
-  const {
+  const { azureAccount, azureKey, azureShare, azureDirectory } = azureConfig;
+  const sharedKeyCredential = new StorageSharedKeyCredential(
     azureAccount,
     azureKey,
-    azureShare,
-    azureDirectory,
-  } = azureConfig;
-  const sharedKeyCredential = new StorageSharedKeyCredential(azureAccount, azureKey);
+  );
   const serviceClient = new ShareServiceClient(
     `https://${azureAccount}.file.core.windows.net`,
     sharedKeyCredential,
   );
-  const directoryClient = await createDirectory(serviceClient, azureShare, azureDirectory, topic);
+  const directoryClient = await createDirectory(
+    serviceClient,
+    azureShare,
+    azureDirectory,
+    topic,
+  );
   const azureFileNames = await listFiles(directoryClient);
   await cleanStore(client);
-  return azureFileNames.map(fileName => processNewData(fileName, client, azureFileNames, directoryClient, topic))
+  return azureFileNames.map((fileName) =>
+    processNewData(fileName, client, azureFileNames, directoryClient, topic),
+  );
 };
 
-export {
-  initializeRedis,
-  loadData,
-};
+export { initializeRedis, loadData };

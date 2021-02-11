@@ -1,9 +1,5 @@
 import config from './config';
-import {
-  log,
-  createKafkaClient,
-  handleKafkaConsumer,
-} from './utils';
+import { log, createKafkaClient, handleKafkaConsumer } from './utils';
 
 log('Starting Haversine Engine');
 

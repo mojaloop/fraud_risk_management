@@ -25,16 +25,38 @@ const {
 const init = async () => {
   const { logTopic, kafkaEndpoint } = configuration;
   await initializeLoggingProducer(kafkaEndpoint);
-  const ILPSourceClient = await initializeRedis(redisHost, redisPort, redisSenderDB, redisAuth, logTopic);
-  const ILPDestinationClient = await initializeRedis(redisHost, redisPort, redisReceiverDB, redisAuth, logTopic);
+  const ILPSourceClient = await initializeRedis(
+    redisHost,
+    redisPort,
+    redisSenderDB,
+    redisAuth,
+    logTopic,
+  );
+  const ILPDestinationClient = await initializeRedis(
+    redisHost,
+    redisPort,
+    redisReceiverDB,
+    redisAuth,
+    logTopic,
+  );
 
   const app = express();
 
   app.post('/reload', async (req, res) => {
-    const historicalData = await loadData(ILPSourceClient, ILPDestinationClient, loadFromLocal, azureConfig, logTopic);
+    const historicalData = await loadData(
+      ILPSourceClient,
+      ILPDestinationClient,
+      loadFromLocal,
+      azureConfig,
+      logTopic,
+    );
     if (historicalData) {
       try {
-        await insertHistoricalData(ILPSourceClient, ILPDestinationClient, historicalData);
+        await insertHistoricalData(
+          ILPSourceClient,
+          ILPDestinationClient,
+          historicalData,
+        );
       } catch (e) {
         log(`unable to insert data into redis store: ${e}`, logTopic);
       }
@@ -52,7 +74,9 @@ const init = async () => {
     res.send(data);
   });
 
-  app.listen(port, () => console.log('Historical Data Store is listening on port ', port));
+  app.listen(port, () =>
+    console.log('Historical Data Store is listening on port ', port),
+  );
 };
 
 init();

@@ -12,16 +12,16 @@ const configuration: ConfigObj = {
   resultTopic: <string>process.env.RESULT_TOPIC,
   partition: parseInt(process.env.PARTITION!, 10),
   autoCommit: <any>process.env.AUTO_COMMIT,
-  logTopic: <string> process.env.LOG_TOPIC,
+  logTopic: <string>process.env.LOG_TOPIC,
 };
 
 interface ConfigObj {
   kafkaEndpoint: string;
-  topics: string[],
-  resultTopic: string,
-  partition: number,
-  autoCommit: boolean,
-  logTopic:string
+  topics: string[];
+  resultTopic: string;
+  partition: number;
+  autoCommit: boolean;
+  logTopic: string;
 }
 
 export { configuration, ConfigObj };

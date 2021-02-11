@@ -1,23 +1,22 @@
-const handleBenfordsLaw = (
-  transfer: any,
-  historicalData: any,
-): boolean => {
-  if (historicalData == undefined
-    || historicalData.length == 0
-    || historicalData[0] == undefined) {
+const handleBenfordsLaw = (transfer: any, historicalData: any): boolean => {
+  if (
+    historicalData == undefined ||
+    historicalData.length == 0 ||
+    historicalData[0] == undefined
+  ) {
     return false;
   }
-  
+
   const numAmounts = historicalData.length;
-  let observed = [0, 0, 0, 0, 0, 0, 0, 0, 0];
-  let expected = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+  const observed = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+  const expected = [0, 0, 0, 0, 0, 0, 0, 0, 0];
   let chiSquare = 0;
 
   if (numAmounts < 50) {
     return false;
   }
 
-  historicalData.forEach((element: { Amount: number[]; }) => {
+  historicalData.forEach((element: { Amount: number[] }) => {
     observed[element.Amount[0] - 1]++;
   });
 
@@ -37,7 +36,8 @@ const handleBenfordsLaw = (
   expected[8] = 0.046 * numAmounts;
 
   for (let index = 0; index < expected.length; index++) {
-    chiSquare += Math.pow(observed[index] - expected[index], 2) / expected[index];
+    chiSquare +=
+      Math.pow(observed[index] - expected[index], 2) / expected[index];
   }
 
   if (chiSquare > 15.507) {
@@ -45,6 +45,6 @@ const handleBenfordsLaw = (
   } else {
     return false;
   }
-}
+};
 
 export default handleBenfordsLaw;

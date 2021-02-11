@@ -12,4 +12,4 @@ export default {
   handleBenfordsLaw,
   handlePartyTypeIndividual,
   handleNewPayeeTransfer,
-}
+};

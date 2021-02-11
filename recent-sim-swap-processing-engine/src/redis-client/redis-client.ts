@@ -6,7 +6,7 @@ const client: RedisClient = new RedisClient({
   db: configuration.redisDB,
   host: configuration.redisHost,
   port: configuration.redisPort,
-  auth_pass: configuration.redisAuth
+  auth_pass: configuration.redisAuth,
 });
 
 /**
@@ -20,19 +20,17 @@ const initializeRedis = async () => {
  * Get the value of a key.
  * @param key the key to check
  */
-const get = (key: string): Promise<string> => new Promise((resolve) => {
-  // Get the value of a key.
-  client.GET(key, (err, reply) => {
-    if (err) {
-      log(`Error from Redis with message: \r\n${err}`, 'REDIS');
-      resolve('');
-    } else {
-      resolve(reply!);
-    }
+const get = (key: string): Promise<string> =>
+  new Promise((resolve) => {
+    // Get the value of a key.
+    client.GET(key, (err, reply) => {
+      if (err) {
+        log(`Error from Redis with message: \r\n${err}`, 'REDIS');
+        resolve('');
+      } else {
+        resolve(reply!);
+      }
+    });
   });
-});
 
-export {
-  initializeRedis,
-  get,
-};
+export { initializeRedis, get };

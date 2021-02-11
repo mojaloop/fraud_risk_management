@@ -10,18 +10,25 @@ const getMSISDNs = (jsonMessage: any): string[] => [
 const handleQuoteMessage = async (
   message: kafka.Message,
   topic: string,
-  handleBlock: (msisdn: string, topic: string, isBlocked: number, txID: string) => any,
+  handleBlock: (
+    msisdn: string,
+    topic: string,
+    isBlocked: number,
+    txID: string,
+  ) => any,
 ) => {
   const jMessage = JSON.parse(message.value.toString());
   const msisdns = getMSISDNs(jMessage);
   const promises: Promise<any>[] = [];
 
   msisdns.forEach((msisdn) => {
-    promises.push(new Promise(async (resolve) => {
-      const blocked = await isBlocked(msisdn);
-      await handleBlock(msisdn, topic, blocked, jMessage.TransactionID);
-      resolve(undefined);
-    }));
+    promises.push(
+      new Promise(async (resolve) => {
+        const blocked = await isBlocked(msisdn);
+        await handleBlock(msisdn, topic, blocked, jMessage.TransactionID);
+        resolve(undefined);
+      }),
+    );
   });
   await Promise.all(promises);
 };
