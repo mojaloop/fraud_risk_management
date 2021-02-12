@@ -1,4 +1,3 @@
-import async from 'async';
 import * as kafka from 'kafka-node';
 import { RedisClient } from 'redis';
 import rules from './rules';
@@ -6,19 +5,19 @@ import { publish } from './producer';
 import { get } from './redis-client';
 import { log } from './helper';
 
-class typology27Type {
-  rule9: boolean | undefined;
-  rule12: boolean | undefined;
-  rule14: boolean | undefined;
-  rule18: boolean | undefined;
-  rule30: boolean | undefined;
-  rule32: boolean | undefined;
-  rule78: boolean | undefined;
+class Typology27Type {
+  rule9?: boolean;
+  rule12?: boolean;
+  rule14?: boolean;
+  rule18?: boolean;
+  rule30?: boolean;
+  rule32?: boolean;
+  rule78?: boolean;
 }
 
 // Composed probability for typology 27 = (009.p)*(012.p)*(014.p+018.p+030.p+032.p+078.p)
 const handleScores = (
-  scores: any,
+  scores: Typology27Type,
   topic: string,
   TransactionID: string,
   transactionDate: string,
@@ -36,7 +35,7 @@ const handleScores = (
     topic,
     `"typology":"typology-27","transactionID":"${TransactionID}","score":${score},"createDate":${transactionDate},"processedDate":${Date.now()},
   "textResult":"Typology 27 score is ${score}, Reason: ${
-  (scores.rule9 ? 'Rule 9, ' : '') +
+      (scores.rule9 ? 'Rule 9, ' : '') +
       (scores.rule12 ? 'Rule 12, ' : '') +
       (scores.rule14 ? 'Rule 14, ' : '') +
       (scores.rule18 ? 'Rule 18, ' : '') +
@@ -44,7 +43,7 @@ const handleScores = (
       (scores.rule32 ? 'Rule 32, ' : '') +
       (scores.rule78 ? 'Rule 78' : '') +
       '"}'
-}`,
+    }`,
   );
 
   // publish(topic, `"typology":"typology-27","transactionID":"${TransactionID}","score":${score},"createDate":${transactionDate},
@@ -66,6 +65,7 @@ const handleQuoteMessage = async (
 ) => {
   try {
     const transfer = JSON.parse(message.value.toString());
+
     const {
       TransactionID,
       ILPSourceAccountAddress,
@@ -74,8 +74,8 @@ const handleQuoteMessage = async (
 
     const ILPList = await get(client, ILPSourceAccountAddress);
     const historicalData =
-      ILPList == undefined ? undefined : JSON.parse(ILPList);
-    const scores: typology27Type = new typology27Type();
+      ILPList === undefined ? undefined : JSON.parse(ILPList);
+    const scores: Typology27Type = new Typology27Type();
 
     try {
       scores.rule9 = rules.handleRecentSimSwap({ transfer, historicalData });

@@ -1,4 +1,7 @@
-const handleCashWithdraw = (message: any): boolean =>
-  message.TransactionType.TransactionScenario === 'WITHDRAW';
+const handleCashWithdraw = (message: {
+  TransactionType: {
+    TransactionScenario: string;
+  };
+}): boolean => message.TransactionType.TransactionScenario === 'WITHDRAW';
 
 export default handleCashWithdraw;

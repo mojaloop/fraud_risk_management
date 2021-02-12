@@ -12,16 +12,9 @@ class Typology11Type {
   rule87?: boolean;
 }
 
-interface Scores {
-  rule17?: boolean;
-  rule27?: boolean;
-  rule86?: boolean;
-  rule87?: boolean;
-}
-
 // https://lextego.atlassian.net/browse/ACTIO-198
 const handleScores = (
-  scores: Scores,
+  scores: Typology11Type,
   topic: string,
   TransactionID: string,
   transactionDate: string,
@@ -95,7 +88,7 @@ const handleQuoteMessage = async (
       payeeHistoricalReceiveDataJSON,
     );
     // See https://lextego.atlassian.net/browse/ACTIO-199
-    const scores: Scores = new Typology11Type();
+    const scores: Typology11Type = new Typology11Type();
 
     try {
       scores.rule17 = rules.handleTransactionDivergence(
