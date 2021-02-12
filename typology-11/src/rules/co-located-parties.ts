@@ -67,8 +67,8 @@ const handleCoLocatedParties = async (
   transfer: any,
   outgoingTransfersClient: RedisClient,
   historicalData: any,
-) => {
-  if (historicalData == undefined || historicalData.length == 0) return false;
+): Promise<boolean> => {
+  if (historicalData === undefined || historicalData.length === 0) return false;
 
   const payeesList = historicalData.map(
     (transfer: any) => transfer.ILPDestinationAccountAddress,
