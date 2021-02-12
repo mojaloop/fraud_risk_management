@@ -6,15 +6,6 @@ dotenv({
   path: path.resolve(__dirname, '../../.env'),
 });
 
-const configuration: ConfigObj = {
-  kafkaEndpoint: <string>process.env.KAFKA_ENDPOINT,
-  topics: (<any>process.env.TOPICS).split(','),
-  resultTopic: <string>process.env.RESULT_TOPIC,
-  partition: parseInt(process.env.PARTITION!, 10),
-  autoCommit: <any>process.env.AUTO_COMMIT,
-  logTopic: <string>process.env.LOG_TOPIC,
-};
-
 interface ConfigObj {
   kafkaEndpoint: string;
   topics: string[];
@@ -23,5 +14,14 @@ interface ConfigObj {
   autoCommit: boolean;
   logTopic: string;
 }
+
+const configuration: ConfigObj = {
+  kafkaEndpoint: <string>process.env.KAFKA_ENDPOINT,
+  topics: (<any>process.env.TOPICS).split(','),
+  resultTopic: <string>process.env.RESULT_TOPIC,
+  partition: parseInt(process.env.PARTITION!, 10),
+  autoCommit: <any>process.env.AUTO_COMMIT,
+  logTopic: <string>process.env.LOG_TOPIC,
+};
 
 export { configuration, ConfigObj };

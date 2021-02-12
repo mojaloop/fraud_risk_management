@@ -6,19 +6,6 @@ dotenv({
   path: path.resolve(__dirname, '../../.env'),
 });
 
-const configuration: ConfigObj = {
-  kafkaEndpoint: <string>process.env.KAFKA_ENDPOINT,
-  topics: (<any>process.env.TOPICS).split(','),
-  resultTopic: <string>process.env.RESULT_TOPIC,
-  partition: parseInt(<any>process.env.PARTITION, 10),
-  autoCommit: <any>process.env.AUTO_COMMIT,
-  redisHost: <string>process.env.REDIS_HOST,
-  redisPort: <any>process.env.REDIS_PORT,
-  redisDB: <any>process.env.REDIS_DB,
-  redisAuth: <string>process.env.REDIS_AUTH,
-  logTopic: <string>process.env.LOG_TOPIC,
-};
-
 interface ConfigObj {
   kafkaEndpoint: string;
   topics: string[];
@@ -31,5 +18,18 @@ interface ConfigObj {
   redisAuth: string;
   logTopic: string;
 }
+
+const configuration: ConfigObj = {
+  kafkaEndpoint: <string>process.env.KAFKA_ENDPOINT,
+  topics: (<any>process.env.TOPICS).split(','),
+  resultTopic: <string>process.env.RESULT_TOPIC,
+  partition: parseInt(<any>process.env.PARTITION, 10),
+  autoCommit: <any>process.env.AUTO_COMMIT,
+  redisHost: <string>process.env.REDIS_HOST,
+  redisPort: <any>process.env.REDIS_PORT,
+  redisDB: <any>process.env.REDIS_DB,
+  redisAuth: <string>process.env.REDIS_AUTH,
+  logTopic: <string>process.env.LOG_TOPIC,
+};
 
 export { configuration, ConfigObj };
