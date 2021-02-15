@@ -1,5 +1,4 @@
 import { RedisClient } from 'redis';
-import { ConfigObj } from './config/config';
 import { log } from './helper';
 
 const initializeRedis = async (

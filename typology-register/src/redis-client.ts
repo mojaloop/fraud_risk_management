@@ -45,7 +45,8 @@ const initializeRedis = async (
   return client;
 };
 
-const cleanStore = async (client: RedisClient): Promise<any> =>
+// TODO: Should we need to return a number? We should return void I think @joey
+const cleanStore = async (client: RedisClient): Promise<number> =>
   new Promise((resolve) => {
     client.flushdb((err) => {
       if (err) {

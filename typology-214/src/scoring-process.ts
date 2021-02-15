@@ -5,17 +5,18 @@ import { publish } from './producer';
 import { get } from './redis-client';
 import { log } from './helper';
 
-class typology214Type {
-  rule12: boolean | undefined;
-  rule27: boolean | undefined;
-  rule30: boolean | undefined;
-  rule48: boolean | undefined;
-  rule78: boolean | undefined;
+class Typology214Type {
+  rule3?: boolean;
+  rule12?: boolean;
+  rule27?: boolean;
+  rule30?: boolean;
+  rule48?: boolean;
+  rule78?: boolean;
 }
 
 // Composed probability for typology 214 = (012.p+027.p+030.p+048.p+078.p)
 const handleScores = (
-  scores: any,
+  scores: Typology214Type,
   topic: string,
   TransactionID: string,
   transactionDate: string,
@@ -31,14 +32,14 @@ const handleScores = (
     topic,
     `"typology":"typology-214","transactionID":"${TransactionID}","score":${score},"createDate":${transactionDate},"processedDate":${Date.now()},
   "textResult":"Typology 214 score is ${score}, Reason: ${
-  (scores.rule3 ? 'Rule 3, ' : '') +
+      (scores.rule3 ? 'Rule 3, ' : '') +
       (scores.rule12 ? 'Rule 12, ' : '') +
       (scores.rule27 ? 'Rule 27, ' : '') +
       (scores.rule30 ? 'Rule 30, ' : '') +
       (scores.rule48 ? 'Rule 48, ' : '') +
       (scores.rule78 ? 'Rule 78' : '') +
       '"}'
-}`,
+    }`,
   );
 
   // publish(topic, `"typology":"typology-214","transactionID":"${TransactionID}","score":${score},"createDate":${transactionDate},
@@ -85,7 +86,7 @@ const handleQuoteMessage = async (
       payeeHistoricalReceiveDataJSON,
     );
     // See https://lextego.atlassian.net/browse/ACTIO-199
-    const scores: typology214Type = new typology214Type();
+    const scores: Typology214Type = new Typology214Type();
 
     try {
       scores.rule12 = rules.handleIndividual(transfer);

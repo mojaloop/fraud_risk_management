@@ -1,6 +1,3 @@
-// TODO
-
-import async from 'async';
 import * as kafka from 'kafka-node';
 import { RedisClient } from 'redis';
 import rules from './rules';
@@ -8,19 +5,19 @@ import { publish } from './producer';
 import { get } from './redis-client';
 import { log } from './helper';
 
-class typology28Type {
-  rule2: boolean | undefined;
-  rule12: boolean | undefined;
-  rule16: boolean | undefined;
-  rule27: boolean | undefined;
-  rule30: boolean | undefined;
-  rule63: boolean | undefined;
-  rule64: boolean | undefined;
+class Typology28Type {
+  rule2?: boolean;
+  rule12?: boolean;
+  rule16?: boolean;
+  rule27?: boolean;
+  rule30?: boolean;
+  rule63?: boolean;
+  rule64?: boolean;
 }
 
 // Composed probability for typology 28 = (009.p)*(012.p)*(014.p+018.p+030.p+032.p+078.p)
 const handleScores = (
-  scores: any,
+  scores: Typology28Type,
   topic: string,
   TransactionID: string,
   transactionDate: string,
@@ -37,7 +34,7 @@ const handleScores = (
     topic,
     `"typology":"typology-28","transactionID":"${TransactionID}","createDate":${transactionDate},"processedDate":${Date.now()},
   "score":${score},"textResult":"Typology 28 score is ${score}, Reason: ${
-  (scores.rule2 ? 'Rule 2, ' : '') +
+      (scores.rule2 ? 'Rule 2, ' : '') +
       (scores.rule12 ? 'Rule 12, ' : '') +
       (scores.rule16 ? 'Rule 16, ' : '') +
       (scores.rule27 ? 'Rule 27, ' : '') +
@@ -45,7 +42,7 @@ const handleScores = (
       (scores.rule63 ? 'Rule 63, ' : '') +
       (scores.rule64 ? 'Rule 64' : '') +
       '"}'
-}`,
+    }`,
   );
 
   // publish(topic, `"typology":"typology-28","transactionID":"${TransactionID}","createDate":${transactionDate},
@@ -94,7 +91,7 @@ const handleQuoteMessage = async (
     );
 
     // See https://lextego.atlassian.net/browse/ACTIO-197
-    const scores: typology28Type = new typology28Type();
+    const scores: Typology28Type = new Typology28Type();
 
     // try { scores.rule17 = rules.handleTransactionDivergence(transfer, payeeHistoricalSendData); }
     // catch (error) {
