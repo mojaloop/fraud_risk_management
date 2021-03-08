@@ -4,7 +4,7 @@ import { initializeLoggingProducer } from './helper';
 import { initializeProducer } from './producer/producer';
 import { initializeRedis } from './redis-client/redis-client';
 
-const start = async () => {
+const start = async (): Promise<void> => {
   await initializeLoggingProducer();
   await initializeRedis();
   await initializeProducer();
