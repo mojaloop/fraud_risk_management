@@ -4,7 +4,7 @@ import { log } from '../helper';
 
 let producer: kafka.Producer;
 
-const initializeProducer = () => {
+const initializeProducer = (): Promise<void> => {
   producer = new kafka.Producer(
     new kafka.KafkaClient({
       kafkaHost: configuration.kafkaEndpoint,
@@ -16,7 +16,7 @@ const initializeProducer = () => {
   });
 };
 
-const publish = (topic: string, message: string) => {
+const publish = (topic: string, message: string): Promise<void> => {
   const result = `[TEMPLATE][${topic}] ${message}`;
   return new Promise((resolve) => {
     producer.send(

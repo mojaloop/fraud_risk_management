@@ -8,7 +8,7 @@ export default {
   // automock: false,
 
   // Stop running tests after `n` failures
-  // bail: 0,
+  bail: 1,
 
   // The directory where Jest should store its cached dependency information
   // cacheDirectory: "/private/var/folders/fv/vk9htm4s40xd4pb2lm_3tbym0000gn/T/jest_dx",
@@ -40,7 +40,14 @@ export default {
   // ],
 
   // An object that configures minimum threshold enforcement for coverage results
-  // coverageThreshold: undefined,
+  coverageThreshold: {
+    global: {
+      branches: 95,
+      functions: 95,
+      lines: 95,
+      statements: 95,
+    },
+  },
 
   // A path to a custom dependency extractor
   // dependencyExtractor: undefined,
@@ -85,13 +92,13 @@ export default {
   // modulePathIgnorePatterns: [],
 
   // Activates notifications for test results
-  // notify: false,
+  notify: true,
 
   // An enum that specifies notification mode. Requires { notify: true }
   // notifyMode: "failure-change",
 
   // A preset that is used as a base for Jest's configuration
-  // preset: undefined,
+  preset: 'ts-jest',
 
   // Run tests from one or more projects
   // projects: undefined,
@@ -126,7 +133,7 @@ export default {
   // setupFiles: [],
 
   // A list of paths to modules that run some code to configure or set up the testing framework before each test
-  // setupFilesAfterEnv: [],
+  setupFilesAfterEnv: ['./jest.setup.redis-mock.js'],
 
   // The number of seconds after which a test is considered as slow and reported as such in the results.
   // slowTestThreshold: 5,

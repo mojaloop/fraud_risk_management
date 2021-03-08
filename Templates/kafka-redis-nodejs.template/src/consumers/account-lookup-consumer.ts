@@ -6,7 +6,7 @@ import { isInSet } from '../redis-client/redis-client';
 const handleAccountLookupMessage = async (
   message: kafka.Message,
   topic: string,
-) => {
+): Promise<void> => {
   const jMessage = JSON.parse(message.value.toString());
   const txID: string = jMessage.transactionId;
   log(

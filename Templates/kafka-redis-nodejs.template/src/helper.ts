@@ -2,7 +2,7 @@ import { KafkaClient, Producer } from 'kafka-node';
 import { configuration } from './config/config';
 
 let logProducer: Producer;
-const initializeLoggingProducer = () => {
+const initializeLoggingProducer = (): Promise<void> => {
   logProducer = new Producer(
     new KafkaClient({
       kafkaHost: configuration.kafkaEndpoint,
@@ -15,8 +15,8 @@ const initializeLoggingProducer = () => {
 };
 
 /** Logs the provided message */
-const log = (message: string, topic: string) =>
-  new Promise((resolver) => {
+const log = (message: string, topic: string): Promise<void> =>
+  new Promise((resolve) => {
     logProducer.send(
       [
         {
@@ -25,7 +25,7 @@ const log = (message: string, topic: string) =>
           partition: configuration.partition,
         },
       ],
-      () => resolver(undefined),
+      () => resolve(undefined),
     );
   });
 export { log, initializeLoggingProducer };
