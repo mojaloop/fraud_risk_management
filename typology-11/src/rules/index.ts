@@ -8,4 +8,4 @@ export default {
   handleTransactionDivergence,
   handleTransactionsBetweenParties,
   handleCoLocatedParties,
-}
+};

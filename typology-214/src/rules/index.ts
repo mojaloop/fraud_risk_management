@@ -13,5 +13,5 @@ export default {
   handleAccountDormancy,
   handleCashWithdraw,
   handleNewPayeeTransfer,
-  handleIndividual
-}
+  handleIndividual,
+};

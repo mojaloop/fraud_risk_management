@@ -18,10 +18,17 @@ const handleQuoteMessage = async (
   const ILPList = await getILPList(redisClient, sourceILP);
 
   const sourceILPTransactions = JSON.parse(ILPList);
-  const biggestTransactionAmount = Math.max(...sourceILPTransactions
-    .map((transaction: any) => transaction.Amount));
-  const isBigger = biggestTransactionAmount + biggestTransactionAmount * 0.5 < amount;
-  await publish(topic, `[${isBigger}] Transaction: ${TransactionID} from ${sourceILP} to ${targetILP} is ${(isBigger) ? 'bigger' : 'not bigger'} than the max recorded transaction`);
+  const biggestTransactionAmount = Math.max(
+    ...sourceILPTransactions.map((transaction: any) => transaction.Amount),
+  );
+  const isBigger =
+    biggestTransactionAmount + biggestTransactionAmount * 0.5 < amount;
+  await publish(
+    topic,
+    `[${isBigger}] Transaction: ${TransactionID} from ${sourceILP} to ${targetILP} is ${
+      isBigger ? 'bigger' : 'not bigger'
+    } than the max recorded transaction`,
+  );
 };
 
 export default handleQuoteMessage;

@@ -11,7 +11,7 @@ const client: RedisClient = new RedisClient({
 /**
  * Clears Redis, then loads sample data from file, then publishes all to Redis.
  */
-const initializeRedis = async () => {
+export const initializeRedis = async (): Promise<void> => {
   client.flushall();
 };
 
@@ -20,19 +20,15 @@ const initializeRedis = async () => {
  * or not.
  * @param value the value to check
  */
-const isInSet = (value: string): Promise<number> => new Promise((resolve) => {
-  // Determine if a given value is a member of a set.
-  client.SISMEMBER('SetName', value, (err, reply) => {
-    if (err) {
-      log(`Error from Redis with message: \r\n${err}`, 'REDIS');
-      resolve(0);
-    } else {
-      resolve(reply);
-    }
+export const isInSet = (value: string): Promise<number> =>
+  new Promise((resolve) => {
+    // Determine if a given value is a member of a set.
+    client.SISMEMBER('SetName', value, (err, reply) => {
+      if (err) {
+        log(`Error from Redis with message: \r\n${err}`, 'REDIS');
+        resolve(0);
+      } else {
+        resolve(reply);
+      }
+    });
   });
-});
-
-export {
-  initializeRedis,
-  isInSet,
-};

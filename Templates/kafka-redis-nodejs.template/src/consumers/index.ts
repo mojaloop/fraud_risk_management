@@ -6,14 +6,17 @@ import handleQuoteMessage from './quote-consumer';
 import handleTransferMessage from './transfer-consumer';
 import handlePartyMessage from './party-consumer';
 
-const createConsumer = (topic: string, config: ConfigObj) => new kafka.Consumer(
-  new kafka.KafkaClient({ kafkaHost: config.kafkaEndpoint }),
-  [{
-    topic,
-    partition: config.partition,
-  }],
-  { autoCommit: config.autoCommit },
-);
+const createConsumer = (topic: string, config: ConfigObj) =>
+  new kafka.Consumer(
+    new kafka.KafkaClient({ kafkaHost: config.kafkaEndpoint }),
+    [
+      {
+        topic,
+        partition: config.partition,
+      },
+    ],
+    { autoCommit: config.autoCommit },
+  );
 
 const getMessageHandler = (topic: string) => {
   switch (topic) {
@@ -30,9 +33,9 @@ const getMessageHandler = (topic: string) => {
 };
 
 /**
-* Subscribe to the configured Kafka server
-* to the selected Kafka topic
-*/
+ * Subscribe to the configured Kafka server
+ * to the selected Kafka topic
+ */
 const createKafkaConsumer = (topic: string, config: ConfigObj) => {
   log('Starting Processing Engine...', topic);
   try {
@@ -45,7 +48,10 @@ const createKafkaConsumer = (topic: string, config: ConfigObj) => {
 
     log('Started Processing Engine.', topic);
   } catch (e) {
-    log(`Unhandled exception while starting consumer with details: ${e}`, topic);
+    log(
+      `Unhandled exception while starting consumer with details: ${e}`,
+      topic,
+    );
   }
 };
 

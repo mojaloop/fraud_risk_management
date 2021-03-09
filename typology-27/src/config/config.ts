@@ -6,6 +6,22 @@ dotenv({
   path: path.resolve(__dirname, '../../.env'),
 });
 
+interface ConfigObj {
+  kafkaEndpoint: string;
+  topic: string;
+  resultTopic: string;
+  consumerGroup: string;
+  partition: number;
+  autoCommit: boolean;
+  logTopic: string;
+  maxQueueSize: number;
+  maxParallelHandles: number;
+  redisDB: string;
+  redisAuth: string;
+  redisHost: string;
+  redisPort: number;
+}
+
 const config: ConfigObj = {
   kafkaEndpoint: <string>process.env.KAFKA_ENDPOINT,
   topic: <string>process.env.TOPIC,
@@ -21,21 +37,5 @@ const config: ConfigObj = {
   redisHost: <string>process.env.REDIS_HOST,
   redisPort: parseInt(process.env.REDIS_PORT!, 10),
 };
-
-interface ConfigObj {
-  kafkaEndpoint: string;
-  topic: string,
-  resultTopic: string,
-  consumerGroup: string,
-  partition: number,
-  autoCommit: boolean,
-  logTopic: string,
-  maxQueueSize: number,
-  maxParallelHandles: number,
-  redisDB: string,
-  redisAuth: string,
-  redisHost: string,
-  redisPort: number
-}
 
 export { config, ConfigObj };

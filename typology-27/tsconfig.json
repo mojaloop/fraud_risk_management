@@ -7,6 +7,7 @@
       "outDir": "build",                        /* Redirect output structure to the directory. */
       "rootDir": "src",                         /* Specify the root directory of input files. Use to control the output directory structure with --outDir. */
       "strict": true,                           /* Enable all strict type-checking options. */
+      "sourceMap": true,
       "noImplicitAny": true,                    /* Raise error on expressions and declarations with an implied 'any' type. */
       "esModuleInterop": true,                  /* Enables emit interoperability between CommonJS and ES Modules via creation of namespace objects for all imports. Implies 'allowSyntheticDefaultImports'. */
       "resolveJsonModule": true,                /* Include modules imported with '.json' extension */

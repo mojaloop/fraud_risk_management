@@ -15,7 +15,7 @@ So far, there's no way of running the whole platform locally, but there's a clou
 The project is, for the moment, a monorepo that doesn't have CICD, nor testing. In fact, a deeper evaluation of the source code will show you our Typescript code is more of a hackaraound JS rather than actual Typescript. Fear not, because you're the reason why that will change during the MVP stage(now).
 
 The project is created to interact with the [Mojaloop Switch](https://github.com/mojaloop/documentation)
-and it's capable of receiving a Mojaloop standarized Quote, exe:
+and it's capable of receiving a Mojaloop standarized Quote, eg:
 
 ```{json}
 {

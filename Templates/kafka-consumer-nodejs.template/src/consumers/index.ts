@@ -9,22 +9,28 @@ import handlePartyMessage from './party-consumer';
 let producer: kafka.Producer;
 
 const initializeProducer = () => {
-  producer = new kafka.Producer(new kafka.KafkaClient({
-    kafkaHost: configuration.kafkaEndpoint,
-  }), {});
+  producer = new kafka.Producer(
+    new kafka.KafkaClient({
+      kafkaHost: configuration.kafkaEndpoint,
+    }),
+    {},
+  );
   return new Promise((resolve) => {
     producer.on('ready', () => resolve(undefined));
   });
 };
 
-const createConsumer = (topic: string, config: ConfigObj) => new kafka.Consumer(
-  new kafka.KafkaClient({ kafkaHost: config.kafkaEndpoint }),
-  [{
-    topic,
-    partition: config.partition,
-  }],
-  { autoCommit: config.autoCommit },
-);
+const createConsumer = (topic: string, config: ConfigObj) =>
+  new kafka.Consumer(
+    new kafka.KafkaClient({ kafkaHost: config.kafkaEndpoint }),
+    [
+      {
+        topic,
+        partition: config.partition,
+      },
+    ],
+    { autoCommit: config.autoCommit },
+  );
 
 const getMessageHandler = (topic: string) => {
   switch (topic) {
@@ -41,9 +47,9 @@ const getMessageHandler = (topic: string) => {
 };
 
 /**
-* Subscribe to the configured Kafka server
-* to the selected Kafka topic
-*/
+ * Subscribe to the configured Kafka server
+ * to the selected Kafka topic
+ */
 const createKafkaConsumer = (topic: string, config: ConfigObj) => {
   log('Starting Blocklist Processing Engine...', topic);
   try {
@@ -56,7 +62,10 @@ const createKafkaConsumer = (topic: string, config: ConfigObj) => {
 
     log('Started Blocklist Processing Engine.', topic);
   } catch (e) {
-    log(`Unhandled exception while starting consumer with details: ${e}`, topic);
+    log(
+      `Unhandled exception while starting consumer with details: ${e}`,
+      topic,
+    );
   }
 };
 

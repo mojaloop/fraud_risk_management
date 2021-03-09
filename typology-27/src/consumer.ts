@@ -5,20 +5,20 @@ import { ConfigObj, config } from './config/config';
 import { log } from './helper';
 import handleTransferMessage from './scoring-process';
 
-const createConsumer = (config: ConfigObj) => new kafka.ConsumerGroup(
-
-  {
-    kafkaHost: config.kafkaEndpoint,
-    groupId: config.consumerGroup,
-    autoCommit: config.autoCommit,
-  },
-  [config.topic]
-);
+const createConsumer = (config: ConfigObj) =>
+  new kafka.ConsumerGroup(
+    {
+      kafkaHost: config.kafkaEndpoint,
+      groupId: config.consumerGroup,
+      autoCommit: config.autoCommit,
+    },
+    [config.topic],
+  );
 
 /**
-* Subscribe to the configured Kafka server
-* to the selected Kafka topic
-*/
+ * Subscribe to the configured Kafka server
+ * to the selected Kafka topic
+ */
 const createKafkaConsumer = async (client: RedisClient) => {
   const { topic } = config;
   log('Starting Typology 27 engine...', topic);
@@ -29,7 +29,7 @@ const createKafkaConsumer = async (client: RedisClient) => {
     const onData = async (message: any) => {
       handleTransferMessage(message, topic, client);
       return Promise.resolve();
-    }
+    };
 
     const msgQueue = async.queue(async (data, done) => {
       await handleCB(data, onData);
@@ -45,7 +45,7 @@ const createKafkaConsumer = async (client: RedisClient) => {
 
     const handleCB = async (data: any, handler: any) => {
       await handler(data);
-    }
+    };
 
     consumer.on('error', (error) => console.log(error));
 
@@ -58,7 +58,10 @@ const createKafkaConsumer = async (client: RedisClient) => {
     });
     log('Started Typology 27 engine.', topic);
   } catch (e) {
-    log(`Unhandled exception while starting consumer with details: ${e}`, topic);
+    log(
+      `Unhandled exception while starting consumer with details: ${e}`,
+      topic,
+    );
   }
 };
 
