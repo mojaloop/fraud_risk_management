@@ -2,6 +2,7 @@ import { FunctionDescription } from '../classes/function-description';
 import { NestedPredicate } from '../classes/nested-predicate';
 import { Predicate } from '../classes/predicate';
 import { PredicateExecutionRequest } from '../classes/predicate-execute-request';
+import { PredicateExecutionResult } from '../classes/predicate-execution-result';
 import { LogicalOperator } from '../enums/logical-operator';
 import { Operator } from '../enums/operator';
 import { PredicateBuilderService } from './predicate-builder.service';
@@ -49,7 +50,7 @@ describe('Predicate Builder Service', () => {
   });
 
   describe('Process Predicate', () => {
-    it('should call inner functions when executing with debug off', () => {
+    it('should call inner functions when executing the predicate', () => {
       const predicates = [getPredicate(), getPredicate()];
       const request = getExecutionRequest(predicates, dataObject);
 
@@ -57,6 +58,7 @@ describe('Predicate Builder Service', () => {
         func: 'SomeFunc',
         paths: ['SomePath'],
       });
+      const expectedResult = new PredicateExecutionResult(expectedFuncDesc, 'true');
 
       const buildSpy = jest
         .spyOn(service, 'BuildGroupFunction')
@@ -66,37 +68,11 @@ describe('Predicate Builder Service', () => {
         .spyOn(service, 'ExecutePredicatesFunction')
         .mockImplementation(() => 'true');
 
-      const result = service.ProcessPredicate(request, false);
+      const result = service.ProcessPredicate(request);
 
       expect(buildSpy).toBeCalledWith(predicates);
       expect(executeSpy).toBeCalledWith(request, expectedFuncDesc);
-      expect(result).toBe('true');
-    });
-
-    it('should call inner functions when executing with debug on', () => {
-      const predicates = [getPredicate(), getPredicate()];
-      const request = getExecutionRequest(predicates, dataObject);
-
-      const expectedFuncDesc = new FunctionDescription({
-        func: 'SomeFunc',
-        paths: ['SomePath'],
-      });
-
-      const expectedOutput = `Paths: \n[SomePath]\n\nFunction: \nSomeFunc\n\nResult: true`;
-
-      const buildSpy = jest
-        .spyOn(service, 'BuildGroupFunction')
-        .mockImplementation(() => expectedFuncDesc);
-
-      const executeSpy = jest
-        .spyOn(service, 'ExecutePredicatesFunction')
-        .mockImplementation(() => 'true');
-
-      const result = service.ProcessPredicate(request, true);
-
-      expect(buildSpy).toBeCalledWith(predicates);
-      expect(executeSpy).toBeCalledWith(request, expectedFuncDesc);
-      expect(result).toBe(expectedOutput);
+      expect(result).toEqual(expect.objectContaining(expectedResult));
     });
   });
 

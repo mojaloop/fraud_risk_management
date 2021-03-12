@@ -26,7 +26,7 @@ export default {
     coverageDirectory: 'coverage',
   
     // An array of regexp pattern strings used to skip coverage collection
-    coveragePathIgnorePatterns: ['/node_modules/'],
+    coveragePathIgnorePatterns: ['/node_modules/','/src/services/kafka.service.ts'],
   
     // Indicates which provider should be used to instrument code for coverage
     coverageProvider: 'v8',
@@ -119,12 +119,12 @@ export default {
     // restoreMocks: false,
   
     // The root directory that Jest should scan for tests and modules within
-    // rootDir: undefined,
+    // rootDir: ".",
   
     // A list of paths to directories that Jest should use to search for files in
-    // roots: [
-    //   "<rootDir>"
-    // ],
+    roots: [
+      "<rootDir>/src/"
+    ],
   
     // Allows you to use a custom runner instead of Jest's default test runner
     // runner: "jest-runner",
@@ -151,10 +151,9 @@ export default {
     // testLocationInResults: false,
   
     // The glob patterns Jest uses to detect test files
-    // testMatch: [
-    //   "**/__tests__/**/*.[jt]s?(x)",
-    //   "**/?(*.)+(spec|test).[tj]s?(x)"
-    // ],
+    testMatch: [
+      "**/*.spec.ts"
+    ],
   
     // An array of regexp pattern strings that are matched against all test paths, matched tests are skipped
     // testPathIgnorePatterns: [
@@ -189,7 +188,7 @@ export default {
     // unmockedModulePathPatterns: undefined,
   
     // Indicates whether each individual test should be reported during the run
-    // verbose: undefined,
+    verbose: true,
   
     // An array of regexp patterns that are matched against all source file paths before re-running tests in watch mode
     // watchPathIgnorePatterns: [],

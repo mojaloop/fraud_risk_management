@@ -1,25 +1,19 @@
 import { FunctionDescription } from '../classes/function-description';
 import { Predicate } from '../classes/predicate';
 import { PredicateExecutionRequest } from '../classes/predicate-execute-request';
+import { PredicateExecutionResult } from '../classes/predicate-execution-result';
 import { LogicalOperator } from '../enums/logical-operator';
 import { Operator } from '../enums/operator';
 
 export class PredicateBuilderService {
-  public ProcessPredicate(request: PredicateExecutionRequest, debug: boolean) {
+  public ProcessPredicate(
+    request: PredicateExecutionRequest,
+  ): PredicateExecutionResult {
     const fncDescription = this.BuildGroupFunction(request.predicates);
 
     const result = this.ExecutePredicatesFunction(request, fncDescription);
-    let returnResult = '';
 
-    if (debug) {
-      returnResult = `Paths: \n[${fncDescription.paths.join(
-        ', ',
-      )}]\n\nFunction: \n${fncDescription.func}\n\nResult: ${result}`;
-    } else {
-      returnResult = result;
-    }
-
-    return returnResult;
+    return new PredicateExecutionResult(fncDescription, result);
   }
 
   public BuildGroupFunction(predicates: Predicate[]): FunctionDescription {
@@ -92,7 +86,7 @@ export class PredicateBuilderService {
       case Operator.GREATERTHAN:
         result = `${propertyPath} ${not ? '<=' : '>'} "${value}"`;
         break;
-    // }
+      // }
       case Operator.GREATERTHANANDEQUALS:
         result = `${propertyPath} ${not ? '<' : '>='} "${value}"`;
         break;
