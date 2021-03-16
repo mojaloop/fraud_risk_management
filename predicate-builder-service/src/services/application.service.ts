@@ -12,7 +12,7 @@ export class ApplicationService {
     this.kafkaService = new KafkaService();
   }
 
-  getOnline(request: Request, response: Response): void {
+  getOnline(response: Response): void {
     response.send('Predicate Builder Service is online.');
   }
 
@@ -21,19 +21,19 @@ export class ApplicationService {
     response: Response,
     debug = false,
   ): void {
-    let reqObject: PredicateExecutionRequest | null = null;
+    if (!request.body) {
+      const error = new Error(
+        'Cannot execute predicate, no predicate execution request was passed.',
+      );
+
+      this.kafkaService.log('Error', error.message);
+      response.status(400).send(error.message);
+      return;
+    }
+
+    let reqObject: PredicateExecutionRequest;
 
     try {
-      if (!request.body) {
-        const error = new Error(
-          'Cannot execute predicate, no predicate execution request was passed.',
-        );
-
-        this.kafkaService.log('Error', error.message);
-        response.status(400).send(error.message);
-        return;
-      }
-
       reqObject = new PredicateExecutionRequest(request.body);
     } catch (err) {
       const parseError = new Error(

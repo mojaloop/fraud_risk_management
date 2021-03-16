@@ -7,7 +7,7 @@ export const appService = new ApplicationService();
 
 app.use(express.json());
 
-app.get('/*', (req, res) => appService.getOnline(req, res));
+app.get('/*', (req, res) => appService.getOnline(res));
 
 app.post('/execute', (req, res) =>
   appService.executePredicateRequest(req, res),

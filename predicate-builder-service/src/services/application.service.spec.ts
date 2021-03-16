@@ -39,14 +39,13 @@ describe('Application Service', () => {
   });
 
   it('should respond to getOnline request', () => {
-    const mockRequest = {} as Request;
     const mockResponse = {
       send() {},
     } as Response;
 
     const sendSpy = jest.spyOn(mockResponse, 'send');
 
-    service.getOnline(mockRequest, mockResponse);
+    service.getOnline(mockResponse);
 
     expect(sendSpy).toBeCalledWith('Predicate Builder Service is online.');
   });
