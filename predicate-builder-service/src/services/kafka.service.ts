@@ -1,4 +1,3 @@
-jest.useFakeTimers();
 import * as kafka from 'kafka-node';
 import { config } from '../config';
 
