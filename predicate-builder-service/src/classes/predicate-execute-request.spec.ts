@@ -1,17 +1,19 @@
 import { Predicate } from './predicate';
 import { PredicateExecutionRequest } from './predicate-execute-request';
 
+require('leaked-handles');
+
 jest.mock('./predicate');
 
 describe('Predicate Execution Request', () => {
   beforeEach(() => {
     // Clears the calls made to the mock
-    (Predicate as any).mockClear();
+    (Predicate as jest.Mock<Predicate>).mockClear();
   });
 
   it('should create a nested predicate successfully with defaulted values', () => {
     const init = {
-      predicates: [{} as any],
+      predicates: [{} as Predicate],
       outputTopic: 'TOPIC',
       data: {},
     };
@@ -28,7 +30,7 @@ describe('Predicate Execution Request', () => {
 
   it('should throw an error if output topic was not passed', () => {
     const init = {
-      predicates: [{} as any],
+      predicates: [{} as Predicate],
       data: {},
     };
 
@@ -53,7 +55,7 @@ describe('Predicate Execution Request', () => {
   it('should throw an error if no data was passed', () => {
     const init = {
       outputTopic: 'TOPIC',
-      predicates: [{} as any],
+      predicates: [{} as Predicate],
     };
 
     let expectedResult: PredicateExecutionRequest | undefined = undefined;

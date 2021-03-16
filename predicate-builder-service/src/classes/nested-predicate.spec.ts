@@ -3,12 +3,14 @@ import { Operator } from '../enums/operator';
 import { NestedPredicate } from './nested-predicate';
 import { Predicate } from './predicate';
 
+require("leaked-handles");
+
 jest.mock('./predicate');
 
 describe('Nested Predicate', () => {
   beforeEach(() => {
     // Clears the calls made to the mock
-    (Predicate as any).mockClear();
+    (Predicate as jest.Mock<Predicate>).mockClear();
   });
 
   it('should create a nested predicate successfully', () => {
@@ -36,7 +38,7 @@ describe('Nested Predicate', () => {
 
     try {
       nestedPredicate = new NestedPredicate({
-        logicalOperator: 'TEST' as any,
+        logicalOperator: 'TEST' as LogicalOperator,
         predicates: [],
       });
     } catch (error) {
@@ -59,7 +61,7 @@ describe('Nested Predicate', () => {
     try {
       nestedPredicate = new NestedPredicate({
         logicalOperator: LogicalOperator.AND,
-        predicates: {} as any,
+        predicates: {} as Predicate[],
       });
     } catch (error) {
       receivedError = error;

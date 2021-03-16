@@ -7,6 +7,8 @@ import { LogicalOperator } from '../enums/logical-operator';
 import { Operator } from '../enums/operator';
 import { PredicateBuilderService } from './predicate-builder.service';
 
+require('leaked-handles');
+
 const getPredicate = () => {
   return new Predicate({
     logicalOperator: LogicalOperator.AND,
@@ -58,7 +60,10 @@ describe('Predicate Builder Service', () => {
         func: 'SomeFunc',
         paths: ['SomePath'],
       });
-      const expectedResult = new PredicateExecutionResult(expectedFuncDesc, 'true');
+      const expectedResult = new PredicateExecutionResult(
+        expectedFuncDesc,
+        'true',
+      );
 
       const buildSpy = jest
         .spyOn(service, 'BuildGroupFunction')
@@ -488,7 +493,7 @@ describe('Predicate Builder Service', () => {
 
       try {
         result = service.GetPredicateLogic(
-          operator as any,
+          operator as Operator,
           'data.name',
           'john',
           true,
@@ -655,7 +660,11 @@ describe('Predicate Builder Service', () => {
     });
 
     it('should build error script for nested path with duplicates', () => {
-      const paths: string[] = ['transaction.payer.amount', 'transaction.payer.currency', 'transaction.payer.amount'];
+      const paths: string[] = [
+        'transaction.payer.amount',
+        'transaction.payer.currency',
+        'transaction.payer.amount',
+      ];
 
       const expectedOutputPart1 = `if(!data.hasOwnProperty('transaction')) {\n\t${defaultErrorPrefix}"data.transaction"')\n};`;
       const expectedOutputPart2 = `if(!data.transaction.hasOwnProperty('payer')) {\n\t${defaultErrorPrefix}"data.transaction.payer"')\n};`;

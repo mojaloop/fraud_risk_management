@@ -1,5 +1,7 @@
 import { Request, Response } from 'express';
+import { Producer } from 'kafka-node';
 import { FunctionDescription } from '../classes/function-description';
+import { Predicate } from '../classes/predicate';
 import { PredicateExecutionRequest } from '../classes/predicate-execute-request';
 import { PredicateExecutionResult } from '../classes/predicate-execution-result';
 import { LogicalOperator } from '../enums/logical-operator';
@@ -8,17 +10,20 @@ import { ApplicationService } from './application.service';
 import { KafkaService } from './kafka.service';
 import { PredicateBuilderService } from './predicate-builder.service';
 
+require("leaked-handles");
+
 jest.mock('./kafka.service.ts');
 
 describe('Application Service', () => {
   let service: ApplicationService;
   let predicateService: PredicateBuilderService;
   beforeEach(() => {
-    
-    (KafkaService as any).mockImplementation(() => {
+    (KafkaService as jest.Mock<KafkaService>).mockImplementation(() => {
       return {
-        log: () => {},
-        publishResult: () => {},
+        ready: false,
+        producer: (undefined as unknown) as Producer,
+        log: () => Promise.resolve(),
+        publishResult: () => Promise.resolve(),
       };
     });
 
@@ -144,7 +149,7 @@ describe('Application Service', () => {
 
     it('should handle an error thrown when the predicates are not populated', () => {
       const expectedError = `Failed to parse predicate execution request\nCould not parse request - No predicates were passed.`;
-      predicateExecutionRequest.predicates = undefined as any;
+      predicateExecutionRequest.predicates = (undefined as unknown) as Predicate[];
 
       service.executePredicateRequest(mockRequest, mockResponse);
 
