@@ -27,7 +27,7 @@ export class ApplicationService {
       );
 
       this.kafkaService.log('Error', error.message);
-      response.status(400).send(error.message);
+      response.status(406).send(error.message);
       return;
     }
 
