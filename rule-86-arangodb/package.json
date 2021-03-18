@@ -1,0 +1,68 @@
+{
+  "name": "rule-86-arangodb",
+  "version": "1.0.0",
+  "description": "This is a rule-86-arangodb Processing Engine.",
+  "main": "index.js",
+  "scripts": {
+    "start:dev": "nodemon",
+    "build": "rimraf ./build && tsc",
+    "start": "npm run build && node build/index.js",
+    "fix": "yarn fix:prettier && yarn fix:eslint",
+    "fix:eslint": "eslint --fix \"**/*.ts\"",
+    "fix:prettier": "prettier --write \"**/*.ts\"",
+    "lint": "yarn lint:eslint && yarn lint:prettier",
+    "lint:eslint": "eslint \"**/*.ts\"",
+    "lint:prettier": "prettier --check \"**/*.ts\"",
+    "test": "jest --config=jest.config.ts",
+    "test:watch": "jest --config=jest.config.ts --watch"
+  },
+  "keywords": [],
+  "author": "johanfol",
+  "license": "ISC",
+  "devDependencies": {
+    "@ngneat/spectator": "^7.1.0",
+    "@types/arangodb": "^3.5.10",
+    "@types/express": "^4.17.11",
+    "@types/jest": "^26.0.20",
+    "@types/node": "^14.14.25",
+    "@types/node-fetch": "^2.5.8",
+    "@types/redis": "^2.8.28",
+    "@typescript-eslint/eslint-plugin": "^4.15.0",
+    "@typescript-eslint/parser": "^4.15.0",
+    "eslint": "^7.19.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-config-prettier": "^7.2.0",
+    "eslint-config-standard": "^16.0.2",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^3.3.1",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^5.0.0",
+    "husky": "4",
+    "jest": "^26.6.3",
+    "lint-staged": "^10.5.4",
+    "nodemon": "^2.0.6",
+    "prettier": "^2.2.1",
+    "redis-mock": "^0.56.3",
+    "rimraf": "^3.0.2",
+    "ts-jest": "^26.5.3",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.2.3"
+  },
+  "dependencies": {
+    "arangojs": "^7.3.0",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "kafka-node": "^5.0.0",
+    "redis": "^3.0.2"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "pre-push": "npm run test"
+    }
+  },
+  "lint-staged": {
+    "*.{js,ts}": "eslint --cache --fix"
+  }
+}
