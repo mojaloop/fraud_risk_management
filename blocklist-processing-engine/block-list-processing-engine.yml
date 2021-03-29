@@ -1,0 +1,14 @@
+version: 1.0
+provider:
+  name: openfaas
+  gateway: http://20.49.140.12:8080
+functions:
+  off-frm-blocklist-processing-engine:
+    lang: dockerfile
+    handler: .
+    image: frmacr.azurecr.io/frm_blocklist_processing_engine:latest
+    annotations:
+      com.openfaas.health.http.path: "/online"
+      com.openfaas.health.http.initialDelay: "30s"
+    secrets:
+      - frmpullsecret
