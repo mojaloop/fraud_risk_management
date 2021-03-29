@@ -1,5 +1,4 @@
 import express from 'express';
-import { config } from './config';
 import { ApplicationService } from './services/application.service';
 
 export const app = express();
@@ -18,8 +17,8 @@ app.post('/debug', (req, res) =>
 );
 
 
-app.listen(config.hostPort, () => {
+app.listen(3000, () => {
   console.log(
-    `Predicate Builder Service - Listening on: http://localhost:${config.hostPort}`,
+    `Predicate Builder Service - Listening on: http://localhost:${3000}`,
   );
 });

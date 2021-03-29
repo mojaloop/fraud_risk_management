@@ -8,5 +8,4 @@ export interface IConfigObj {
   logTopic: string;
   maxQueueSize: number;
   maxParallelHandles: number;
-  hostPort: number;
 }

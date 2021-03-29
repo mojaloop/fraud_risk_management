@@ -16,5 +16,4 @@ export const config: IConfigObj = {
   logTopic: <string>process.env.LOG_TOPIC,
   maxQueueSize: parseInt(process.env.MAX_QUEUE_SIZE!, 10),
   maxParallelHandles: parseInt(process.env.MAX_PARALLEL_HANDLES!, 10),
-  hostPort: parseInt(process.env.HOST_PORT!, 10),
 };

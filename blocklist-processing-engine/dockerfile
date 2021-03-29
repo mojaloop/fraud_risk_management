@@ -38,12 +38,6 @@ ENV exec_timeout="10s"
 ENV write_timeout="15s"
 ENV read_timeout="15s"
 
-ENV REDIS_HOST=my-redis-master.frm.svc.cluster.local
-ENV REDIS_PORT=6379
-ENV REDIS_DB=0
-ENV REDIS_AUTH=TjEmUWes67
-ENV HOST_PORT=3000
-
 ENV prefix_logs="false"
 
 HEALTHCHECK --interval=3s CMD [ -e /tmp/.lock ] || exit 1
