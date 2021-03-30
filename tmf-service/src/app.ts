@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-'use strict';
 
 import Koa from 'koa';
 import * as swagger from 'swagger2';
@@ -9,7 +8,8 @@ import router from './routes';
 import { Server } from 'http';
 
 class App extends Koa {
-  server: Server | undefined;
+  public server!: Server;
+
   constructor() {
     super();
 
@@ -33,8 +33,9 @@ class App extends Koa {
     this.use(router.allowedMethods());
   }
 
-  listen(...args: any): any {
+  listen(...args: any[]): Server {
     this.server = super.listen(...args);
+
     return this.server;
   }
 

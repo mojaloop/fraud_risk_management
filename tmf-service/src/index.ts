@@ -46,6 +46,8 @@ signals.forEach((signal) => {
 // Expose app
 module.exports = app;
 
+export default app;
+
 // import { config } from './config';
 // import Koa, { Context } from 'koa';
 // import * as swagger from 'swagger2';
