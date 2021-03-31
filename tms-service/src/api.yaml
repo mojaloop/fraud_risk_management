@@ -47,9 +47,6 @@ paths:
       produces:
         - "application/json"
       parameters:
-        - $ref: "#/parameters/accept"
-        - $ref: "#/parameters/content-length"
-        - $ref: "#/parameters/content-type"
         - in: "body"
           name: "body"
           description: "Validates request params"
