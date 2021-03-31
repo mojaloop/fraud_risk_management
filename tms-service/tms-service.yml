@@ -1,0 +1,12 @@
+version: 1.0
+provider:
+  name: openfaas
+  gateway: http://127.0.0.1:8080
+functions:
+  tms-service:
+    lang: dockerfile
+    handler: .
+    image: localhost:32000/tms-service:latest
+    annotations:
+      com.openfaas.health.http.path: /
+

@@ -7,6 +7,21 @@ info:
 schemes:
   - "http"
 paths:
+  /:
+    get:
+      summary: "Check the status of the service"
+      description: "If the service is up and running correctly the response will be 'UP'"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Health"
+        500:
+          $ref: '#/responses/500'
   /health:
     get:
       summary: "Check the status of the service"

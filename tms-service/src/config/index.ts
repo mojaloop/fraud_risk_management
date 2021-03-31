@@ -9,12 +9,10 @@ dotenv({
 
 interface ConfigObj {
   port: number;
-  env: string;
 }
 
 const config: ConfigObj = {
   port: parseInt(process.env.PORT!, 10) || 3000,
-  env: process.env.NODE_ENV!,
 };
 
 export { config, ConfigObj };

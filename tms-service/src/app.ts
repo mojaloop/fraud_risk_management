@@ -8,14 +8,14 @@ import router from './routes';
 import { Server } from 'http';
 
 class App extends Koa {
-  public server!: Server;
+  public servers: Server[];
 
   constructor() {
     super();
 
     // bodyparser needs to be loaded first in order to work
     this.use(bodyParser());
-
+    this.servers = [];
     this._configureMiddlewares();
     this._configureRoutes();
   }
@@ -34,13 +34,15 @@ class App extends Koa {
   }
 
   listen(...args: any[]): Server {
-    this.server = super.listen(...args);
-
-    return this.server;
+    const server = super.listen(...args);
+    this.servers.push(server);
+    return server;
   }
 
-  async terminate(): Promise<void> {
-    this.server?.close();
+  terminate(): void {
+    for (const server of this.servers) {
+      server.close();
+    }
   }
 }
 

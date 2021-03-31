@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "NODE_ENV=development nodemon",
     "build": "rimraf ./build && tsc",
-    "start": "npm run build && node build/index.js",
+    "start": "node build/index.js",
     "fix": "yarn fix:prettier && yarn fix:eslint",
     "fix:eslint": "eslint --fix \"**/*.ts\"",
     "fix:prettier": "prettier --write \"**/*.ts\"",
@@ -15,7 +15,8 @@
     "lint:prettier": "prettier --check \"**/*.ts\"",
     "test": "jest --config=jest.config.ts --passWithNoTests",
     "test:watch": "jest --config=jest.config.ts --watch",
-    "test:integration": "yarn test ./test/integration"
+    "test:unit": "yarn test ./test/unit",
+    "test:integration": "yarn test ./test/integration --detectOpenHandles"
   },
   "keywords": [],
   "author": "Aaron Reynoza",
