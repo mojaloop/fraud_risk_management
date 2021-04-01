@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { config } from './config';
 import { Context } from 'koa';
 import App from './app';
