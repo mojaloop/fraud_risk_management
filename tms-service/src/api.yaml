@@ -1,0 +1,250 @@
+swagger: "2.0"
+info:
+  title: "Swagger Example"
+  description: >
+    FRM transaction validation.
+  version: "0.1.0"
+schemes:
+  - "http"
+paths:
+  /:
+    get:
+      summary: "Check the status of the service"
+      description: "If the service is up and running correctly the response will be 'UP'"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Health"
+        500:
+          $ref: '#/responses/500'
+  /health:
+    get:
+      summary: "Check the status of the service"
+      description: "If the service is up and running correctly the response will be 'UP'"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Health"
+        500:
+          $ref: '#/responses/500'
+
+  /monitor/transaction:
+    post:
+      summary: "Monitor transaction"
+      description: "TODO"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Validates request params"
+          required: true
+          schema:
+            $ref: "#/definitions/transactionPostRequest"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/TransactionResponse"
+        400:
+          $ref: '#/responses/400'
+        401:
+          $ref: '#/responses/401'
+        500:
+          $ref: '#/responses/500'
+
+responses:
+  400:
+    description: Bad Request
+    schema:
+      $ref: '#/definitions/Error'
+  401:
+    description: Unauthorized
+    schema:
+      $ref: '#/definitions/Error'
+  500:
+    description: Internal Server Error
+    schema:
+      $ref: '#/definitions/Error'
+
+definitions:
+
+  Health:
+    type: "object"
+    properties:
+      status:
+        type: "string"
+        enum:
+          - "UP"
+          - "DOWN"
+  Transaction:
+    type: "object"
+    required:
+      - AuthenticationType
+    properties:
+      AuthenticationType:
+        type: string
+  TransactionType:
+    type: "object"
+    required:
+      - TransactionScenario
+    properties:
+      TransactionScenario:
+        type: string
+      TransactionInitiator:
+        type: string
+      TransactionInitiatorType:
+        type: string
+  Payee:
+    type: "object"
+    required:
+      - PartyName
+    properties:
+      PartyName:
+        type: string
+  Payer:
+    type: "object"
+    required:
+      - PartyIDType
+      - PersonalIdentifierType
+      - PartyID
+      - PartyName
+    properties:
+      PartyIDType:
+        type: string
+      PersonalIdentifierType:
+        type: string
+      PartyID:
+        type: string
+      PartyName:
+        type: string
+  transactionPostRequest:
+    type: "object"
+    required:
+      - TransactionID
+      - ILPSourceAccountAddress
+      - ILPDestinationAccountAddress
+      - PayerContactNo
+      - PayeeContactNo
+      - Amount
+      - Fee
+      - Payer
+      - Payee
+      - SourceAccountBalance
+      - SourceAccountTransactionLimit
+      - SourceAccountDailyLimit
+      - SourceAccountPINDate
+      - PayerDeviceIMEI
+      - PayerICCID
+      - Location
+      - Transaction
+      - TransactionType
+    properties:
+      TransactionID:
+        type: "string"
+        minLength: 1
+        pattern: "^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        example: "123e4567-e89b-12d3-a456-426614174000"
+      ILPSourceAccountAddress:
+        type: "string"
+        minLength: 1
+        example: "Bank1.MSISDN.2507122015"
+      ILPDestinationAccountAddress:
+        type: "string"
+        minLength: 1
+        example: "Bank2.MSISDN.25094672092"
+      PayerContactNo:
+        type: "string"
+        minLength: 1
+        pattern: "^[0-9]+$"
+        example: "2507122015"
+      PayeeContactNo:
+        type: "string"
+        minLength: 1
+        pattern: "^[0-9]+$"
+        example: "25094672092"
+      Amount:
+        type: "string"
+        minLength: 1
+        pattern: \d{1,2}[\.]{1}\d{1,2}
+        example: "250.40"
+      Fee:
+        type: "string"
+        minLength: 1
+        pattern: \d{1,2}[\.]{1}\d{1,2}
+        example: "250.40"
+      Payer:
+        $ref: "#/definitions/Payer"
+      Payee:
+        $ref: "#/definitions/Payee"
+      SourceAccountBalance:
+        type: "string"
+        example: "5000.30"
+      SourceAccountTransactionLimit:
+        type: "string"
+        example: "500"
+      SourceAccountDailyLimit:
+        type: "string"
+        example: "1500"
+      SourceAccountPINDate:
+        type: "string"
+        example: "10/10/2010"
+      PayerDeviceIMEI:
+        type: "string"
+        example: "19283747590379"
+      PayerICCID:
+        type: "string"
+        example: "39iejdi3948"
+      Location:
+        type: "string"
+        example: "Ghana"
+      Transaction:
+        $ref: "#/definitions/Transaction"
+      TransactionType:
+        $ref: "#/definitions/TransactionType"
+  TransactionResponse:
+    type: "object"
+    properties:
+      data:
+        type: "object"
+        properties:
+          result:
+            type: "string"
+            example: "Transaction is valid"
+
+  Error:
+    type: "object"
+    properties:
+      data:
+        type: "object"
+        properties:
+          error:
+            type: "string"
+parameters:
+  accept:
+    in: header
+    name: accept
+    type: string
+    required: true
+  content-length:
+    in: header
+    name: content-length
+    type: string
+    required: true
+  content-type:
+    in: header
+    name: content-type
+    type: string
+    required: true
