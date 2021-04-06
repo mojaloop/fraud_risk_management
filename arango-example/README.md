@@ -18,3 +18,16 @@ you'll need to add an `env` file. Check the `env-template` for an example. Make 
 To run the project, run `npm start` to run the example ILP. The engine will process all the transactions for the given ILP. If you want to try another ILP, you can do so by passing it as a param with `npm start my-ilp-id`.
 
 Note that the engine is running a 2 level graph validation since the example ILP(docs/g.tz.fsp001.msisdn.2558617728568) doesn't have a third level of connectivity down to the original sender. there's no other ILP who has this level of connectivity, so if you want to try a deeper level, you'll need to add the data yourself. For now, the example ILP has a 2 level of connectivy to the original ILP. This is noted in the query during the `2..2` level of connectivity. to test the ideal co-located parties query, add the correct data and change the query to `3..3`.
+
+
+docker run -p 8529:8529 -e ARANGO_ROOT_PASSWORD=123456 arangodb/arangodb:3.7.9
+
+export IP=127.0.0.1
+docker volume create arangodb1
+docker run -it --name=adb1 --rm -p 8528:8528 -v arangodb1:/data -v C:\Data\Arangodb:/var/run/docker.sock arangodb/arangodb-starter --starter.address=172.17.0.1 --starter.mode=single
+
+ILPS/NeoBank1.msisdn.89443021496839241738
+ILPS/BigBank2.msisdn.89441061531543896064
+ILPS/CreditUnion1.msisdn.89441113067362811904
+ILPS/CreditUnion1.msisdn.89441273066624581632
+ILPS/CreditUnion1.msisdn.89441113067362811904

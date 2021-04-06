@@ -10,7 +10,7 @@ export class ApplicationService {
     request: Request,
     response: Response,
   ): Promise<void> {
-    const res = await quoteConsumer.handleQuoteMessage(request.body.toString());
+    const res = await quoteConsumer.handleQuoteMessage(JSON.stringify(request.body));
     response.status(200).send(res);
   }
 }
