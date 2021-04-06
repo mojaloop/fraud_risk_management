@@ -13,21 +13,21 @@ RUN chmod +x /usr/bin/fwatchdog
 RUN apk --no-cache add curl ca-certificates \
     && addgroup -S app && adduser -S -g app app
 
-RUN apk add --no-cache -t build-dependencies git make gcc g++ python libtool autoconf automake \
+RUN apk add --no-cache -t build-dependencies git make gcc g++ python libtool autoconf automake yarn \
     && cd $(npm root -g)/npm \
     && npm config set unsafe-perm true \
     && npm install -g node-gyp
 
-COPY package.json package-lock.json* /opt/blocklist-rule-processing-engine/
+COPY package.json yarn.lock /opt/blocklist-rule-processing-engine/
 
-RUN npm ci
+RUN yarn install
 
 RUN apk del build-dependencies
 
 COPY tsconfig.json /opt/blocklist-rule-processing-engine/
 COPY src /opt/blocklist-rule-processing-engine/src
 
-RUN npm run build
+RUN yarn run build
 
 ENV cgi_headers="true"
 ENV fprocess="node ./build/index.js"
