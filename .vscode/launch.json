@@ -5,56 +5,40 @@
             "type": "node",
             "request": "launch",
             "name": "Launch Typology-11-Engine",
-            "skipFiles": [
-                "<node_internals>\\**"
-            ],
+            "skipFiles": ["<node_internals>\\**"],
             "program": "${workspaceFolder}\\typology-11\\src\\index.ts",
             "preLaunchTask": "tsc:typology-11",
-            "outFiles": [
-                "${workspaceFolder}\\typology-11\\build\\**\\*.js"
-            ],
+            "outFiles": ["${workspaceFolder}\\typology-11\\build\\**\\*.js"],
             "cwd": "${workspaceFolder}\\typology-11"
         },
         {
             "type": "node",
             "request": "launch",
             "name": "Launch Typology-27-Engine",
-            "skipFiles": [
-                "<node_internals>\\**"
-            ],
+            "skipFiles": ["<node_internals>\\**"],
             "program": "${workspaceFolder}\\typology-27\\src\\index.ts",
             "preLaunchTask": "tsc:typology-27",
-            "outFiles": [
-                "${workspaceFolder}\\typology-27\\build\\**\\*.js"
-            ],
+            "outFiles": ["${workspaceFolder}\\typology-27\\build\\**\\*.js"],
             "cwd": "${workspaceFolder}\\typology-27"
         },
         {
             "type": "node",
             "request": "launch",
             "name": "Launch Typology-28-Engine",
-            "skipFiles": [
-                "<node_internals>\\**"
-            ],
+            "skipFiles": ["<node_internals>\\**"],
             "program": "${workspaceFolder}\\typology-28\\src\\index.ts",
             "preLaunchTask": "tsc:typology-28",
-            "outFiles": [
-                "${workspaceFolder}\\typology-28\\build\\**\\*.js"
-            ],
+            "outFiles": ["${workspaceFolder}\\typology-28\\build\\**\\*.js"],
             "cwd": "${workspaceFolder}\\typology-28"
         },
         {
             "type": "node",
             "request": "launch",
             "name": "Launch Typology-214-Engine",
-            "skipFiles": [
-                "<node_internals>\\**"
-            ],
+            "skipFiles": ["<node_internals>\\**"],
             "program": "${workspaceFolder}\\typology-214\\src\\index.ts",
             "preLaunchTask": "tsc:typology-214",
-            "outFiles": [
-                "${workspaceFolder}\\typology-214\\build\\**\\*.js"
-            ],
+            "outFiles": ["${workspaceFolder}\\typology-214\\build\\**\\*.js"],
             "cwd": "${workspaceFolder}\\typology-214"
         }
     ]

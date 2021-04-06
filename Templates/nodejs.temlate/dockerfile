@@ -3,7 +3,7 @@ FROM node:12.16.1-alpine as builder
 
 ARG TARGETPLATFORM
 
-WORKDIR /opt/blocklist-rule-processing-engine
+WORKDIR /opt/<!ProjectName!>
 
 ENV NPM_CONFIG_LOGLEVEL warn
 
@@ -18,14 +18,14 @@ RUN apk add --no-cache -t build-dependencies git make gcc g++ python libtool aut
     && npm config set unsafe-perm true \
     && npm install -g node-gyp
 
-COPY package.json yarn.lock /opt/blocklist-rule-processing-engine/
+COPY package.json yarn.lock /opt/<!ProjectName!>/
 
 RUN yarn install
 
 RUN apk del build-dependencies
 
-COPY tsconfig.json /opt/blocklist-rule-processing-engine/
-COPY src /opt/blocklist-rule-processing-engine/src
+COPY tsconfig.json /opt/<!ProjectName!>/
+COPY src /opt/<!ProjectName!>/src
 
 RUN yarn run build
 

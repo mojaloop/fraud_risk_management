@@ -3,12 +3,12 @@ provider:
   name: openfaas
   gateway: http://127.0.0.1:8080
 functions:
-  off-frm-predicate-builder-service:
+  off-frm-blocklist-processing-engine:
     lang: dockerfile
     handler: .
-    image: localhost:5000/frm_predicate_builder_service:latest
+    image: localhost:5000/frm_blocklist_processing_engine:latest
     annotations:
-      com.openfaas.health.http.path: /online
+      com.openfaas.health.http.path: "/online"
       com.openfaas.health.http.initialDelay: "30s"
     secrets:
       - frmpullsecret

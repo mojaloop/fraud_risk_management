@@ -1,16 +1,27 @@
-// STARTUP FILE
-import { configuration } from './config/config';
-import { initializeProducer, createKafkaConsumer } from './consumers';
-import { initializeLoggingProducer } from './helper';
-import { initializeRedis } from './redis-client/redis-client';
+import express from 'express';
+import { config } from './config';
+import { ApplicationService } from './services/application.service';
 
-const start = async () => {
-  await initializeLoggingProducer();
-  await initializeRedis();
-  await initializeProducer();
-  configuration.topics.forEach((topic) => {
-    createKafkaConsumer(topic, configuration);
-  });
-};
+export const app = express();
+export const appService = new ApplicationService();
 
-start();
+app.use(express.json());
+
+app.get('/*', (req, res) => appService.getOnline(res));
+
+app.post('/execute', (req, res) =>
+  appService.executeBlockListRule(req, res),
+);
+
+app.post('/debug', (req, res) =>
+  appService.executeBlockListRule(req, res, true),
+);
+
+
+app.listen(3000, () => {
+  console.log(
+    `Block List Processing Engine - Listening on: http://localhost:${3000}`,
+  );
+});
+
+appService.initialize();
