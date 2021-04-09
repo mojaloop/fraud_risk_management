@@ -9,6 +9,6 @@ functions:
     image: localhost:5000/frm_predicate_builder_service:latest
     annotations:
       com.openfaas.health.http.path: /online
-      com.openfaas.health.http.initialDelay: "30s"
+      com.openfaas.health.http.initialDelay: "45s"
     secrets:
       - frmpullsecret

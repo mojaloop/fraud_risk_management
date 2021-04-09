@@ -1,4 +1,5 @@
-node_modules
-covarage
-build
+coverage
 .vscode
+template
+README.md
+build
