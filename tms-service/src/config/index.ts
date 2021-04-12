@@ -4,7 +4,7 @@ import { config as dotenv } from 'dotenv';
 
 // Load .env file into process.env if it exists. This is convenient for running locally.
 dotenv({
-  path: path.resolve(__dirname, '../../.env'),
+  path: path.resolve(__dirname, '../../.env.template'),
 });
 
 interface ConfigObj {

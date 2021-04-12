@@ -21,7 +21,7 @@ paths:
           schema:
             $ref: "#/definitions/Health"
         500:
-          $ref: '#/responses/500'
+          $ref: "#/responses/500"
   /health:
     get:
       summary: "Check the status of the service"
@@ -36,7 +36,7 @@ paths:
           schema:
             $ref: "#/definitions/Health"
         500:
-          $ref: '#/responses/500'
+          $ref: "#/responses/500"
 
   /monitor/transaction:
     post:
@@ -59,28 +59,27 @@ paths:
           schema:
             $ref: "#/definitions/TransactionResponse"
         400:
-          $ref: '#/responses/400'
+          $ref: "#/responses/400"
         401:
-          $ref: '#/responses/401'
+          $ref: "#/responses/401"
         500:
-          $ref: '#/responses/500'
+          $ref: "#/responses/500"
 
 responses:
   400:
     description: Bad Request
     schema:
-      $ref: '#/definitions/Error'
+      $ref: "#/definitions/Error"
   401:
     description: Unauthorized
     schema:
-      $ref: '#/definitions/Error'
+      $ref: "#/definitions/Error"
   500:
     description: Internal Server Error
     schema:
-      $ref: '#/definitions/Error'
+      $ref: "#/definitions/Error"
 
 definitions:
-
   Health:
     type: "object"
     properties:

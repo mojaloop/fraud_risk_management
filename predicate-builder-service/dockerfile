@@ -4,8 +4,12 @@ FROM --platform=${TARGETPLATFORM:-linux/amd64} node:14-alpine as ship
 ARG TARGETPLATFORM
 ARG BUILDPLATFORM
 
-RUN apk --no-cache add curl ca-certificates \
-    && addgroup -S app && adduser -S -g app app
+COPY --from=watchdog /fwatchdog /usr/bin/fwatchdog
+RUN chmod +x /usr/bin/fwatchdog
+
+RUN addgroup -S app && adduser -S -g app app
+
+RUN apk --no-cache add curl ca-certificates
 
 RUN apk add --no-cache -t build-dependencies git make gcc g++ python libtool autoconf automake yarn \
     && cd $(npm root -g)/npm \
@@ -15,7 +19,9 @@ RUN apk add --no-cache -t build-dependencies git make gcc g++ python libtool aut
 # Turn down the verbosity to default level.
 ENV NPM_CONFIG_LOGLEVEL warn
 
-RUN chmod 777 /tmp
+# chmod for tmp is for a buildkit issue
+RUN chown app:app -R /home/app \
+    && chmod 777 /tmp
 
 USER app
 

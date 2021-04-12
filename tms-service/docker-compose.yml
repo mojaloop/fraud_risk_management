@@ -1,5 +1,5 @@
 version: '2'
 services:
   node:
-    image: predicate-builder-service
+    image: frm-tms-service
     restart: 'no'

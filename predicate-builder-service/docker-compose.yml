@@ -1,0 +1,5 @@
+version: '2'
+services:
+  node:
+    image: frm-predicate-builder-service
+    restart: 'no'
