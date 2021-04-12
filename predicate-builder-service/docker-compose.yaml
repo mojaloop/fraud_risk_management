@@ -1,5 +1,0 @@
-version: "2"
-services:
-  node:
-    image: predicate-builder-service
-    restart: "no"

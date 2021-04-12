@@ -16,9 +16,10 @@ app.post('/debug', (req, res) =>
   appService.executePredicateRequest(req, res, true),
 );
 
-
 app.listen(3000, () => {
   console.log(
     `Predicate Builder Service - Listening on: http://localhost:${3000}`,
   );
 });
+
+export default app;

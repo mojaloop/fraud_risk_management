@@ -2,10 +2,10 @@
   "name": "tms-service",
   "version": "0.1.0",
   "description": "TMS-service",
-  "main": "src/index.ts",
+  "main": "build/index.js",
   "scripts": {
-    "dev": "NODE_ENV=development nodemon",
-    "build": "rimraf ./build && tsc",
+    "dev": "env $(cat .env.template) nodemon",
+    "build": "tsc",
     "start": "node build/index.js",
     "fix": "yarn fix:prettier && yarn fix:eslint",
     "fix:eslint": "eslint --fix \"**/*.ts\"",
@@ -16,14 +16,24 @@
     "test": "jest --config=jest.config.ts --passWithNoTests",
     "test:watch": "jest --config=jest.config.ts --watch",
     "test:unit": "yarn test ./test/unit",
+    "cleanup": "rm -rf build template jest.config.js jest.config.js.map node_modules",
     "test:integration": "yarn test ./test/integration --detectOpenHandles"
   },
   "keywords": [],
   "author": "Aaron Reynoza",
   "license": "ISC",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "koa": "^2.13.1",
+    "koa-bodyparser": "^4.3.0",
+    "koa-router": "^10.0.0",
+    "swagger2": "^3.0.0",
+    "swagger2-koa": "^3.0.0"
+  },
   "devDependencies": {
     "@types/jest": "^26.0.22",
     "@types/koa": "^2.13.1",
+    "@types/koa-bodyparser": "^4.3.0",
     "@types/koa-router": "^7.4.1",
     "@types/node": "^14.14.25",
     "@types/supertest": "^2.0.10",
@@ -47,14 +57,6 @@
     "ts-jest": "^26.5.4",
     "ts-node": "^9.1.1",
     "typescript": "^4.1.4"
-  },
-  "dependencies": {
-    "dotenv": "^8.2.0",
-    "koa": "^2.13.1",
-    "koa-bodyparser": "^4.3.0",
-    "koa-router": "^10.0.0",
-    "swagger2": "^3.0.0",
-    "swagger2-koa": "^3.0.0"
   },
   "husky": {
     "hooks": {
