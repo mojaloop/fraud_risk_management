@@ -1,0 +1,15 @@
+provider:
+  name: openfaas
+  gateway: http://127.0.0.1:8080
+language: node14
+fprocess: node build/index.js
+functions:
+  frm-predicate-builder-service:
+    lang: dockerfile
+    handler: .
+    image: localhost:5000/typology-28:latest
+    annotations:
+      com.openfaas.health.http.path: /online
+      com.openfaas.health.http.initialDelay: "45s"
+    secrets:
+      - frmpullsecret
