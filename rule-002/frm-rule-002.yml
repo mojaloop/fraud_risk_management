@@ -1,0 +1,14 @@
+version: 1.0
+provider:
+  name: openfaas
+  gateway: http://127.0.0.1:8080
+functions:
+  frm-rule-002:
+    lang: dockerfile
+    handler: .
+    image: localhost:5000/frm_rule_002:latest
+    annotations:
+      com.openfaas.health.http.path: /online
+      com.openfaas.health.http.initialDelay: "45s"
+    secrets:
+      - frmpullsecret
