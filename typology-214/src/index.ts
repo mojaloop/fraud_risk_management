@@ -1,37 +1,28 @@
-import { config } from './config/config';
-import runConsumer from './consumer';
-import { initializeLoggingProducer } from './helper';
-import { initializeProducer } from './producer';
-import { initializeRedis } from './redis-client';
+import Koa from 'koa';
+import bodyParser from 'koa-bodyparser';
+import Router from 'koa-router';
+import { ApplicationService } from './services/application.service';
 
-const start = async () => {
-  const {
-    redisSenderDB,
-    redisReceiverDB,
-    redisHost,
-    redisPort,
-    redisAuth,
-  } = config;
-  try {
-    await initializeLoggingProducer();
-    await initializeProducer();
-    const redisSenderClient = await initializeRedis(
-      redisSenderDB,
-      redisHost,
-      redisPort,
-      redisAuth,
-    );
-    const redisReceiverClient = await initializeRedis(
-      redisReceiverDB,
-      redisHost,
-      redisPort,
-      redisAuth,
-    );
+export const appService: ApplicationService = new ApplicationService();
+export const app = new Koa();
 
-    await runConsumer(redisSenderClient, redisReceiverClient);
-  } catch (e) {
-    console.error(e);
-  }
-};
 
-start();
+const router = new Router();
+
+router.get(/.*/gmi, async (ctx) => {
+    await appService.getOnline(ctx);
+});
+
+router.post('/execute', async (ctx) => {
+
+    //TODO make sure what is ment by  
+    /*
+    registered with the Channel Routing Setup processor to be invoked when 
+    the transaction’s value for Payer.PartyIDType = “INDIVIDUAL_ID”
+     */
+    await appService.execute(ctx);
+});
+
+app.use(bodyParser());
+app.use(router.routes());
+app.listen(3000);

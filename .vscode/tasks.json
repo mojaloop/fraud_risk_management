@@ -36,6 +36,15 @@
             ],
             "group": "build",
             "label": "tsc:typology-214"
+        },
+        {
+            "type": "typescript",
+            "tsconfig": "account-muling/tsconfig.json",
+            "problemMatcher": [
+                "$tsc"
+            ],
+            "group": "build",
+            "label": "tsc:account-muling"
         }
     ]
 }

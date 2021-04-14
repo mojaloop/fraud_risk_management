@@ -1,0 +1,15 @@
+
+version: 1.0
+provider:
+  name: openfaas
+  gateway: http://127.0.0.1:8080
+functions:
+  off-frm-account-muling:
+    lang: dockerfile
+    handler: .
+    image: localhost:5000/frm_account_muling:latest
+    annotations:
+      com.openfaas.health.http.path: /online
+      com.openfaas.health.http.initialDelay: "30s"
+    # secrets:
+    # - frmpullsecret

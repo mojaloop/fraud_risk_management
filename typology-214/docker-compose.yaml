@@ -3,9 +3,9 @@ services:
   redis:
     image: redis
     ports:
-      - "6379:6379"
+      - "6380:6380"
   node:
-    image: typology-214
+    image: typology-account-muling
     restart: "no"
     depends_on:
       - "redis"
