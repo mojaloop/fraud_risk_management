@@ -14,12 +14,6 @@ router.get(/.*/gmi, async (ctx) => {
 });
 
 router.post('/execute', async (ctx) => {
-
-    //TODO make sure what is ment by  
-    /*
-    registered with the Channel Routing Setup processor to be invoked when 
-    the transaction’s value for Payer.PartyIDType = “INDIVIDUAL_ID”
-     */
     await appService.execute(ctx);
 });
 

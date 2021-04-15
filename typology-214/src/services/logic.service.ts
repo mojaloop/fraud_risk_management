@@ -29,9 +29,7 @@ export class LogicService {
 
     const sourceHistoricalSendData = JSON.parse(sourceHistoricalSendDataJSON);
     const payeeHistoricalSendData = JSON.parse(payeeHistoricalSendDataJSON);
-    const payeeHistoricalReceiveData = JSON.parse(
-      payeeHistoricalReceiveDataJSON,
-    );
+    const payeeHistoricalReceiveData = JSON.parse(payeeHistoricalReceiveDataJSON);
 
     // See https://lextego.atlassian.net/browse/AM-305
     const scores: Typology214Type = new Typology214Type();
