@@ -28,6 +28,7 @@
   "dependencies": {
     "@types/redis": "^2.8.28",
     "arangojs": "^7.4.0",
+    "axios": "^0.21.1",
     "dotenv": "^8.2.0",
     "koa": "^2.13.1",
     "koa-bodyparser": "^4.3.0",
@@ -36,6 +37,7 @@
   },
   "devDependencies": {
     "@types/arangodb": "^3.5.10",
+    "@types/axios": "^0.14.0",
     "@types/jest": "^26.0.22",
     "@types/koa": "^2.13.1",
     "@types/koa-bodyparser": "^4.3.0",
