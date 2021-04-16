@@ -9,15 +9,15 @@ export const app = new Koa();
 const router = new Router();
 
 router.get('/', async (ctx) => {
-  await appService.getOnline(ctx);
+  await appService.main(ctx);
+});
+
+router.post('/', async (ctx) => {
+  await appService.call(ctx);
 });
 
 router.get('/online', async (ctx) => {
   await appService.getOnline(ctx);
-});
-
-router.post('/execute', async (ctx) => {
-  await appService.execute(ctx);
 });
 
 app.use(bodyParser());
