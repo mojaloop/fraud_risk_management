@@ -22,3 +22,11 @@ export interface IResponse {
   rule?: Rule;
   transaction: ITransaction;
 }
+
+export interface ITransactionInfo {
+  _key: string;
+  _id: string;
+  _from: string;
+  _to: string;
+  _rev: string;
+}

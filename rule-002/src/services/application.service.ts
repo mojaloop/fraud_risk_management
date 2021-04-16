@@ -2,7 +2,10 @@ import axios from 'axios';
 import * as Koa from 'koa';
 import { TransactionCheck } from '../classes/transaction-check';
 import { IRequest, IResponse, ITypologies } from '../interfaces/iRule002';
+import { ArangoDBService } from './arango-client.service';
 import { LoggerService } from './logger.service';
+
+const arangodb = new ArangoDBService();
 
 export class ApplicationService {
   async main(ctx: Koa.Context): Promise<void> {
@@ -31,22 +34,60 @@ export class ApplicationService {
 
       const data = ctx.request.body.typologies as ITypologies;
 
-      for (const typology of data.typologies) {
-        LoggerService.log(`Sending Result to ${typology.name}`);
+      LoggerService.log(`TransactionID ${request.transaction.TransactionID}`);
 
-        result.rule = {
-          rule: 'Rule-002',
-          result: true,
-        };
+      // Get the transaction object include payer and payee
+      const transactionInfoQuery = `
+        FOR doc IN transactions
+          FILTER doc._id == "${request.transaction.TransactionID}"
+          RETURN doc
+          `;
 
-        const response = await axios.post(typology.endpoint, {
-          transaction: request.transaction,
-        });
+      const transactionData = await arangodb.query(transactionInfoQuery);
 
-        LoggerService.log(`\nResponse ${JSON.stringify(response)}`);
+      if (transactionData && transactionData[0].length > 0) {
+        const payeeId = transactionData[0][0]._to;
+
+        const payeeTransactionsQuery = `
+          FOR v, e, p IN 2..2 OUTBOUND
+            "${payeeId}"
+            GRAPH "transactions"
+            FILTER e._to == "${payeeId}"
+            return p
+          `;
+
+        const payeeAllTransactions = await arangodb.query(
+          payeeTransactionsQuery,
+        );
+
+        LoggerService.log(
+          `payeeAllTransactions ${JSON.stringify(payeeAllTransactions)}`,
+        );
+
+        if (payeeAllTransactions && payeeAllTransactions.length > 0) {
+          for (const typology of data.typologies) {
+            LoggerService.log(`Sending Result to ${typology.name}`);
+
+            result.rule = {
+              rule: 'Rule-002',
+              result: true,
+            };
+
+            const response = await axios.post(typology.endpoint, {
+              transaction: request.transaction,
+            });
+
+            LoggerService.log(`\nResponse ${JSON.stringify(response)}`);
+          }
+        } else {
+          result.rule = {
+            rule: 'Rule-002',
+            result: false,
+          };
+        }
       }
 
-      ctx.body = request;
+      ctx.body = result;
       ctx.status = 200;
     } catch (error) {
       const failMessage = 'Failed to parse execution request.';
