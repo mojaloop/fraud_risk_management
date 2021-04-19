@@ -1,5 +1,4 @@
-import { ParameterizedContext } from 'koa';
-import { IRouterParamContext } from 'koa-router';
+import * as Koa from 'koa';
 import { ExecuteRequest } from '../classes/execute-request';
 import { LoggerService } from './logger.service';
 import { LogicService } from './logic.service';
@@ -11,17 +10,13 @@ export class ApplicationService {
     this.logicService = new LogicService();
   }
 
-  async getOnline(
-    ctx: ParameterizedContext<any, IRouterParamContext<any, {}>, any>,
-  ) {
+  async getOnline(ctx: Koa.Context): Promise<void> {
     LoggerService.log('Received Online Request - Status: Online');
     ctx.status = 200;
-    ctx.body = `<!ProjectName!> is online.`;
+    ctx.body = '<!ProjectName!> is online.';
   }
 
-  async execute(
-    ctx: ParameterizedContext<any, IRouterParamContext<any, {}>, any>,
-  ) {
+  async execute(ctx: Koa.Context): Promise<void> {
     let request!: ExecuteRequest;
     LoggerService.log('Start - Handle execute request');
     try {

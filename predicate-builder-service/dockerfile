@@ -11,10 +11,7 @@ RUN addgroup -S app && adduser -S -g app app
 
 RUN apk --no-cache add curl ca-certificates
 
-RUN apk add --no-cache -t build-dependencies git make gcc g++ python libtool autoconf automake yarn \
-    && cd $(npm root -g)/npm \
-    && npm config set unsafe-perm true \
-    && npm install -g node-gyp
+RUN apk add --no-cache -t build-dependencies yarn
 
 # Turn down the verbosity to default level.
 ENV NPM_CONFIG_LOGLEVEL warn
@@ -34,9 +31,6 @@ WORKDIR /home/app
 COPY package.json ./
 COPY yarn.lock ./
 COPY tsconfig.json ./
-
-# Install dependencies
-# RUN yarn run cleanup
 
 # Install dependencies
 RUN yarn install
