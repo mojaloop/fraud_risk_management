@@ -1,72 +1,99 @@
 import { Context } from 'koa';
-import util from 'util';
-import { config } from '../config';
-import { getScores, appendScore } from '../redis-client';
-import https from 'https';
+import { config, ConfigObj } from '../config';
+import {
+  getScores,
+  appendScore,
+  deleteTransactionRecord,
+} from '../redis-client';
+import axios from 'axios';
+
+interface requestBodyType {
+  message: string;
+  score: number;
+}
+
+const sendRequest = (config: ConfigObj, requestBody: requestBodyType) => {
+  const route = `http://${config.channelRoutingHostname}:${config.channelRoutingPort}/${config.channelRoutingPath}`;
+  axios.post(route, requestBody);
+};
+
+const getScore = (resultsArray: number[]) => {
+  const scoreSum = resultsArray.reduce(
+    (sum: number, score: number) => sum + score,
+  );
+  const scoreAverage = scoreSum / resultsArray.length;
+  return scoreAverage > 0.75
+    ? {
+      message: 'Transaction is positive for Fraud/Risk',
+      score: scoreAverage,
+    }
+    : {
+      message: 'Transaction is negative for Fraud/Risk',
+      score: scoreAverage,
+    };
+};
 
 const scoreTypologies = async (ctx: Context): Promise<Context> => {
   try {
-    const typologiesNeeded = [28, 11];
+    // Only typology 28 for MVP
+    const typologiesNeeded = [28];
     const { redisClient } = ctx.state;
     const { transactionID, typologyNumber, score } = ctx.request.body;
-    const transactionTypology = `${transactionID}-${typologyNumber}`;
-    const transactionTypologiesResults = await getScores(redisClient, transactionTypology);
-    if (typeof transactionTypologiesResults !== 'string') {
-      const body = {
-        [typologyNumber]: score,
-      };
-      await appendScore(redisClient, transactionTypology, JSON.stringify(body));
+    const jsonTypologiesResults = await getScores(redisClient, transactionID);
+
+    // WARNING: REMOVE AFTER MVP. This is an easy scoring
+    // implementation since we're only using 1 typology.
+
+    // check if it's the first record for this transaction and record it.
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    if (jsonTypologiesResults! === 'null') {
+      const body = `{"${typologyNumber}": ${score}`;
+      await appendScore(redisClient, transactionID, body);
       ctx.body = { result: 'Typology result saved' };
       ctx.response.status = 200;
       return ctx;
     }
-    const typologiesResults = JSON.parse(transactionTypologiesResults);
-    typologiesResults[typologyNumber] = score;
-    await appendScore(redisClient, transactionTypology, JSON.stringify(typologiesResults));
-    if (typologiesResults.length === typologiesNeeded.length) {
-      const scoreSum = typologiesResults.reduce((sum: number, score: number) => sum + score);
-      const scoreAverage = scoreSum / typologiesResults.length;
-      const requestBody = scoreAverage > 0.75
-        ? {
-          message: 'Transaction is positive for Fraud/Risk',
-          score: scoreAverage,
-        }
-        : {
-          message: 'Transaction is negative for Fraud/Risk',
-          score: scoreAverage,
-        };
-      const requestBodyString = JSON.stringify(requestBody);
-      const options = {
-        hostname: config.channelRoutingHostname,
-        port: config.channelRoutingPort,
-        path: `/${config.channelRoutingPath}`,
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Content-Length': requestBodyString.length,
-        },
-      };
 
-      const req = https.request(options, res => {
-        console.log(`statusCode: ${res.statusCode}`);
-        res.on('data', d => {
-          process.stdout.write(d);
-          resolve();
-        });
-      });
-
-      req.on('error', error => {
-        console.error(error);
-        resolve(error);
-      });
-
-      req.write(requestBodyString);
-      req.end();
+    // check if this is a duplicate for the same typology.
+    const newResultToBeAdded = `, "${typologyNumber}": ${score}`;
+    const testTypologiesNumbers = Object.keys(
+      JSON.parse(`${jsonTypologiesResults}}`),
+    );
+    if (testTypologiesNumbers.includes(`${typologyNumber}`)) {
+      ctx.body = { result: 'Typology result already stored' };
+      ctx.response.status = 400;
+      return ctx;
     }
+
+    // Store the typology result and evaluate if these are all the results, then score it.
+    await appendScore(redisClient, transactionID, newResultToBeAdded);
+    const typologiesResults = JSON.parse(
+      `${jsonTypologiesResults}${newResultToBeAdded}}`,
+    );
+    const resultsArray: number[] = Object.values(typologiesResults);
+    if (resultsArray.length === typologiesNeeded.length) {
+      const requestBody = getScore(resultsArray);
+      sendRequest(config, requestBody);
+      // remove transaction from redis to save memory.
+      deleteTransactionRecord(redisClient, transactionID);
+      ctx.status = 200;
+      ctx.body = requestBody;
+      return ctx;
+    }
+    ctx.body = { result: 'Typology result saved' };
+    ctx.response.status = 400;
   } catch (e) {
-    console.log(e);
+    // eslint-disable-next-line no-console
+    console.error(e);
+    ctx.status = 500;
+    ctx.body = e;
   }
   return ctx;
 };
 
-export { scoreTypologies };
+const testResult = async (ctx: Context): Promise<Context> => {
+  ctx.status = 201;
+  return ctx;
+};
+
+export { scoreTypologies, testResult };

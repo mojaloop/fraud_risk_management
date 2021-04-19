@@ -6,7 +6,6 @@ import router from './routes';
 import { config } from './config';
 import { initializeRedis } from './redis-client';
 import { Server } from 'http';
-import { RedisClient } from 'redis';
 
 class App extends Koa {
   public servers: Server[];
@@ -21,7 +20,12 @@ class App extends Koa {
   async _configureRoutes(): Promise<void> {
     // Bootstrap application router
     const { redisChannelScoring, redisAuth, redisHost, redisPort } = config;
-    const redisClient = await initializeRedis(redisChannelScoring, redisHost, redisPort, redisAuth);
+    const redisClient = await initializeRedis(
+      redisChannelScoring,
+      redisHost,
+      redisPort,
+      redisAuth,
+    );
     this.use((ctx, next) => {
       ctx.state.redisClient = redisClient;
       return next();

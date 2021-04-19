@@ -1,5 +1,5 @@
+/* eslint-disable no-console */
 import { RedisClient } from 'redis';
-import util from 'util';
 
 const initializeRedis = async (
   redisDB: string,
@@ -16,22 +16,45 @@ const initializeRedis = async (
   return client;
 };
 
-const getScores = async (client: RedisClient, key: string): Promise<string | null> => new Promise((resolve) => {
-  // Get the value of a key.
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  client.get(key, (err, reply) => {
-    if (err) {
-      console.log(err);
-      resolve('');
-    } else {
-      resolve(`${reply}`);
-    }
-  });
-});
-
-const appendScore = (client: RedisClient, key: string, score: string): Promise<string | null> =>
+const getScores = async (
+  client: RedisClient,
+  key: string,
+): Promise<string | null> =>
   new Promise((resolve) => {
     // Get the value of a key.
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    client.get(key, (err, reply) => {
+      if (err) {
+        console.log(err);
+        resolve('');
+      } else {
+        resolve(`${reply}`);
+      }
+    });
+  });
+
+const deleteTransactionRecord = async (
+  client: RedisClient,
+  key: string,
+): Promise<string | null> =>
+  new Promise((resolve) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    client.del(key, (err, reply) => {
+      if (err) {
+        console.log(err);
+        resolve('');
+      } else {
+        resolve(`${reply}`);
+      }
+    });
+  });
+
+const appendScore = (
+  client: RedisClient,
+  key: string,
+  score: string,
+): Promise<string | null> =>
+  new Promise((resolve) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     client.append(key, score, (err, reply) => {
       if (err) {
@@ -43,4 +66,4 @@ const appendScore = (client: RedisClient, key: string, score: string): Promise<s
     });
   });
 
-export { getScores, initializeRedis, appendScore };
+export { getScores, initializeRedis, appendScore, deleteTransactionRecord };
