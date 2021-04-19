@@ -11,7 +11,6 @@ RUN addgroup -S app && adduser -S -g app app
 
 RUN apk --no-cache add curl ca-certificates
 
-# RUN apk add --no-cache -t build-dependencies git make gcc g++ python libtool autoconf automake yarn
 RUN apk add --no-cache -t build-dependencies yarn
 
 # Turn down the verbosity to default level.
