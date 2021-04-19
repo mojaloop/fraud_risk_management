@@ -1,16 +1,16 @@
 version: 1.0
 provider:
   name: openfaas
-  gateway: http://20.49.140.12:8080
+  gateway: http://127.0.0.1:8080
 language: node14
 fprocess: node build/index.js
 functions:
   frm-tms-service:
     lang: dockerfile
     handler: .
-    image: frmacr.azurecr.io/frm_tms_service:latest
+    image: localhost:32000/frm_tms_service:latest
     annotations:
       com.openfaas.health.http.path: /health
       com.openfaas.health.http.initialDelay: "45s"
     secrets:
-      - frmpullsecret
+      - somesecret
