@@ -6,6 +6,7 @@ export class RedisClientService {
   client: RedisClient;
 
   constructor() {
+    console.log('Connecting to redis hosted on: ' + config.redisHost);
     this.client = new RedisClient({
       db: config.redisDB,
       host: config.redisHost,

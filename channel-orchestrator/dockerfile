@@ -23,8 +23,6 @@ ENV NPM_CONFIG_LOGLEVEL warn
 RUN chown app:app -R /home/app \
     && chmod 777 /tmp
 
-USER app
-
 # Create a folder named function
 RUN mkdir -p /home/app
 
@@ -50,8 +48,24 @@ RUN yarn run build
 ENV cgi_headers="true"
 ENV fprocess="node ./build/index.js"
 ENV mode="http"
+ENV upstream_url="http://127.0.0.1:3000"
 
-HEALTHCHECK --interval=3s CMD [ -e /tmp/.lock ] || exit 1
+ENV exec_timeout="10s"
+ENV write_timeout="15s"
+ENV read_timeout="15s"
+
+ENV REDIS_AUTH='TjEmUWes67'
+ENV REDIS_HOST='my-redis-master'
+# ENV REDIS_AUTH='4ikHQfBqMA'
+# ENV REDIS_HOST='10.75.132.57'
+ENV REDIS_PORT=6379
+ENV REDIS_DB=0
+ENV TYPOLOGY_MAP='[{"typology28": "http://127.0.0.1:3000/execute", "rules": [{"rule2": "http://127.0.0.1:3000/execute"}]},{"typology32": "http://127.0.0.1:3000/execute", "rules": [{"rule2": "http://127.0.0.1:3000/execute"}, {"rule3": "http://127.0.0.1:3000/execute"}]}]'
+ENV HOST_PORT=3000
+
+ENV prefix_logs="false"
+
+HEALTHCHECK --interval=60s CMD [ -e /tmp/.lock ] || exit 1
 
 # Execute watchdog command
 CMD ["fwatchdog"]
