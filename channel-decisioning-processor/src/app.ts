@@ -1,34 +1,36 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import Koa from 'koa';
-import * as swagger from 'swagger2';
-import { ui, validate } from 'swagger2-koa';
 import bodyParser from 'koa-bodyparser';
 import router from './routes';
+import { config } from './config';
+import { initializeRedis } from './redis-client';
 import { Server } from 'http';
 
 class App extends Koa {
   public servers: Server[];
-
   constructor() {
     super();
 
     // bodyparser needs to be loaded first in order to work
-    this.use(bodyParser());
     this.servers = [];
-    this._configureMiddlewares();
     this._configureRoutes();
   }
 
-  _configureMiddlewares(): void {
-    const readSwagger = swagger.loadDocumentSync('src/mojaloop-api.yaml');
-    const swaggerDocument: swagger.Document = readSwagger as swagger.Document;
-    this.use(ui(swaggerDocument, '/swagger'));
-    this.use(validate(swaggerDocument));
-  }
-
-  _configureRoutes(): void {
+  async _configureRoutes(): Promise<void> {
     // Bootstrap application router
+    const { redisChannelScoring, redisAuth, redisHost, redisPort } = config;
+    const redisClient = await initializeRedis(
+      redisChannelScoring,
+      redisHost,
+      redisPort,
+      redisAuth,
+    );
+    this.use((ctx, next) => {
+      ctx.state.redisClient = redisClient;
+      return next();
+    });
+    this.use(bodyParser());
     this.use(router.routes());
     this.use(router.allowedMethods());
   }
