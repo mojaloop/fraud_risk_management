@@ -1,5 +1,5 @@
 export abstract class LoggerService {
-    private static source = 'frm-rule-002';
+    private static source = 'typology-28';
     private static timeStamp() {
       const dateObj = new Date();
   
@@ -32,7 +32,6 @@ export abstract class LoggerService {
       innerError?: Error,
       serviceOperation?: string,
     ): Promise<void> {
-      const source = 'frm-rule-002';
       let errMessage = typeof message === 'string' ? message : message.stack;
   
       if (innerError) {

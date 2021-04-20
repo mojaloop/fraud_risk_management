@@ -1,6 +1,6 @@
 import { RedisClient } from 'redis';
 import { ConfigObj } from './config/config';
-import { log } from './helper';
+import { LoggerService } from './services/logger.service';
 
 const initializeRedis = (
   redisDB: string,
@@ -22,8 +22,7 @@ const get = (client: RedisClient, key: string): Promise<string> =>
     // Get the value of a key.
     client.GET(key, (err, reply) => {
       if (err) {
-        console.log(err);
-        log(`Error from Redis with message: \r\n${err}`, 'REDIS');
+        LoggerService.error(`Error from Redis with message: \r\n${err}`);
         resolve('');
       } else {
         resolve(reply!);
@@ -36,10 +35,7 @@ const getILPList = (client: RedisClient, sourceILP: string): Promise<string> =>
   new Promise((resolve) => {
     client.GET(sourceILP, (err, reply) => {
       if (err) {
-        log(
-          `Error while getting List for ILP from Redis with message: \r\n${err}`,
-          'REDIS',
-        );
+        LoggerService.error(`Error while getting List for ILP from Redis with message: \r\n${err}`);
         resolve('Error');
       } else {
         resolve(reply!);

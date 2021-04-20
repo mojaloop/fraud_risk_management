@@ -2,29 +2,16 @@ import { Request, Response } from 'express';
 import { RedisClient } from 'redis';
 import { Typology28Type } from '../classes/typology28';
 import { config } from '../config/config';
-import { log, redisGetJson, redisSetJson } from '../helper';
-import { get, initializeRedis } from '../redis-client';
+import { redisGetJson, redisAppendJson } from '../helper';
+import { initializeRedis } from '../redis-client';
 import https from 'https';
+import { LoggerService } from './logger.service';
 
 export class ApplicationService {
-  topic: string = 'TYPOLOGY-28';
-  senderClient: RedisClient;
-  receiverClient: RedisClient;
+  
   typologyCacheClient: RedisClient;
 
   constructor() {
-    this.senderClient = initializeRedis(
-      config.redisSenderDB,
-      config.redisHost,
-      config.redisPort,
-      config.redisAuth,
-    );
-    this.receiverClient = initializeRedis(
-      config.redisReceiverDB,
-      config.redisHost,
-      config.redisPort,
-      config.redisAuth,
-    );
     this.typologyCacheClient = initializeRedis(
       config.redisTypologyCacheDB,
       config.redisHost,
@@ -47,7 +34,7 @@ export class ApplicationService {
         `Cannot execute Typology-28, no request body was passed.`,
       );
 
-      log(`[ERROR] ${error.message}`, this.topic);
+      LoggerService.error(`[ERROR] ${error.message}`);
       response.status(406).send(error.message);
       return;
     }
@@ -65,7 +52,7 @@ export class ApplicationService {
 
         // check if all results are found - for MVP, we are going with just one Rule result. 
         if (ruleResults.length < 1) {
-          var saveResult = await redisSetJson(transactionID, ruleResults, this.typologyCacheClient);
+          var saveResult = await redisAppendJson(transactionID, ruleResults, this.typologyCacheClient);
           response.status(200).send('All rules not yet processed for Typology 28');
           return;
         }
@@ -93,7 +80,7 @@ export class ApplicationService {
       );
       processError.message += `\n${error.message}`;
 
-      log(`[ERROR] ${processError.message}`, this.topic);
+      LoggerService.error(`[ERROR] ${processError.message}`);
       response.status(500).send(processError.message);
       return;
     }
@@ -157,6 +144,5 @@ export class ApplicationService {
       (scores.rule64 ? 'Rule 64' : '') +
       '"}'
       }`
-
   };
 }

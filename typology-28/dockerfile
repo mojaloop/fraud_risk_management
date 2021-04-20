@@ -53,6 +53,19 @@ ENV read_timeout="15s"
 
 ENV prefix_logs="false"
 
+# Service environment variables
+ENV REDIS_SENDER_DB=0
+ENV REDIS_RECEIVER_DB=1
+ENV REDIS_TYPOLOGY_CACHE_DB=2
+ENV HOST_PORT=3000
+ENV CHANNEL_SCORE_HOSTNAME=d54af5b4-2133-4350-a754-bc9ae75d9c49.mock.pstmn.io
+ENV CHANNEL_SCORE_PORT=443
+ENV CHANNEL_SCORE_PATH=score
+ENV REDIS_AUTH='TjEmUWes67'
+ENV REDIS_HOST='my-redis-master'
+ENV REDIS_PORT=6379
+ENV REDIS_DB=0
+
 HEALTHCHECK --interval=3s CMD [ -e /tmp/.lock ] || exit 1
 
 # Execute watchdog command
