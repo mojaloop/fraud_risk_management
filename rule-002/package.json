@@ -1,0 +1,77 @@
+{
+  "name": "rule-002",
+  "version": "0.1.0",
+  "description": "FRM-rule-002-velocity-(incoming)-service",
+  "main": "build/index.js",
+  "scripts": {
+    "dev": "env $(cat .env.dev) nodemon",
+    "build": "tsc",
+    "start": "node build/index.js",
+    "fix": "yarn fix:prettier && yarn fix:eslint",
+    "fix:eslint": "eslint --fix \"**/*.ts\"",
+    "fix:prettier": "prettier --write \"**/*.ts\"",
+    "lint": "yarn lint:eslint && yarn lint:prettier",
+    "lint:eslint": "eslint \"**/*.ts\"",
+    "lint:prettier": "prettier --check \"**/*.ts\"",
+    "test": "jest --config=jest.config.ts --passWithNoTests",
+    "test:watch": "jest --config=jest.config.ts --watch",
+    "test:unit": "yarn test ./tests/unit",
+    "cleanup": "rm -rf build template jest.config.js jest.config.js.map node_modules",
+    "test:integration": "yarn test ./tests/integration --detectOpenHandles"
+  },
+  "keywords": [
+    "frm",
+    "rule-002"
+  ],
+  "author": "Joey Goksu",
+  "license": "ISC",
+  "dependencies": {
+    "@types/redis": "^2.8.28",
+    "arangojs": "^7.4.0",
+    "axios": "^0.21.1",
+    "dotenv": "^8.2.0",
+    "koa": "^2.13.1",
+    "koa-bodyparser": "^4.3.0",
+    "koa-router": "^10.0.0",
+    "redis": "^3.1.0"
+  },
+  "devDependencies": {
+    "@types/arangodb": "^3.5.10",
+    "@types/axios": "^0.14.0",
+    "@types/jest": "^26.0.22",
+    "@types/koa": "^2.13.1",
+    "@types/koa-bodyparser": "^4.3.0",
+    "@types/koa-router": "^7.4.1",
+    "@types/node": "^14.14.25",
+    "@types/supertest": "^2.0.10",
+    "@typescript-eslint/eslint-plugin": "^4.15.0",
+    "@typescript-eslint/parser": "^4.15.0",
+    "eslint": "^7.19.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-config-prettier": "^7.2.0",
+    "eslint-config-standard": "^16.0.2",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^3.3.1",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^5.0.0",
+    "husky": "^4",
+    "jest": "^26.6.3",
+    "lint-staged": "^10.5.4",
+    "nodemon": "^2.0.6",
+    "prettier": "^2.2.1",
+    "rimraf": "^3.0.2",
+    "supertest": "^6.1.3",
+    "ts-jest": "^26.5.4",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.2.3"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,ts}": "eslint --cache --fix"
+  }
+}

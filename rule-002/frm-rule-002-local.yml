@@ -1,0 +1,11 @@
+version: 1.0
+provider:
+  name: openfaas
+  gateway: http://127.0.0.1:8080
+language: node14
+fprocess: node build/index.js
+functions:
+  off-frm-rule-002:
+    lang: dockerfile
+    handler: .
+    image: localhost:5000/frm_rule_002:latest
