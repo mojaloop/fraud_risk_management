@@ -1,0 +1,11 @@
+version: 1.0
+provider:
+  name: openfaas
+  gateway: http://20.49.140.12:8080
+language: node14
+fprocess: node build/index.js
+functions:
+  off-frm-predicate-builder-service:
+    lang: dockerfile
+    handler: .
+    image: localhost:5000/frm-predicate-builder-service:latest

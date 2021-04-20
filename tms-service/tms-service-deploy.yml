@@ -1,0 +1,9 @@
+version: 1.0
+provider:
+  name: openfaas
+  gateway: http://20.49.140.12:8080
+functions:
+  off-frm-tms-service:
+    lang: dockerfile
+    handler: .
+    image: frmacr.azurecr.io/frm-tms-service:0.1
