@@ -22,15 +22,13 @@ const getScore = (resultsArray: number[]) => {
     (sum: number, score: number) => sum + score,
   );
   const scoreAverage = scoreSum / resultsArray.length;
-  return scoreAverage > 0.75
-    ? {
-      message: 'Transaction is positive for Fraud/Risk',
-      score: scoreAverage,
-    }
-    : {
-      message: 'Transaction is negative for Fraud/Risk',
-      score: scoreAverage,
-    };
+  return {
+    message:
+      scoreAverage > 0.75
+        ? 'Transaction is positive for Fraud/Risk'
+        : 'Transaction is Negative for Fraud/Risk',
+    score: scoreAverage,
+  };
 };
 
 const scoreTypologies = async (ctx: Context): Promise<Context> => {
@@ -39,10 +37,18 @@ const scoreTypologies = async (ctx: Context): Promise<Context> => {
     const typologiesNeeded = [28];
     const { redisClient } = ctx.state;
     const { transactionID, typologyNumber, score } = ctx.request.body;
-    const jsonTypologiesResults = await getScores(redisClient, transactionID);
 
     // WARNING: REMOVE AFTER MVP. This is an easy scoring
     // implementation since we're only using 1 typology.
+    if (typologiesNeeded.length === 1) {
+      const requestBody = getScore([score]);
+      await sendRequest(config, requestBody);
+      ctx.status = 200;
+      ctx.body = requestBody;
+      return ctx;
+    }
+
+    const jsonTypologiesResults = await getScores(redisClient, transactionID);
 
     // check if it's the first record for this transaction and record it.
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -92,6 +98,8 @@ const scoreTypologies = async (ctx: Context): Promise<Context> => {
 };
 
 const testResult = async (ctx: Context): Promise<Context> => {
+  // eslint-disable-next-line no-console
+  console.log(JSON.stringify(ctx.request.body));
   ctx.status = 201;
   return ctx;
 };

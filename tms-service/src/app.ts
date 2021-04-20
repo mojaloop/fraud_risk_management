@@ -21,7 +21,7 @@ class App extends Koa {
   }
 
   _configureMiddlewares(): void {
-    const readSwagger = swagger.loadDocumentSync('src/api.yaml');
+    const readSwagger = swagger.loadDocumentSync('src/mojaloop-api.yaml');
     const swaggerDocument: swagger.Document = readSwagger as swagger.Document;
     this.use(ui(swaggerDocument, '/swagger'));
     this.use(validate(swaggerDocument));

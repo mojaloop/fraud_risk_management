@@ -20,9 +20,7 @@ describe('check endpoints', () => {
     ];
 
     for (const path of testCases) {
-      const res = await request
-        .get(path)
-        .expect(404);
+      const res = await request.get(path).expect(404);
 
       const { status } = res.body;
       expect(status).toBe(undefined);
