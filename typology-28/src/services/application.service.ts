@@ -135,7 +135,7 @@ export class ApplicationService {
       (scores.rule63 ? 0.15 : 0) +
       (scores.rule64 ? 0.15 : 0);
     return `{"typology":"typology-28","transactionID":"${TransactionID}","createDate":${transactionDate},"processedDate":${Date.now()},
-  "score":${score},"textResult":"Typology 28 score is ${score}, Reason: ${(scores.rule2 ? 'Rule 2, ' : '') +
+  "score":${score},"typologyNumber": 28,"textResult":"Typology 28 score is ${score}, Reason: ${(scores.rule2 ? 'Rule 2, ' : '') +
       (scores.rule12 ? 'Rule 12, ' : '') +
       (scores.rule16 ? 'Rule 16, ' : '') +
       (scores.rule27 ? 'Rule 27, ' : '') +
