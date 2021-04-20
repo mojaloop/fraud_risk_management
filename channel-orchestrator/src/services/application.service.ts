@@ -1,4 +1,4 @@
-import { ParameterizedContext } from 'koa';
+import { Context } from 'koa';
 import { IRouterParamContext } from 'koa-router';
 import { ExecuteRequest } from '../classes/execute-request';
 import { LoggerService } from './logger.service';
@@ -12,15 +12,15 @@ export class ApplicationService {
   }
 
   async getOnline(
-    ctx: ParameterizedContext<any, IRouterParamContext<any, {}>, any>,
+    ctx: Context,
   ) {
     LoggerService.log('Received Online Request - Status: Online');
     ctx.status = 200;
-    ctx.body = `<!ProjectName!> is online.`;
+    ctx.body = 'Channel-Orchestrator is online.';
   }
 
   async execute(
-    ctx: ParameterizedContext<any, IRouterParamContext<any, {}>, any>,
+    ctx: Context,
   ) {
     let request!: ExecuteRequest;
     LoggerService.log('Start - Handle execute request');

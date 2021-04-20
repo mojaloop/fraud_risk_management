@@ -1,10 +1,10 @@
-import { ITransaction } from "../interfaces/iTransaction";
+import { ITransaction } from '../interfaces/iTransaction';
 
 export class RuleRequest {
-    transaction: ITransaction;
-    typologies: any;
-    constructor(transaction: ITransaction, typologies: any) {
-        this.transaction = transaction;
-        this.typologies = typologies;
-    }
+  transaction: ITransaction;
+  typologies: Map<string, string>;
+  constructor(transaction: ITransaction, typologies: Map<string, string>) {
+    this.transaction = transaction;
+    this.typologies = typologies;
+  }
 }

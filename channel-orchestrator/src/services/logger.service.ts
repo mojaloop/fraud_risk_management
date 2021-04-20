@@ -1,12 +1,12 @@
 export abstract class LoggerService {
-  private static source = '<!ProjectName!>';
+  private static source = 'Channel-Orchestrator';
   private static timeStamp() {
     const dateObj = new Date();
 
     let date = dateObj.toISOString();
     date = date.substring(0, date.indexOf('T'));
 
-    let time = dateObj.toLocaleTimeString([], { hour12: false });
+    const time = dateObj.toLocaleTimeString([], { hour12: false });
 
     return `${date} ${time}`;
   }
@@ -32,7 +32,7 @@ export abstract class LoggerService {
     innerError?: Error,
     serviceOperation?: string,
   ) {
-    const source: string = '<!ProjectName!>';
+    const source = 'Channel-Orchestrator';
     let errMessage = typeof message === 'string' ? message : message.stack;
 
     if (innerError) {

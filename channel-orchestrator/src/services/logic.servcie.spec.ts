@@ -29,7 +29,7 @@ describe('Logic Service', () => {
       const result = await service.handleTransaction(expectedReq);
 
       expect(result).toEqual(
-        `[<!ProjectName!>][Result][FALSE] Payer and Payee contact number is not the same for transaction ID: ${expectedReq.TransactionID}`,
+        `[Channel-Orchestrator][Result][FALSE] Payer and Payee contact number is not the same for transaction ID: ${expectedReq.TransactionID}`,
       );
     });
 
@@ -40,7 +40,7 @@ describe('Logic Service', () => {
       const result = await service.handleTransaction(expectedReq);
 
       expect(result).toEqual(
-        `[<!ProjectName!>][Result][TRUE] Payer and Payee contact number is the same for transaction ID: ${expectedReq.TransactionID}`,
+        `[Channel-Orchestrator][Result][TRUE] Payer and Payee contact number is the same for transaction ID: ${expectedReq.TransactionID}`,
       );
     });
   });

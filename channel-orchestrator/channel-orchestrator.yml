@@ -3,10 +3,10 @@ provider:
   name: openfaas
   gateway: http://20.49.140.12:8080
 functions:
-  off-frm-channel-orchestrator:
+  off-channel-orchestrator:
     lang: dockerfile
     handler: .
-    image: frmacr.azurecr.io/frm-channel-orchestrator:latest
+    image: frmacr.azurecr.io/off-channel-orchestrator:latest
     # annotations:
     #   com.openfaas.health.http.path: /online
     #   com.openfaas.health.http.initialDelay: "30s"

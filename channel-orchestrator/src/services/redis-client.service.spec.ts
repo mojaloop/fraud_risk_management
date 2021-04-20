@@ -69,7 +69,7 @@ describe('Redis Client Service', () => {
       const result = await service.get(key);
 
       expect(redisGetSpy).toBeCalledWith(key, expect.anything());
-      expect(errorSpy).toBeCalledWith(`Error while getting ${key} from Redis with message:`, internalError, 'RedisClient')
+      expect(errorSpy).toBeCalledWith(`Error while getting ${key} from Redis with message:`, internalError, 'RedisClient');
       expect(result).toEqual('');
     });
   });

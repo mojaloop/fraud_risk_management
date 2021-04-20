@@ -45,7 +45,7 @@ describe('Application Service', () => {
 
       expect(loggerSpy).toBeCalledWith(expectedLog);
       expect(ctx.status).toEqual(200);
-      expect(ctx.body).toEqual(`<!ProjectName!> is online.`);
+      expect(ctx.body).toEqual('Channel-Orchestrator is online.');
     });
   });
 

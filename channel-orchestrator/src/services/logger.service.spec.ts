@@ -1,14 +1,13 @@
 import { LoggerService } from './logger.service';
 
-const loggerSource = '<!ProjectName!>';
+const loggerSource = 'Channel-Orchestrator';
 const getTestRegex = (
   msg: string,
   type: 'INFO' | 'ERROR' | 'WARN',
   operation = '',
 ) =>
   new RegExp(
-    `\\[\\d{4}-\\d{2}-\\d{2}\\s\\d{2}:\\d{2}:\\d{2}\\]\\[${loggerSource}${
-      operation ? ' - ' + operation : operation
+    `\\[\\d{4}-\\d{2}-\\d{2}\\s\\d{2}:\\d{2}:\\d{2}\\]\\[${loggerSource}${operation ? ' - ' + operation : operation
     }\\]\\[${type}\\] - ${msg}`,
   );
 
@@ -25,9 +24,9 @@ describe('Logger Service', () => {
   let consoleErrorSpy: jest.SpyInstance;
 
   beforeEach(() => {
-    consoleLoggerSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
-    consoleWarnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
-    consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+    consoleLoggerSpy = jest.spyOn(console, 'log').mockImplementation(() => { console.log('log') });
+    consoleWarnSpy = jest.spyOn(console, 'warn').mockImplementation(() => { console.log('warn')});
+    consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => { console.log('error')});
   });
 
   describe('Log', () => {
@@ -125,7 +124,7 @@ describe('Logger Service', () => {
 
       let messageForRegex = fixErrorStackRegex(
         expectedMessage.stack as string,
-      );;
+      );
       const childErrorRegex = fixErrorStackRegex(childError.stack as string);
 
       messageForRegex = `${messageForRegex}[\\r\\n\\s\\t]{1,}${childErrorRegex}`;

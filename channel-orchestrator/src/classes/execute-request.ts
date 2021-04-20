@@ -20,6 +20,7 @@ export class ExecuteRequest implements ITransaction {
     PartyName: string[];
     PersonalIdentifierType: string;
   };
+
   PayerContactNo!: string;
   PayerDeviceIMEI!: string;
   PayerICCID!: string;
@@ -35,6 +36,7 @@ export class ExecuteRequest implements ITransaction {
     TransactionInitiator: string;
     TransactionInitiatorType: string;
   };
+
   // We expect the initial value to be passed to be of similar structure to what we have
   constructor(init: Partial<ExecuteRequest>) {
     if (!init) {
