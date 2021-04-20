@@ -86,7 +86,7 @@ export class ApplicationService {
 
       var res = await this.sendScore(score);
 
-      response.status(200).send(score);
+      response.status(200).send(`${score}\r\nChannel Score Response:\r\n${res}`);
     } catch (error) {
       const processError = new Error(
         'Failed to process Typology-28 request',

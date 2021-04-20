@@ -23,9 +23,9 @@ const redisGetJson = (key: string, client: RedisClient): Promise<any> =>
     })
   });
 
-const redisSetJson = (key: string, value: any, client: RedisClient): Promise<any> =>
+const redisAppendJson = (key: string, value: any, client: RedisClient): Promise<any> =>
   new Promise<any>((resolve) => {
-    client.set(key, JSON.stringify(value), (err, res) => {
+    client.append(key, JSON.stringify(value), (err, res) => {
       if (err)
         console.log(err);
       resolve(res);
@@ -46,4 +46,4 @@ const log = (message: string, topic: string) =>
       () => resolver(undefined),
     );
   });
-export { log, initializeLoggingProducer, redisGetJson, redisSetJson };
+export { log, initializeLoggingProducer, redisGetJson, redisAppendJson as redisSetJson };

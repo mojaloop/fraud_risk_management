@@ -31,9 +31,9 @@ app.post('/debug', async (req, res) =>
 );
 
 
-app.listen(config.hostPort, () => {
+app.listen(3000, () => {
   console.log(
-    `Typology 28 - Listening on: http://localhost:${config.hostPort}`,
+    `Typology 28 - Listening on: http://localhost:3000`,
   );
 });
 

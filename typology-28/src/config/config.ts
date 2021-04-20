@@ -22,7 +22,6 @@ interface ConfigObj {
   redisAuth: string;
   redisHost: string;
   redisPort: number;
-  hostPort: number;
   channelScoreHostname: string;
   channelScorePort: number;
   channelScorePath: string;
@@ -44,7 +43,6 @@ const config: ConfigObj = {
   redisAuth: <string>process.env.REDIS_AUTH,
   redisHost: <string>process.env.REDIS_HOST,
   redisPort: parseInt(process.env.REDIS_PORT!, 10),
-  hostPort: parseInt(process.env.HOST_PORT!, 10),
   channelScoreHostname: <string>process.env.CHANNEL_SCORE_HOSTNAME,
   channelScorePort: parseInt(process.env.CHANNEL_SCORE_PORT!, 10),
   channelScorePath: <string>process.env.CHANNEL_SCORE_PATH,
