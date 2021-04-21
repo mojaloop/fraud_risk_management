@@ -4,4 +4,5 @@ export interface IConfig {
   dbUser: string;
   dbPassword: string;
   graphName: string;
+  debug: boolean | undefined;
 }

@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any, no-console */
+import { configuration } from '../config';
+
 export abstract class LoggerService {
   private static source = 'frm-rule-002';
   private static timeStamp() {
@@ -11,38 +14,40 @@ export abstract class LoggerService {
     return `${date} ${time}`;
   }
 
-  static async log(message: string, serviceOperation?: string): Promise<void> {
-    console.log(
-      `[${LoggerService.timeStamp()}][${LoggerService.source}${
-        serviceOperation ? ' - ' + serviceOperation : ''
-      }][INFO] - ${message}`,
-    );
+  static log(message: string, serviceOperation?: string): Promise<void> | any {
+    configuration.debug &&
+      console.log(
+        `[${LoggerService.timeStamp()}][${LoggerService.source}${
+          serviceOperation ? ' - ' + serviceOperation : ''
+        }][INFO] - ${message}`,
+      );
   }
 
-  static async warn(message: string, serviceOperation?: string): Promise<void> {
-    console.warn(
-      `[${LoggerService.timeStamp()}][${LoggerService.source}${
-        serviceOperation ? ' - ' + serviceOperation : ''
-      }][WARN] - ${message}`,
-    );
+  static warn(message: string, serviceOperation?: string): Promise<void> | any {
+    configuration.debug &&
+      console.warn(
+        `[${LoggerService.timeStamp()}][${LoggerService.source}${
+          serviceOperation ? ' - ' + serviceOperation : ''
+        }][WARN] - ${message}`,
+      );
   }
 
-  static async error(
+  static error(
     message: string | Error,
     innerError?: Error,
     serviceOperation?: string,
-  ): Promise<void> {
-    const source = 'frm-rule-002';
+  ): Promise<void> | any {
     let errMessage = typeof message === 'string' ? message : message.stack;
 
     if (innerError) {
       errMessage += `\r\n${innerError.stack}`;
     }
 
-    console.error(
-      `[${LoggerService.timeStamp()}][${LoggerService.source}${
-        serviceOperation ? ' - ' + serviceOperation : ''
-      }][ERROR] - ${errMessage}`,
-    );
+    configuration.debug &&
+      console.error(
+        `[${LoggerService.timeStamp()}][${LoggerService.source}${
+          serviceOperation ? ' - ' + serviceOperation : ''
+        }][ERROR] - ${errMessage}`,
+      );
   }
 }
