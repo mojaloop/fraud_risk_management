@@ -20,9 +20,9 @@ export class LogicService {
     const typologyMap = Object.assign(new Array<TypologyMap>(), JSON.parse(config.typologyMap));
 
     // Deduplicate all rules
-    typologyMap.forEach((typology: TypologyMap) => {
+    for (const typology of typologyMap) {
       if (typology.rules) {
-        typology.rules.forEach((rule: Rule) => {
+        for (const rule of typology.rules) {
           const ruleIndex = rules.findIndex(r => r.ruleName === rule.ruleName);
           if (ruleIndex > -1) {
             rules[ruleIndex].typologies.set(typology.typologyName, typology.typologyEndpoint);
@@ -32,9 +32,15 @@ export class LogicService {
             rule.typologies = tempTypologies;
             rules.push(rule);
           }
-        });
+
+        }
+
       }
-    });
+    }
+    // typologyMap.forEach((typology: TypologyMap) => {
+    // typology.rules.forEach((rule: Rule) => {
+    //   });
+    // });
 
     let ruleCounter = 0;
     // Send transaction to all rules
