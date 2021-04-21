@@ -4,7 +4,7 @@ import { Typology28Type } from '../classes/typology28';
 import { config } from '../config/config';
 import { redisGetJson, redisAppendJson } from '../helper';
 import { initializeRedis } from '../redis-client';
-import https from 'https';
+import http from 'http';
 import { LoggerService } from './logger.service';
 
 export class ApplicationService {
@@ -90,10 +90,6 @@ export class ApplicationService {
   private sendScore(score: string): Promise<void | Error> {
     return new Promise((resolve) => {
       const options = {
-
-        hostname: config.channelScoreHostname,
-        port: config.channelScorePort,
-        path: `/${config.channelScorePath}`,
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -101,11 +97,11 @@ export class ApplicationService {
         }
       }
 
-      const req = https.request(options, res => {
+      const req = http.request(config.channelScoreEndpoint, options, res => {
         console.log(`statusCode: ${res.statusCode}`)
 
         res.on('data', d => {
-          process.stdout.write(d);
+          console.log(d.toString());
           resolve();
         })
       })
