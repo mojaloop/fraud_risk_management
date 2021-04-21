@@ -1,7 +1,7 @@
 {
   "name": "rule-002",
   "version": "0.1.0",
-  "description": "FRM-rule-002-velocity-(incoming)-service",
+  "description": "FRM-rule-002-account-dormancy-service",
   "main": "build/index.js",
   "scripts": {
     "dev": "nodemon --config nodemon.json src/index.ts",
@@ -67,10 +67,14 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged"
+      "pre-commit": "lint-staged",
+      "pre-push": "yarn run test"
     }
   },
   "lint-staged": {
-    "*.{js,ts}": "eslint --cache --fix"
+    "*.ts": [
+      "eslint --fix",
+      "prettier --write"
+    ]
   }
 }

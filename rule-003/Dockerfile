@@ -52,6 +52,13 @@ ENV read_timeout="15s"
 
 ENV prefix_logs="false"
 
+ENV DATABASE_NAME=_system
+ENV DATABASE_URL=http://20.49.247.152:8529
+ENV DATABASE_USER=root
+ENV DATABASE_PASSWORD=123456
+ENV COLLECTION_NAME=Transactions
+ENV GRAPH_NAME=FCA
+
 HEALTHCHECK --interval=3s CMD [ -e /tmp/.lock ] || exit 1
 
 # Execute watchdog command
