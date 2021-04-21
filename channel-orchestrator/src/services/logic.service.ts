@@ -5,7 +5,7 @@ import { forkJoin } from 'rxjs';
 import { ExecuteRequest } from '../classes/execute-request';
 import { config } from '../config';
 import { RuleRequest } from '../classes/rule-request';
-import { Rule, TypologyMap } from '../classes/typology-map';
+import { Rule, Typology, TypologyMap } from '../classes/typology-map';
 
 export class LogicService {
   redisClient: RedisClientService;
@@ -25,10 +25,10 @@ export class LogicService {
         for (const rule of typology.rules) {
           const ruleIndex = rules.findIndex(r => r.ruleName === rule.ruleName);
           if (ruleIndex > -1) {
-            rules[ruleIndex].typologies.set(typology.typologyName, typology.typologyEndpoint);
+            rules[ruleIndex].typologies.push(new Typology(typology.typologyName, typology.typologyEndpoint));
           } else {
-            const tempTypologies = new Map<string, string>();
-            tempTypologies.set(typology.typologyName, typology.typologyEndpoint);
+            const tempTypologies = Array<Typology>();
+            tempTypologies.push(new Typology(typology.typologyName, typology.typologyEndpoint));
             rule.typologies = tempTypologies;
             rules.push(rule);
           }
@@ -57,7 +57,8 @@ export class LogicService {
     const ruleEndpoint = rule.ruleEndpoint;
     const typologies = rule.typologies;
     const ruleRequest: RuleRequest = new RuleRequest(req, typologies);
-    await this.executePost(ruleEndpoint, JSON.stringify(ruleRequest));
+    const toSend = `{"transaction":${JSON.stringify(req)}, "typologies":${JSON.stringify(typologies)}}`;
+    await this.executePost(ruleEndpoint, toSend);
   }
 
   // Submit the score to the configured Channel Scoring Engine
@@ -72,16 +73,16 @@ export class LogicService {
       };
 
       const req = http.request(endpoint, options, res => {
-        console.log(`statusCode: ${res.statusCode}`);
+        console.log(`Rule response statusCode: ${res.statusCode}`);
 
         res.on('data', d => {
-          process.stdout.write(d);
+          console.log(`Rule response data: ${d.toString()}`);
           resolve();
         });
       });
 
       req.on('error', error => {
-        console.error(error);
+        console.error(`Rule response data: ${error}`);
         resolve(error);
       });
 
