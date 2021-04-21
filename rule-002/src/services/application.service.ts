@@ -1,6 +1,7 @@
 import axios from 'axios';
 import * as Koa from 'koa';
 import { TransactionCheck } from '../classes/transaction-check';
+import { configuration } from '../config';
 import { IRequest, IResponse, ITypologies } from '../interfaces/iRule002';
 import { ArangoDBService } from './arango-client.service';
 import { LoggerService } from './logger.service';
@@ -38,7 +39,7 @@ export class ApplicationService {
 
       // Get the transaction object include payer and payee
       const transactionInfoQuery = `
-        FOR doc IN transactions
+        FOR doc IN ${configuration.collectionName}
           FILTER doc._id == "${request.transaction.TransactionID}"
           RETURN doc
           `;
@@ -51,7 +52,7 @@ export class ApplicationService {
         const payeeTransactionsQuery = `
           FOR v, e, p IN 2..2 OUTBOUND
             "${payeeId}"
-            GRAPH "transactions"
+            GRAPH "${configuration.graphName}"
             FILTER e._to == "${payeeId}"
             return p
           `;

@@ -13,7 +13,8 @@ const configuration: IConfig = {
   dbUser: <string>process.env.DATABASE_USER,
   dbPassword: <string>process.env.DATABASE_PASSWORD,
   graphName: <string>process.env.GRAPH_NAME,
-  debug: !!(<boolean | undefined>process.env.DEBUG),
+  collectionName: <string>process.env.COLLECTION_NAME,
+  dev: <string>process.env.NODE_ENV,
 };
 
 export { configuration };

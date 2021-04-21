@@ -11,7 +11,7 @@
     "*.test.ts"
   ],
   "env": {
-    "NODE_ENV": "development"
+    "NODE_ENV": "dev"
   },
   "execMap": {
     "ts": "ts-node"

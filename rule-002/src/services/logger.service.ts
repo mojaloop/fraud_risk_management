@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any, no-console */
 import { configuration } from '../config';
 
+const isDebugging = configuration.dev === 'dev';
+
 export abstract class LoggerService {
   private static source = 'frm-rule-002';
   private static timeStamp() {
@@ -15,7 +17,7 @@ export abstract class LoggerService {
   }
 
   static log(message: string, serviceOperation?: string): Promise<void> | any {
-    configuration.debug &&
+    isDebugging &&
       console.log(
         `[${LoggerService.timeStamp()}][${LoggerService.source}${
           serviceOperation ? ' - ' + serviceOperation : ''
@@ -24,7 +26,7 @@ export abstract class LoggerService {
   }
 
   static warn(message: string, serviceOperation?: string): Promise<void> | any {
-    configuration.debug &&
+    isDebugging &&
       console.warn(
         `[${LoggerService.timeStamp()}][${LoggerService.source}${
           serviceOperation ? ' - ' + serviceOperation : ''
@@ -43,7 +45,7 @@ export abstract class LoggerService {
       errMessage += `\r\n${innerError.stack}`;
     }
 
-    configuration.debug &&
+    isDebugging &&
       console.error(
         `[${LoggerService.timeStamp()}][${LoggerService.source}${
           serviceOperation ? ' - ' + serviceOperation : ''
