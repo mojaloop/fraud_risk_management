@@ -35,12 +35,12 @@ export class ApplicationService {
 
       const data = ctx.request.body.typologies as ITypologies;
 
-      //   LoggerService.log(`TransactionID ${request.transaction.TransactionID}`);
+      LoggerService.log(`TransactionID ${request.transaction.TransactionID}`);
 
       // Get the transaction object include payer and payee
       const transactionInfoQuery = `
         FOR doc IN ${configuration.collectionName}
-          FILTER doc._id == "${request.transaction.TransactionID}"
+          FILTER doc._id == "Transactions/${request.transaction.TransactionID}"
           RETURN doc
           `;
 
@@ -61,13 +61,13 @@ export class ApplicationService {
           payeeTransactionsQuery,
         );
 
-        // LoggerService.log(
-        //   `payeeAllTransactions ${JSON.stringify(payeeAllTransactions)}`,
-        // );
+        LoggerService.log(
+          `payeeAllTransactions ${JSON.stringify(payeeAllTransactions)}`,
+        );
 
         if (payeeAllTransactions && payeeAllTransactions.length > 0) {
           for (const typology of data.typologies) {
-            // LoggerService.log(`Sending Result to ${typology.name}`);
+            LoggerService.log(`Sending Result to ${typology.name}`);
 
             result.rule = {
               rule: 'Rule-002',
@@ -78,7 +78,7 @@ export class ApplicationService {
               transaction: request.transaction,
             });
 
-            // LoggerService.log(`\nResponse ${JSON.stringify(response)}`);
+            LoggerService.log(`\nResponse ${JSON.stringify(response)}`);
           }
         } else {
           result.rule = {
@@ -86,10 +86,13 @@ export class ApplicationService {
             result: false,
           };
         }
+        ctx.body = result;
+        ctx.status = 200;
+      } else {
+        LoggerService.error('Transaction not exist');
+        ctx.body = `${request.transaction.TransactionID} could not found`;
+        ctx.status = 404;
       }
-
-      ctx.body = result;
-      ctx.status = 200;
     } catch (error) {
       const failMessage = 'Failed to parse execution request.';
 
