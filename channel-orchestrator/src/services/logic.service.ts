@@ -82,7 +82,8 @@ export class LogicService {
       });
 
       req.on('error', error => {
-        console.error(`Rule response data: ${error}`);
+        console.error(`Rule response Error data: ${error}`);
+        console.error(`Request:\r\n${request}`);
         resolve(error);
       });
 
