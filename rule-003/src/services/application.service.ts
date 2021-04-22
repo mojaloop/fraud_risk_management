@@ -47,7 +47,11 @@ export class ApplicationService {
 
       const transactionData = await arangodb.query(transactionInfoQuery);
 
-      if (transactionData && transactionData[0].length > 0) {
+      if (
+        transactionData &&
+        transactionData[0] &&
+        transactionData[0].length > 0
+      ) {
         const payeeId = transactionData[0][0]._to;
 
         const payeeTransactionsQuery = `
