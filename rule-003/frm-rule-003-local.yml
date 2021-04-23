@@ -5,7 +5,7 @@ provider:
 language: node14
 fprocess: node build/index.js
 functions:
-  off-frm-rule-003:
+  off-rule-003:
     lang: dockerfile
     handler: .
     image: localhost:5000/frm_rule_003:latest
