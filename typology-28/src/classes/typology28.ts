@@ -1,5 +1,5 @@
 export interface Typology28Type {
-    rule2?: boolean;
+    rule002?: boolean;
     rule12?: boolean;
     rule16?: boolean;
     rule27?: boolean;
