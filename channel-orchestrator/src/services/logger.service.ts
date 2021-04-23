@@ -10,6 +10,15 @@ export abstract class LoggerService {
 
     return `${date} ${time}`;
   }
+  
+
+  static async trace(message: string, serviceOperation?: string) {
+    console.trace(
+      `[${LoggerService.timeStamp()}][${LoggerService.source}${
+        serviceOperation ? ' - ' + serviceOperation : ''
+      }][TRACE] - ${message}`,
+    );
+  }
 
   static async log(message: string, serviceOperation?: string) {
     console.log(

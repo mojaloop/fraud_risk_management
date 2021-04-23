@@ -6,6 +6,7 @@ import { ExecuteRequest } from '../classes/execute-request';
 import { config } from '../config';
 import { RuleRequest } from '../classes/rule-request';
 import { Rule, Typology, TypologyMap } from '../classes/typology-map';
+import { LoggerService } from './logger.service';
 
 export class LogicService {
   redisClient: RedisClientService;
@@ -73,17 +74,20 @@ export class LogicService {
       };
 
       const req = http.request(endpoint, options, res => {
-        console.log(`Rule response statusCode: ${res.statusCode}`);
-
+        LoggerService.log(`Rule response statusCode: ${res.statusCode}`);
+        if (res.statusCode != 200) {
+          LoggerService.trace(`StatusCode != 200, request:\r\n${request}`);
+        }
+        
         res.on('data', d => {
-          console.log(`Rule response data: ${d.toString()}`);
+          LoggerService.log(`Rule response data: ${d.toString()}`);
           resolve();
         });
       });
 
       req.on('error', error => {
-        console.error(`Rule response Error data: ${error}`);
-        console.error(`Request:\r\n${request}`);
+        LoggerService.error(`Rule response Error data: ${error}`);
+        LoggerService.error(`Request:\r\n${request}`);
         resolve(error);
       });
 
