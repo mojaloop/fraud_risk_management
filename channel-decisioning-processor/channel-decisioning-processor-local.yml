@@ -9,6 +9,3 @@ functions:
     lang: dockerfile
     handler: .
     image: localhost:5000/frm-channel-decisioning-processor:latest
-    annotations:
-      com.openfaas.health.http.path: /health
-      com.openfaas.health.http.initialDelay: "45s"
