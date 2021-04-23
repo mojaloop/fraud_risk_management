@@ -20,7 +20,7 @@ ENV NPM_CONFIG_LOGLEVEL warn
 RUN chown app:app -R /home/app \
     && chmod 777 /tmp
 
-USER app
+#USER app
 
 # Create a folder named function
 RUN mkdir -p /home/app
@@ -54,6 +54,11 @@ ENV write_timeout="15s"
 ENV read_timeout="15s"
 
 ENV prefix_logs="false"
+
+# Service Environment variables
+ENV NIFI_HOST=20.49.174.200
+ENV NIFI_PORT=9091
+ENV NIFI_ROUTE=/quotes
 
 HEALTHCHECK --interval=3s CMD [ -e /tmp/.lock ] || exit 1
 
