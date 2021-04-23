@@ -60,7 +60,7 @@ ENV REDIS_HOST='my-redis-master'
 # ENV REDIS_HOST='10.75.132.57'
 ENV REDIS_PORT=6379
 ENV REDIS_DB=0
-ENV TYPOLOGY_MAP='[{"typologyName":"typology28","typologyEndpoint":"http://gateway:8080/function/off-typology-28/execute","rules":[{"ruleName":"rule2","ruleEndpoint":"http://gateway:8080/function/off-frm-rule-002/execute"}]},{"typologyName":"typology214","typologyEndpoint":"http://gateway:8080/function/off-typology-214/execute","rules":[{"ruleName":"rule3","ruleEndpoint":"http://gateway:8080/function/off-frm-rule-003/execute"}]}]'
+ENV TYPOLOGY_MAP='[{"typologyName":"typology28","typologyEndpoint":"http://gateway:8080/function/off-typology-28/execute","rules":[{"ruleName":"rule2","ruleEndpoint":"http://gateway:8080/function/off-rule-002/execute"}]},{"typologyName":"typology214","typologyEndpoint":"http://gateway:8080/function/off-typology-214/execute","rules":[{"ruleName":"rule3","ruleEndpoint":"http://gateway:8080/function/off-rule-003/execute"}]}]'
 ENV HOST_PORT=3000
 
 ENV prefix_logs="false"
