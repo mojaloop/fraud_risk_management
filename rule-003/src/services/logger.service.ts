@@ -4,7 +4,7 @@ import { configuration } from '../config';
 const isDebugging = configuration.dev === 'dev';
 
 export abstract class LoggerService {
-  private static source = 'frm-rule-002';
+  private static source = 'frm-rule-003';
   private static timeStamp() {
     const dateObj = new Date();
 

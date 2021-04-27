@@ -1,8 +1,9 @@
 import axios from 'axios';
 import * as Koa from 'koa';
-import { TransactionCheck } from '../classes/transaction-check';
+import { ExecuteRequest } from '../classes/execute-request';
 import { configuration } from '../config';
-import { IRequest, IResponse, ITypologies } from '../interfaces/iRule002';
+import { handleAccountDormancy } from '../helpers';
+import { IRequest, IResponse, ITypologies } from '../interfaces/iRule003';
 import { ArangoDBService } from './arango-client.service';
 import { LoggerService } from './logger.service';
 
@@ -12,13 +13,13 @@ export class ApplicationService {
   async main(ctx: Koa.Context): Promise<void> {
     LoggerService.log('Received Online Request - Status: Online');
     ctx.status = 200;
-    ctx.body = 'frm-rule-002.';
+    ctx.body = 'frm-rule-003.';
   }
 
-  async getOnline(ctx: Koa.Context): Promise<void> {
+  getOnline(ctx: Koa.Context): void {
     LoggerService.log('Received Online Request - Status: Online');
     ctx.status = 200;
-    ctx.body = 'frm-rule-002 is online.';
+    ctx.body = 'frm-rule-003 is online.';
   }
 
   async execute(ctx: Koa.Context): Promise<void> {
@@ -26,7 +27,7 @@ export class ApplicationService {
 
     try {
       const request: IRequest = {
-        transaction: new TransactionCheck(ctx.request.body.transaction),
+        transaction: new ExecuteRequest(ctx.request.body.transaction),
       };
 
       const result: IResponse = {
@@ -73,9 +74,14 @@ export class ApplicationService {
           for (const typology of data.typologies) {
             LoggerService.log(`Sending Result to ${typology.name}`);
 
+            const ruleCondition = handleAccountDormancy(
+              request.transaction,
+              payeeAllTransactions,
+            );
+
             result.rule = {
-              rule: 'Rule-002',
-              result: true,
+              rule: 'Rule-003',
+              result: ruleCondition,
             };
 
             const response = await axios.post(typology.endpoint, {
@@ -86,7 +92,7 @@ export class ApplicationService {
           }
         } else {
           result.rule = {
-            rule: 'Rule-002',
+            rule: 'Rule-003',
             result: false,
           };
         }

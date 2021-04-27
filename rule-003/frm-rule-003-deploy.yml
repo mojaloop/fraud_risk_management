@@ -5,9 +5,9 @@ provider:
 language: node14
 fprocess: node build/index.js
 functions:
-  off-tms-service:
+  off-rule-003:
     lang: dockerfile
     handler: .
-    image: frmacr.azurecr.io/frm-tms-service:latest
+    image: frmacr.azurecr.io/frm_rule_003:latest
     secrets:
       - frmpullsecret

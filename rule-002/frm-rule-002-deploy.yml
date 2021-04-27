@@ -5,7 +5,7 @@ provider:
 language: node14
 fprocess: node build/index.js
 functions:
-  off-frm-rule-002:
+  off-rule-002:
     lang: dockerfile
     handler: .
     image: frmacr.azurecr.io/frm_rule_002:latest
