@@ -55,6 +55,16 @@ ENV read_timeout="15s"
 
 ENV prefix_logs="false"
 
+ENV NODE_ENV=development
+ENV PORT=3000
+ENV REDIS_CHANNEL_SCORING_DB=1
+ENV REDIS_AUTH='TjEmUWes67'
+ENV REDIS_HOST='my-redis-master'
+ENV REDIS_PORT=6379
+ENV CHANNEL_ROUTING_HOSTNAME=http://20.49.140.12:8080
+ENV CHANNEL_ROUTING_PORT=3000
+ENV CHANNEL_ROUTING_PATH=result-test
+
 HEALTHCHECK --interval=3s CMD [ -e /tmp/.lock ] || exit 1
 
 # Execute watchdog command

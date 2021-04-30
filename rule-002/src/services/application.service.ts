@@ -1,6 +1,7 @@
 import axios from 'axios';
 import * as Koa from 'koa';
 import { TransactionCheck } from '../classes/transaction-check';
+import { configuration } from '../config';
 import { IRequest, IResponse, ITypologies } from '../interfaces/iRule002';
 import { ArangoDBService } from './arango-client.service';
 import { LoggerService } from './logger.service';
@@ -20,7 +21,7 @@ export class ApplicationService {
     ctx.body = 'frm-rule-002 is online.';
   }
 
-  async call(ctx: Koa.Context): Promise<void> {
+  async execute(ctx: Koa.Context): Promise<void> {
     LoggerService.log('Start - Handle execute request');
 
     try {
@@ -38,20 +39,24 @@ export class ApplicationService {
 
       // Get the transaction object include payer and payee
       const transactionInfoQuery = `
-        FOR doc IN transactions
-          FILTER doc._id == "${request.transaction.TransactionID}"
+        FOR doc IN ${configuration.collectionName}
+          FILTER doc._id == "Transactions/${request.transaction.TransactionID}"
           RETURN doc
           `;
 
       const transactionData = await arangodb.query(transactionInfoQuery);
 
-      if (transactionData && transactionData[0].length > 0) {
+      if (
+        transactionData &&
+        transactionData[0] &&
+        transactionData[0].length > 0
+      ) {
         const payeeId = transactionData[0][0]._to;
 
         const payeeTransactionsQuery = `
           FOR v, e, p IN 2..2 OUTBOUND
             "${payeeId}"
-            GRAPH "transactions"
+            GRAPH "${configuration.graphName}"
             FILTER e._to == "${payeeId}"
             return p
           `;
@@ -85,10 +90,13 @@ export class ApplicationService {
             result: false,
           };
         }
+        ctx.body = result;
+        ctx.status = 200;
+      } else {
+        LoggerService.error('Transaction not exist');
+        ctx.body = `${request.transaction.TransactionID} could not found`;
+        ctx.status = 404;
       }
-
-      ctx.body = result;
-      ctx.status = 200;
     } catch (error) {
       const failMessage = 'Failed to parse execution request.';
 

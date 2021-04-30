@@ -1,0 +1,13 @@
+version: 1.0
+provider:
+  name: openfaas
+  gateway: http://20.49.140.12:8080
+language: node14
+fprocess: node build/index.js
+functions:
+  off-typology-28:
+    lang: dockerfile
+    handler: .
+    image: frmacr.azurecr.io/typology-28:latest
+    secrets:
+      - frmpullsecret
