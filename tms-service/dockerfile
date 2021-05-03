@@ -49,6 +49,9 @@ ENV fprocess="node ./build/index.js"
 ENV mode="http"
 ENV upstream_url="http://127.0.0.1:3000"
 
+ENV NIFI_HOST="20.49.174.200"
+ENV NIFI_PORT=9091
+ENV NIFI_ROUTE="/quotes"
 ENV exec_timeout="10s"
 ENV write_timeout="15s"
 ENV read_timeout="15s"

@@ -6,6 +6,6 @@ const router = new Router();
 router.get('/', miscController.healthcheck);
 router.get('/health', miscController.healthcheck);
 router.post('/result-test', channelProcessorController.testResult);
-router.post('/typology-scoring', channelProcessorController.scoreTypologies);
+router.post('/execute', channelProcessorController.scoreTypologies);
 
 export default router;

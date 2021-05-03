@@ -8,6 +8,9 @@ functions:
   off-channel-decisioning-processor:
     lang: dockerfile
     handler: .
-    image: frmacr.azurecr.io/frm-channel-decisioning-processor:latest
+    image: frmacr.azurecr.io/channel-decisioning-processor:latest
+    annotations:
+      com.openfaas.health.http.path: /health
+      com.openfaas.health.http.initialDelay: "45s"
     secrets:
       - frmpullsecret

@@ -9,5 +9,9 @@ functions:
     lang: dockerfile
     handler: .
     image: frmacr.azurecr.io/frm-tms-service:latest
+    annotations:
+      com.openfaas.health.http.path: /health
+      com.openfaas.health.http.initialDelay: "45s"
     secrets:
       - frmpullsecret
+
