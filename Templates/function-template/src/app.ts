@@ -19,17 +19,20 @@ class App extends Koa {
 
   async _configureRoutes(): Promise<void> {
     // Bootstrap application router
-    const { redisChannelScoring, redisAuth, redisHost, redisPort } = config;
-    const redisClient = await initializeRedis(
-      redisChannelScoring,
-      redisHost,
-      redisPort,
-      redisAuth,
-    );
-    this.use((ctx, next) => {
-      ctx.state.redisClient = redisClient;
-      return next();
-    });
+    const { redisDB, redisAuth, redisHost, redisPort, redisConnection } = config;
+    
+    if (redisConnection) {
+      const redisClient = await initializeRedis(
+        redisDB,
+        redisHost,
+        redisPort,
+        redisAuth,
+      );
+      this.use((ctx, next) => {
+        ctx.state.redisClient = redisClient;
+        return next();
+      });
+    }
     this.use(bodyParser());
     this.use(router.routes());
     this.use(router.allowedMethods());

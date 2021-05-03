@@ -5,10 +5,10 @@ provider:
 language: node14
 fprocess: node build/index.js
 functions:
-  off-channel-decisioning-processor:
+  off-function-name:
     lang: dockerfile
     handler: .
-    image: frmacr.azurecr.io/channel-decisioning-processor:latest
+    image: frmacr.azurecr.io/function-name:latest
     annotations:
       com.openfaas.health.http.path: /health
       com.openfaas.health.http.initialDelay: "45s"

@@ -4,29 +4,33 @@ import { config as dotenv } from 'dotenv';
 
 // Load .env file into process.env if it exists. This is convenient for running locally.
 dotenv({
-  path: path.resolve(__dirname, '../../.env.template'),
+  path: path.resolve(__dirname, '../../.env'),
 });
 
 interface ConfigObj {
   port: number;
-  redisChannelScoring: string;
+  redisDB: string;
   redisAuth: string;
   redisHost: string;
   redisPort: number;
-  channelRoutingHostname: string;
-  channelRoutingPort: number;
-  channelRoutingPath: string;
+  apmLogging: boolean,
+  redisConnection: boolean,
+  apmServiceName: string,
+  apmSecretToken: string,
+  apmURL: string,
 }
 
 const config: ConfigObj = {
   port: parseInt(process.env.PORT!, 10) || 3000,
-  redisChannelScoring: <string>process.env.REDIS_CHANNEL_SCORING_DB,
+  redisDB: <string>process.env.REDIS_DB,
   redisAuth: <string>process.env.REDIS_AUTH,
   redisHost: <string>process.env.REDIS_HOST,
   redisPort: parseInt(process.env.REDIS_PORT!, 10),
-  channelRoutingHostname: <string>process.env.CHANNEL_ROUTING_HOSTNAME,
-  channelRoutingPort: parseInt(process.env.CHANNEL_ROUTING_PORT!, 10),
-  channelRoutingPath: <string>process.env.CHANNEL_ROUTING_PATH,
+  apmLogging: <boolean>(process.env.APM_LOGGING === 'true'),
+  redisConnection: <boolean>(process.env.REDIS_CONNECTION === 'true'),
+  apmServiceName: <string>process.env.APM_SERVICE_NAME,
+  apmURL: <string>process.env.APM_URL,
+  apmSecretToken: <string>process.env.APM_SECRET_TOKEN,
 };
 
 export { config, ConfigObj };

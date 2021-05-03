@@ -1,7 +1,7 @@
 {
-  "name": "channel-decisioning-processor",
+  "name": "template-function-processor",
   "version": "0.1.0",
-  "description": "channel-decisioning-processor",
+  "description": "template-function-processor",
   "main": "build/index.js",
   "scripts": {
     "dev": "env $(cat .env.template) nodemon",

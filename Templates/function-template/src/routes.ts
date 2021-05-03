@@ -1,11 +1,10 @@
 import Router from 'koa-router';
 import * as miscController from './controllers/misc';
-import * as channelProcessorController from './controllers/channelProcessor';
 const router = new Router();
 
 router.get('/', miscController.healthcheck);
 router.get('/health', miscController.healthcheck);
-router.post('/result-test', channelProcessorController.testResult);
-router.post('/execute', channelProcessorController.scoreTypologies);
+// Change this to your liking
+router.post('/execute', miscController.healthcheck);
 
 export default router;
