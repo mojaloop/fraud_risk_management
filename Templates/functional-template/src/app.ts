@@ -3,7 +3,7 @@
 import Koa from 'koa';
 import bodyParser from 'koa-bodyparser';
 import router from './routes';
-import { config } from './config';
+import { configuration } from './config';
 import { initializeRedis } from './redis-client';
 import { Server } from 'http';
 
@@ -19,8 +19,14 @@ class App extends Koa {
 
   async _configureRoutes(): Promise<void> {
     // Bootstrap application router
-    const { redisDB, redisAuth, redisHost, redisPort, redisConnection } = config;
-    
+    const {
+      redisDB,
+      redisAuth,
+      redisHost,
+      redisPort,
+      redisConnection,
+    } = configuration;
+
     if (redisConnection) {
       const redisClient = await initializeRedis(
         redisDB,
