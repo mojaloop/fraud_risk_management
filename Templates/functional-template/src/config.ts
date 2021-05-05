@@ -2,14 +2,15 @@
 // config settings, env variables
 import path from 'path';
 import { config as dotenv } from 'dotenv';
-import { IConfig } from '../interfaces';
+import { IConfig } from './interfaces';
 
 // Load .env file into process.env if it exists. This is convenient for running locally.
 dotenv({
-  path: path.resolve(__dirname, '../../.env'),
+  path: path.resolve(__dirname, '../../.env.template'),
 });
 
 export const configuration: IConfig = {
+  functionName: <string>process.env.FUNCTION_NAME,
   port: parseInt(process.env.PORT!, 10) || 3000,
   redisDB: <string>process.env.REDIS_DB,
   redisAuth: <string>process.env.REDIS_AUTH,

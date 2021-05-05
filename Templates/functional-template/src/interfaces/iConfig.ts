@@ -1,4 +1,5 @@
 export interface IConfig {
+  functionName: string;
   port: number;
   redisDB: string;
   redisAuth: string;

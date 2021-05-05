@@ -4,7 +4,7 @@ import Koa from 'koa';
 import bodyParser from 'koa-bodyparser';
 import router from './routes';
 import { configuration } from './config';
-import { initializeRedis } from './redis-client';
+import { initializeRedis } from './clients/redisClient';
 import { Server } from 'http';
 
 class App extends Koa {

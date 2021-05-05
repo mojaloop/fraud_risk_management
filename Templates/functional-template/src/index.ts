@@ -1,17 +1,17 @@
 /* eslint-disable no-console */
-import { config } from './config';
+import { configuration } from './config';
 import { Context } from 'koa';
 import App from './app';
 import apm from 'elastic-apm-node';
 
-if (config.apmLogging) {
+if (configuration.apmLogging) {
   apm.start({
-    serviceName: config.apmServiceName,
-    secretToken: config.apmSecretToken,
-    serverUrl: config.apmURL,
+    serviceName: configuration.apmServiceName,
+    secretToken: configuration.apmSecretToken,
+    serverUrl: configuration.apmURL,
   });
-  
 }
+
 const app = new App();
 
 export function handleError(err: Error, ctx: Context): void {
@@ -36,10 +36,10 @@ app.on('error', handleError);
 if (
   Object.values(require.cache).filter(async (m) => m?.children.includes(module))
 ) {
-  const server = app.listen(config.port, () => {
+  const server = app.listen(configuration.port, () => {
     console.info(
       { event: 'execute' },
-      `API server listening on PORT ${config.port}`,
+      `API server listening on PORT ${configuration.port}`,
     );
   });
   server.on('error', handleError);

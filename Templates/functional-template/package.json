@@ -16,8 +16,8 @@
     "lint:prettier": "prettier --check \"**/*.ts\"",
     "test": "jest --config=jest.config.ts --passWithNoTests",
     "test:watch": "jest --config=jest.config.ts --watch",
-    "test:unit": "yarn test ./test/unit",
-    "test:integration": "yarn test ./test/integration --detectOpenHandles"
+    "test:unit": "yarn test ./src/test/unit",
+    "test:integration": "yarn test ./src/test/integration --detectOpenHandles"
   },
   "keywords": [
     "mojaloop",
