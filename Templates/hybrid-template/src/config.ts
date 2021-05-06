@@ -6,7 +6,7 @@ import { IConfig } from './interfaces';
 
 // Load .env file into process.env if it exists. This is convenient for running locally.
 dotenv({
-  path: path.resolve(__dirname, '../../.env.template'),
+  path: path.resolve(__dirname, '../.env'),
 });
 
 export const configuration: IConfig = {
