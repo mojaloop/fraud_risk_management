@@ -24,9 +24,9 @@ describe('Logger Service', () => {
   let consoleErrorSpy: jest.SpyInstance;
 
   beforeEach(() => {
-    consoleLoggerSpy = jest.spyOn(console, 'log').mockImplementation(() => { console.log('log') });
-    consoleWarnSpy = jest.spyOn(console, 'warn').mockImplementation(() => { console.log('warn')});
-    consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => { console.log('error')});
+    consoleLoggerSpy = jest.spyOn(console, 'log').mockImplementation(() => { });
+    consoleWarnSpy = jest.spyOn(console, 'warn').mockImplementation(() => { });
+    consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => { });
   });
 
   describe('Log', () => {

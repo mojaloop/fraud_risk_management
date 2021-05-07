@@ -8,7 +8,7 @@ import http from 'http';
 import { LoggerService } from './logger.service';
 
 export class ApplicationService {
-  
+
   typologyCacheClient: RedisClient;
 
   constructor() {
@@ -31,7 +31,7 @@ export class ApplicationService {
   ): Promise<void> {
     if (!request.body) {
       const error = new Error(
-        `Cannot execute Typology-28, no request body was passed.`,
+        'Cannot execute Typology-28, no request body was passed.',
       );
 
       LoggerService.error(`[ERROR] ${error.message}`);
@@ -39,11 +39,11 @@ export class ApplicationService {
       return;
     }
     try {
-      let score: string = '';
+      let score = '';
       try {
         const transfer = request.body;
         const transactionID = transfer.transaction.TransactionID;
-        var ruleResults = await redisGetJson(transactionID, this.typologyCacheClient);
+        let ruleResults = await redisGetJson(transactionID, this.typologyCacheClient);
 
         if (!ruleResults || ruleResults.length === 0)
           ruleResults = [`{"name": "${transfer.rule.name}", "result": ${transfer.rule.result}}`];
@@ -52,7 +52,7 @@ export class ApplicationService {
 
         // check if all results are found - for MVP, we are going with just one Rule result. 
         if (ruleResults.length < 1) {
-          var saveResult = await redisAppendJson(transactionID, ruleResults, this.typologyCacheClient);
+          const saveResult = await redisAppendJson(transactionID, JSON.stringify(ruleResults), this.typologyCacheClient);
           response.status(200).send('All rules not yet processed for Typology 28');
           return;
         }
@@ -71,7 +71,7 @@ export class ApplicationService {
         console.error(e);
       }
 
-      var res = await this.sendScore(score);
+      const res = await this.sendScore(score);
 
       response.status(200).send(`${score}\r\nChannel Score Response:\r\n${res}`);
     } catch (error) {
@@ -82,7 +82,7 @@ export class ApplicationService {
 
       LoggerService.error(`[ERROR] ${processError.message}`);
       response.status(500).send(processError.message);
-      return;
+
     }
   }
 
@@ -93,26 +93,26 @@ export class ApplicationService {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Content-Length': score.length
-        }
-      }
+          'Content-Length': score.length,
+        },
+      };
 
       const req = http.request(config.channelScoreEndpoint, options, res => {
-        console.log(`statusCode: ${res.statusCode}`)
+        console.log(`statusCode: ${res.statusCode}`);
 
         res.on('data', d => {
           console.log(d.toString());
           resolve();
-        })
-      })
+        });
+      });
 
       req.on('error', error => {
         console.error(error);
         resolve(error);
-      })
+      });
 
-      req.write(score)
-      req.end()
+      req.write(score);
+      req.end();
     });
   }
 
@@ -139,6 +139,6 @@ export class ApplicationService {
       (scores.rule63 ? 'Rule 63, ' : '') +
       (scores.rule64 ? 'Rule 64' : '') +
       '"}'
-      }`
-  };
+}`;
+  }
 }

@@ -24,7 +24,7 @@ module.exports = {
     '@typescript-eslint/no-use-before-define': 'off',
     'no-console': 'warn',
     quotes: ['error', 'single'],
-    'linebreak-style': ['error', 'unix'],
+    'linebreak-style': ['error', 'windows'],
     semi: ['error', 'always'],
     'comma-dangle': ['error', 'always-multiline'],
   },

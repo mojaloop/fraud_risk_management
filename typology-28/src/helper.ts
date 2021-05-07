@@ -1,23 +1,25 @@
 import { KafkaClient, Producer } from 'kafka-node';
 import { RedisClient } from 'redis';
 import { config } from './config/config';
+import { LoggerService } from './services/logger.service';
 
 
-const redisGetJson = (key: string, client: RedisClient): Promise<any> =>
-  new Promise<any>((resolve) => {
+const redisGetJson = (key: string, client: RedisClient): Promise<Array<string>> =>
+  new Promise<Array<string>>((resolve) => {
     client.get(key, (err, res) => {
-      let ruleRes = JSON.parse(res ?? "[]");
+      if (err) { LoggerService.error(err); }
+      const ruleRes = JSON.parse(res ?? '[]');
       resolve(ruleRes);
-    })
+    });
   });
 
-const redisAppendJson = (key: string, value: any, client: RedisClient): Promise<any> =>
-  new Promise<any>((resolve) => {
-    client.append(key, JSON.stringify(value), (err, res) => {
+const redisAppendJson = (key: string, value: string, client: RedisClient): Promise<number> =>
+  new Promise<number>((resolve) => {
+    client.append(key, value, (err, res) => {
       if (err)
         console.log(err);
       resolve(res);
-    })
+    });
   });
 
 export { redisGetJson, redisAppendJson };

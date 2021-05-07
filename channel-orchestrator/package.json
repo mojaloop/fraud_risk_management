@@ -13,7 +13,7 @@
     "lint": "yarn lint:eslint && yarn lint:prettier",
     "lint:eslint": "eslint \"**/*.ts\"",
     "lint:prettier": "prettier --check \"**/*.ts\"",
-    "test": "jest --config=jest.config.js",
+    "test": "jest --config=jest.config.ts",
     "test:watch": "jest --config=jest.config.js --watch",
     "cleanup": "rm -rf build template jest.config.js jest.config.js.map node_modules"
   },

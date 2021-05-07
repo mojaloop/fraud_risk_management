@@ -23,24 +23,14 @@ describe('Logic Service', () => {
   });
 
   describe('Handle Transaction', () => {
-    it('should handle successful request, with a unmatched number', async () => {
-      const expectedReq = getMockRequest();
-
-      const result = await service.handleTransaction(expectedReq);
-
-      expect(result).toEqual(
-        `[Channel-Orchestrator][Result][FALSE] Payer and Payee contact number is not the same for transaction ID: ${expectedReq.TransactionID}`,
-      );
-    });
-
-    it('should handle successful request, with a matched number', async () => {
+    it('should handle successful request', async () => {
       const expectedReq = getMockRequest();
       expectedReq.PayeeContactNo = expectedReq.PayerContactNo;
 
       const result = await service.handleTransaction(expectedReq);
 
       expect(result).toEqual(
-        `[Channel-Orchestrator][Result][TRUE] Payer and Payee contact number is the same for transaction ID: ${expectedReq.TransactionID}`,
+        `[ChannelOrchestrator][Result] 2 rules initiated for transaction ID: ${expectedReq.TransactionID}`,
       );
     });
   });

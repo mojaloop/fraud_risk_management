@@ -16,7 +16,6 @@ export class LogicService {
   }
 
   async handleTransaction(req: ExecuteRequest) {
-
     const rules: Rule[] = new Array<Rule>();
     const typologyMap = Object.assign(new Array<TypologyMap>(), JSON.parse(config.typologyMap));
 
@@ -33,15 +32,9 @@ export class LogicService {
             rule.typologies = tempTypologies;
             rules.push(rule);
           }
-
         }
-
       }
     }
-    // typologyMap.forEach((typology: TypologyMap) => {
-    // typology.rules.forEach((rule: Rule) => {
-    //   });
-    // });
 
     let ruleCounter = 0;
     // Send transaction to all rules
@@ -75,7 +68,7 @@ export class LogicService {
 
       const req = http.request(endpoint, options, res => {
         LoggerService.log(`Rule response statusCode: ${res.statusCode}`);
-        if (res.statusCode != 200) {
+        if (res.statusCode !== 200) {
           LoggerService.trace(`StatusCode != 200, request:\r\n${request}`);
         }
         
