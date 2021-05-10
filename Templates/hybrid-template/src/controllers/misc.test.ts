@@ -1,5 +1,5 @@
 import { Context } from 'koa';
-import { healthcheck, monitorTransaction } from '../../src/controllers/misc';
+import { healthcheck, monitorTransaction } from './misc';
 
 describe('test misc functions', () => {
   test('should healtcheck return UP', () => {

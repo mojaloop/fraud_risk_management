@@ -1,26 +1,16 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
+// config settings, env variables
 import path from 'path';
 import { config as dotenv } from 'dotenv';
+import { IConfig } from './interfaces';
 
 // Load .env file into process.env if it exists. This is convenient for running locally.
 dotenv({
-  path: path.resolve(__dirname, '../../.env'),
+  path: path.resolve(__dirname, '../.env'),
 });
 
-interface ConfigObj {
-  port: number;
-  redisDB: string;
-  redisAuth: string;
-  redisHost: string;
-  redisPort: number;
-  apmLogging: boolean,
-  redisConnection: boolean,
-  apmServiceName: string,
-  apmSecretToken: string,
-  apmURL: string,
-}
-
-const config: ConfigObj = {
+export const configuration: IConfig = {
+  functionName: <string>process.env.FUNCTION_NAME,
   port: parseInt(process.env.PORT!, 10) || 3000,
   redisDB: <string>process.env.REDIS_DB,
   redisAuth: <string>process.env.REDIS_AUTH,
@@ -31,6 +21,11 @@ const config: ConfigObj = {
   apmServiceName: <string>process.env.APM_SERVICE_NAME,
   apmURL: <string>process.env.APM_URL,
   apmSecretToken: <string>process.env.APM_SECRET_TOKEN,
+  dbName: <string>process.env.DATABASE_NAME,
+  dbURL: <string>process.env.DATABASE_URL,
+  dbUser: <string>process.env.DATABASE_USER,
+  dbPassword: <string>process.env.DATABASE_PASSWORD,
+  graphName: <string>process.env.GRAPH_NAME,
+  collectionName: <string>process.env.COLLECTION_NAME,
+  dev: <string>process.env.NODE_ENV,
 };
-
-export { config, ConfigObj };
