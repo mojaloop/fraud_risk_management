@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { configuration } from '../config';
 import { LoggerService } from './logger';
 
@@ -26,27 +27,31 @@ describe('Logger Service', () => {
   let consoleErrorSpy: jest.SpyInstance;
 
   beforeEach(() => {
-    consoleLoggerSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
-    consoleWarnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
-    consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+    consoleLoggerSpy = jest.spyOn(console, 'log').mockImplementation();
+
+    consoleWarnSpy = jest.spyOn(console, 'warn').mockImplementation();
+
+    consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation();
   });
 
   describe('Log', () => {
     it('should log a message with defaults', async () => {
       const expectedMessage = 'ExpectedLogMessage';
       await LoggerService.log(expectedMessage);
+
       const measuredArgs = consoleLoggerSpy.mock.calls[0][0];
-      //   expect(measuredArgs).toMatch(getTestRegex(expectedMessage, 'INFO'));
+      expect(measuredArgs).toMatch(getTestRegex(expectedMessage, 'INFO'));
     });
 
     it('should log a message with defined operation', async () => {
       const expectedMessage = 'ExpectedLogMessage';
       const operation = 'TestService';
       await LoggerService.log(expectedMessage, operation);
+
       const measuredArgs = consoleLoggerSpy.mock.calls[0][0];
-      //   expect(measuredArgs).toMatch(
-      //     getTestRegex(expectedMessage, 'INFO', operation),
-      //   );
+      expect(measuredArgs).toMatch(
+        getTestRegex(expectedMessage, 'INFO', operation),
+      );
     });
   });
 
@@ -54,18 +59,20 @@ describe('Logger Service', () => {
     it('should warn a message with defaults', async () => {
       const expectedMessage = 'ExpectedWarnMessage';
       await LoggerService.warn(expectedMessage);
+
       const measuredArgs = consoleWarnSpy.mock.calls[0][0];
-      //   expect(measuredArgs).toMatch(getTestRegex(expectedMessage, 'WARN'));
+      expect(measuredArgs).toMatch(getTestRegex(expectedMessage, 'WARN'));
     });
 
     it('should log a message with defined operation', async () => {
       const expectedMessage = 'ExpectedWarnMessage';
       const operation = 'TestService';
+
       await LoggerService.warn(expectedMessage, operation);
       const measuredArgs = consoleWarnSpy.mock.calls[0][0];
-      //   expect(measuredArgs).toMatch(
-      //     getTestRegex(expectedMessage, 'WARN', operation),
-      //   );
+      expect(measuredArgs).toMatch(
+        getTestRegex(expectedMessage, 'WARN', operation),
+      );
     });
   });
 
@@ -73,6 +80,7 @@ describe('Logger Service', () => {
     it('should error a string message with defaults', async () => {
       const expectedMessage = 'ExpectedErrorMessage';
       await LoggerService.error(expectedMessage);
+
       const measuredArgs = consoleErrorSpy.mock.calls[0][0];
       expect(measuredArgs).toMatch(getTestRegex(expectedMessage, 'ERROR'));
     });
@@ -81,36 +89,37 @@ describe('Logger Service', () => {
       const expectedMessage = 'ExpectedWarnMessage';
       const operation = 'TestService';
       await LoggerService.error(expectedMessage, undefined, operation);
+
       const measuredArgs = consoleErrorSpy.mock.calls[0][0];
-      //   expect(measuredArgs).toMatch(
-      //     getTestRegex(expectedMessage, 'ERROR', operation),
-      //   );
+      expect(measuredArgs).toMatch(
+        getTestRegex(expectedMessage, 'ERROR', operation),
+      );
     });
 
     it('should error a error object message with defaults', async () => {
       const expectedMessage = new Error('ExpectedErrorMessage');
       await LoggerService.error(expectedMessage);
-      const measuredArgs = consoleErrorSpy.mock.calls[0][0];
 
+      const measuredArgs = consoleErrorSpy.mock.calls[0][0];
       const messageForRegex = fixErrorStackRegex(
         expectedMessage.stack as string,
       );
 
-      //   expect(expectedMessage.stack).toBeTruthy();
-      //   expect(measuredArgs).toMatch(getTestRegex(messageForRegex, 'ERROR'));
+      expect(expectedMessage.stack).toBeTruthy();
+      expect(measuredArgs).toMatch(getTestRegex(messageForRegex, 'ERROR'));
     });
 
     it('should error a error object message with child error', async () => {
       const expectedMessage = new Error('ExpectedErrorMessage');
       await LoggerService.error(expectedMessage);
-      const measuredArgs = consoleErrorSpy.mock.calls[0][0];
 
+      const measuredArgs = consoleErrorSpy.mock.calls[0][0];
       const messageForRegex = fixErrorStackRegex(
         expectedMessage.stack as string,
       );
 
-      //   expect(expectedMessage.stack).toBeTruthy();
-      //   expect(measuredArgs).toMatch(getTestRegex(messageForRegex, 'ERROR'));
+      expect(expectedMessage.stack).toBeTruthy();
+      expect(measuredArgs).toMatch(getTestRegex(messageForRegex, 'ERROR'));
     });
 
     it('should error a error object message with child error and operation', async () => {
@@ -129,10 +138,10 @@ describe('Logger Service', () => {
 
       messageForRegex = `${messageForRegex}[\\r\\n\\s\\t]{1,}${childErrorRegex}`;
 
-      //   expect(expectedMessage.stack).toBeTruthy();
-      //   expect(measuredArgs).toMatch(
-      //     getTestRegex(messageForRegex, 'ERROR', operation),
-      //   );
+      expect(expectedMessage.stack).toBeTruthy();
+      expect(measuredArgs).toMatch(
+        getTestRegex(messageForRegex, 'ERROR', operation),
+      );
     });
   });
 });

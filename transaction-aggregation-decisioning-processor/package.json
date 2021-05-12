@@ -2,12 +2,12 @@
   "name": "transaction-agreggation-decisioning-processor",
   "version": "0.1.0",
   "description": "transaction-agreggation-decisioning-processor",
-  "main": "build/index.js",
+  "main": "dist/index.js",
   "scripts": {
     "dev": "nodemon",
     "build": "tsc",
-    "start": "node build/index.js",
-    "cleanup": "rm -rf build template jest.config.js jest.config.js.map node_modules",
+    "start": "node dist/index.js",
+    "cleanup": "rm -rf dist template jest.config.js jest.config.js.map node_modules",
     "fix": "yarn fix:prettier && yarn fix:eslint",
     "fix:eslint": "eslint --fix \"**/*.ts\"",
     "fix:prettier": "prettier --write \"**/*.ts\"",
@@ -19,7 +19,7 @@
     "test:unit": "yarn test ./src/test/unit",
     "test:integration": "yarn test ./src/test/integration --detectOpenHandles"
   },
-  "types": "build/index.d.ts",
+  "types": "dist/index.d.ts",
   "keywords": [
     "mojaloop",
     "frm"
