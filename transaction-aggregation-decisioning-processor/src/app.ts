@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-
 import Koa from 'koa';
 import bodyParser from 'koa-bodyparser';
 import router from './routes';

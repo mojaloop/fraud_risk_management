@@ -1,5 +1,5 @@
-/* eslint-disable no-console */
 import { RedisClient } from 'redis';
+import { LoggerService } from '../helpers';
 
 const initializeRedis = async (
   redisDB: string,
@@ -22,10 +22,9 @@ const getScores = async (
 ): Promise<string | null> =>
   new Promise((resolve) => {
     // Get the value of a key.
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     client.get(key, (err, reply) => {
       if (err) {
-        console.log(err);
+        LoggerService.log(err);
         resolve('');
       } else {
         resolve(`${reply}`);
@@ -38,10 +37,9 @@ const deleteTransactionRecord = async (
   key: string,
 ): Promise<string | null> =>
   new Promise((resolve) => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     client.del(key, (err, reply) => {
       if (err) {
-        console.log(err);
+        LoggerService.log(err);
         resolve('');
       } else {
         resolve(`${reply}`);
@@ -55,10 +53,9 @@ const appendScore = (
   score: string,
 ): Promise<string | null> =>
   new Promise((resolve) => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     client.append(key, score, (err, reply) => {
       if (err) {
-        console.log(err);
+        LoggerService.log(err);
         resolve('');
       } else {
         resolve(`${reply}`);

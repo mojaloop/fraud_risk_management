@@ -19,6 +19,7 @@
     "test:unit": "yarn test ./src/test/unit",
     "test:integration": "yarn test ./src/test/integration --detectOpenHandles"
   },
+  "types": "build/index.d.ts",
   "keywords": [
     "mojaloop",
     "frm"

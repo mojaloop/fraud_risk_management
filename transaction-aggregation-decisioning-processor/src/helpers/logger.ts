@@ -48,7 +48,7 @@ export abstract class LoggerService {
 
     isDebugging &&
       console.error(
-        `[${LoggerService.timeStamp()}][${LoggerService.source}${
+        `⛔️ [${LoggerService.timeStamp()}][${LoggerService.source}${
           serviceOperation ? ' - ' + serviceOperation : ''
         }][ERROR] - ${errMessage}`,
       );
