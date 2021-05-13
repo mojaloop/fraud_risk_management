@@ -24,7 +24,7 @@ const getScores = async (
     // Get the value of a key.
     client.get(key, (err, reply) => {
       if (err) {
-        LoggerService.log(err);
+        LoggerService.error(err);
         resolve('');
       } else {
         resolve(`${reply}`);
@@ -39,7 +39,7 @@ const deleteTransactionRecord = async (
   new Promise((resolve) => {
     client.del(key, (err, reply) => {
       if (err) {
-        LoggerService.log(err);
+        LoggerService.error(err);
         resolve('');
       } else {
         resolve(`${reply}`);
@@ -55,7 +55,7 @@ const appendScore = (
   new Promise((resolve) => {
     client.append(key, score, (err, reply) => {
       if (err) {
-        LoggerService.log(err);
+        LoggerService.error(err);
         resolve('');
       } else {
         resolve(`${reply}`);
