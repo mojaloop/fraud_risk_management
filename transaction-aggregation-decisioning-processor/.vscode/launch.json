@@ -6,7 +6,7 @@
       "request": "launch",
       "name": "Start App",
       "runtimeArgs": ["-r", "ts-node/register"],
-      "args": ["${workspaceFolder}/src/index.ts", "${NODE_ENV=dev}"],
+      "args": ["${workspaceFolder}/src/index.ts", "${NODE_ENV=development}"],
       "envFile": "${workspaceFolder}/.env.dev"
     },
     {
@@ -17,7 +17,7 @@
       "program": "${workspaceRoot}/node_modules/.bin/jest",
       "args": ["-i"],
       "internalConsoleOptions": "neverOpen",
-      "envFile": "${workspaceRoot}/.env",
+      "envFile": "${workspaceRoot}/.env.dev",
       "console": "integratedTerminal"
     }
   ]

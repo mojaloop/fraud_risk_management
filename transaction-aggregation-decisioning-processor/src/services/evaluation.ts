@@ -10,10 +10,9 @@ export const getScore = (
   const scoreAverage = scoreSum / resultsArray.length;
   return {
     transactionID,
-    message:
-      scoreAverage > 0.75
-        ? 'Transaction is positive for Fraud/Risk'
-        : 'Transaction is Negative for Fraud/Risk',
+    message: `Transaction is ${
+      scoreAverage > 0.75 ? 'positive' : 'negative'
+    } for Fraud/Risk`,
     score: scoreAverage,
   };
 };

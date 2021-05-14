@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any, no-console */
 import { configuration } from '../config';
 
-const isDebugging = configuration.dev === 'development';
+const isDebugging =
+  configuration.dev === 'development' || configuration.dev === 'test';
 
 export abstract class LoggerService {
   private static source = configuration.functionName;
