@@ -12,62 +12,62 @@ const createPostRequest = (config: IConfig, requestBody: iScore) => {
 };
 
 /**
- * @description Only typology 28 for MVP
+ * @description Only 1 channel for MVP
  */
 export const scoreTransaction = async (ctx: Context): Promise<Context> => {
   try {
-    const typologiesNeeded = [28];
+    const channelsNeeded = [28];
     const { redisClient, configuration } = ctx.state;
-    const { transactionID, typologyNumber, score } = ctx.request.body;
+    const { transactionID, channelNumber, score } = ctx.request.body;
 
     /**
      * TODO: REMOVE AFTER MVP. This is an easy scoring
-     * @description implementation since we're only using 1 typology.
+     * @description implementation since we're only using 1 channel.
      */
-    if (typologiesNeeded.length === 1) {
-      const requestBody = getScore([score]);
+    if (channelsNeeded.length === 1) {
+      const requestBody = getScore([score], transactionID);
       await createPostRequest(configuration, requestBody);
       ctx.status = 200;
       ctx.body = requestBody;
       return ctx;
     }
 
-    const jsonTypologiesResults = await getScores(redisClient, transactionID);
+    const jsonChannelsResults = await getScores(redisClient, transactionID);
 
     /**
      * @description check if it's the first record for this transaction and record it.
      */
-    if (jsonTypologiesResults === 'null') {
-      const body = `{"${typologyNumber}": ${score}`;
+    if (jsonChannelsResults === 'null') {
+      const body = `{"${channelNumber}": ${score}`;
       await appendScore(redisClient, transactionID, body);
-      ctx.body = { result: 'Typology result saved' };
+      ctx.body = { result: 'Channel result saved' };
       ctx.response.status = 200;
       return ctx;
     }
 
     /**
-     * @description check if this is a duplicate for the same typology.
+     * @description check if this is a duplicate for the same Channel.
      */
-    const newResultToBeAdded = `, "${typologyNumber}": ${score}`;
-    const testTypologiesNumbers = Object.keys(
-      JSON.parse(`${jsonTypologiesResults}}`),
+    const newResultToBeAdded = `, "${channelNumber}": ${score}`;
+    const testChannelsNumbers = Object.keys(
+      JSON.parse(`${jsonChannelsResults}}`),
     );
-    if (testTypologiesNumbers.includes(`${typologyNumber}`)) {
-      ctx.body = { result: 'Typology result already stored' };
+    if (testChannelsNumbers.includes(`${channelNumber}`)) {
+      ctx.body = { result: 'Channel result already stored' };
       ctx.response.status = 400;
       return ctx;
     }
 
     /**
-     * @description Store the typology result and evaluate if these are all the results, then score it.
+     * @description Store the channel result and evaluate if these are all the results, then score it.
      */
     await appendScore(redisClient, transactionID, newResultToBeAdded);
-    const typologiesResults = JSON.parse(
-      `${jsonTypologiesResults}${newResultToBeAdded}}`,
+    const channelsResults = JSON.parse(
+      `${jsonChannelsResults}${newResultToBeAdded}}`,
     );
-    const resultsArray: number[] = Object.values(typologiesResults);
-    if (resultsArray.length === typologiesNeeded.length) {
-      const requestBody = getScore(resultsArray);
+    const resultsArray: number[] = Object.values(channelsResults);
+    if (resultsArray.length === channelsNeeded.length) {
+      const requestBody = getScore(resultsArray, transactionID);
       createPostRequest(configuration, requestBody);
       // remove transaction from redis to save memory.
       deleteTransactionRecord(redisClient, transactionID);

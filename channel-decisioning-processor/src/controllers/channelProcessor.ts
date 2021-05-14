@@ -23,6 +23,7 @@ const getScore = (resultsArray: number[]) => {
   );
   const scoreAverage = scoreSum / resultsArray.length;
   return {
+    channelNumber: 1,
     message:
       scoreAverage > 0.75
         ? 'Transaction is positive for Fraud/Risk'
