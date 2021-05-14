@@ -18,15 +18,17 @@ describe('test misc functions', () => {
 
   test('should monitorTransaction result is VALID', async () => {
     const ctx = {
-      body: {
-        result: 'Transaction is not valid',
+      request: {
+        body: {
+          TransactionID: '123',
+        },
       },
     };
 
     const ctxTest = await execute(ctx as Context);
 
-    expect(ctxTest.body).toMatchObject({
-      result: 'Transaction is valid',
-    });
+    expect(ctxTest.request.body.result).toMatch(
+      '[ChannelRouter][Result] 0 Channels initiated for transaction ID: 123',
+    );
   });
 });

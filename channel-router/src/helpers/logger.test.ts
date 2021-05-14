@@ -37,7 +37,7 @@ describe('Logger Service', () => {
     it('should trace a message with defaults', async () => {
       const expectedMessage = 'ExpectedTraceMessage';
       await LoggerService.trace(expectedMessage);
-      const measuredArgs = consoleTraceSpy.mock.calls[0];
+      const measuredArgs = consoleTraceSpy.mock.calls[0][0];
       //   expect(measuredArgs).toMatch(getTestRegex(expectedMessage, 'WARN'));
     });
 
@@ -45,7 +45,7 @@ describe('Logger Service', () => {
       const expectedMessage = 'ExpectedTraceMessage';
       const operation = 'TestService';
       await LoggerService.warn(expectedMessage, operation);
-      const measuredArgs = consoleTraceSpy.mock.calls[0];
+      const measuredArgs = consoleTraceSpy.mock.calls[0][0];
       expect(measuredArgs).toMatch(
         getTestRegex(expectedMessage, 'TRACE', operation),
       );
@@ -56,15 +56,15 @@ describe('Logger Service', () => {
     it('should log a message with defaults', async () => {
       const expectedMessage = 'ExpectedLogMessage';
       await LoggerService.log(expectedMessage);
-      const measuredArgs = consoleLoggerSpy.mock.calls[0];
-      //   expect(measuredArgs).toMatch(getTestRegex(expectedMessage, 'INFO'));
+      const measuredArgs = consoleLoggerSpy.mock.calls[0][0];
+      expect(measuredArgs).toMatch(getTestRegex(expectedMessage, 'INFO'));
     });
 
     it('should log a message with defined operation', async () => {
       const expectedMessage = 'ExpectedLogMessage';
       const operation = 'TestService';
       await LoggerService.log(expectedMessage, operation);
-      const measuredArgs = consoleLoggerSpy.mock.calls[0];
+      const measuredArgs = consoleLoggerSpy.mock.calls[0][0];
       expect(measuredArgs).toMatch(
         getTestRegex(expectedMessage, 'INFO', operation),
       );
@@ -75,15 +75,15 @@ describe('Logger Service', () => {
     it('should warn a message with defaults', async () => {
       const expectedMessage = 'ExpectedWarnMessage';
       await LoggerService.warn(expectedMessage);
-      const measuredArgs = consoleWarnSpy.mock.calls[0];
-      //   expect(measuredArgs).toMatch(getTestRegex(expectedMessage, 'WARN'));
+      const measuredArgs = consoleWarnSpy.mock.calls[0][0];
+      expect(measuredArgs).toMatch(getTestRegex(expectedMessage, 'WARN'));
     });
 
     it('should log a message with defined operation', async () => {
       const expectedMessage = 'ExpectedWarnMessage';
       const operation = 'TestService';
       await LoggerService.warn(expectedMessage, operation);
-      const measuredArgs = consoleWarnSpy.mock.calls[0];
+      const measuredArgs = consoleWarnSpy.mock.calls[0][0];
       expect(measuredArgs).toMatch(
         getTestRegex(expectedMessage, 'WARN', operation),
       );
@@ -94,7 +94,7 @@ describe('Logger Service', () => {
     it('should error a string message with defaults', async () => {
       const expectedMessage = 'ExpectedErrorMessage';
       await LoggerService.error(expectedMessage);
-      const measuredArgs = consoleErrorSpy.mock.calls[0];
+      const measuredArgs = consoleErrorSpy.mock.calls[0][0];
       expect(measuredArgs).toMatch(getTestRegex(expectedMessage, 'ERROR'));
     });
 
@@ -102,7 +102,7 @@ describe('Logger Service', () => {
       const expectedMessage = 'ExpectedWarnMessage';
       const operation = 'TestService';
       await LoggerService.error(expectedMessage, undefined, operation);
-      const measuredArgs = consoleErrorSpy.mock.calls[0];
+      const measuredArgs = consoleErrorSpy.mock.calls[0][0];
       //   expect(measuredArgs).toMatch(
       //     getTestRegex(expectedMessage, 'ERROR', operation),
       //   );
@@ -111,7 +111,7 @@ describe('Logger Service', () => {
     it('should error a error object message with defaults', async () => {
       const expectedMessage = new Error('ExpectedErrorMessage');
       await LoggerService.error(expectedMessage);
-      const measuredArgs = consoleErrorSpy.mock.calls[0];
+      const measuredArgs = consoleErrorSpy.mock.calls[0][0];
 
       const messageForRegex = fixErrorStackRegex(
         expectedMessage.stack as string,
@@ -124,7 +124,7 @@ describe('Logger Service', () => {
     it('should error a error object message with child error', async () => {
       const expectedMessage = new Error('ExpectedErrorMessage');
       await LoggerService.error(expectedMessage);
-      const measuredArgs = consoleErrorSpy.mock.calls[0];
+      const measuredArgs = consoleErrorSpy.mock.calls[0][0];
 
       const messageForRegex = fixErrorStackRegex(
         expectedMessage.stack as string,
@@ -143,7 +143,7 @@ describe('Logger Service', () => {
 
       await LoggerService.error(expectedMessage, childError, operation);
 
-      const measuredArgs = consoleErrorSpy.mock.calls[0];
+      const measuredArgs = consoleErrorSpy.mock.calls[0][0];
 
       let messageForRegex = fixErrorStackRegex(expectedMessage.stack as string);
       const childErrorRegex = fixErrorStackRegex(childError.stack as string);
