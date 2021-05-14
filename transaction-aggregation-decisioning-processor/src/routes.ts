@@ -1,11 +1,15 @@
 import Router from 'koa-router';
-import * as miscController from './controllers/misc';
-import * as evaluatorController from './controllers/evaluation';
+import {
+  handleHealthCheck,
+  handleScoring,
+  handleTestRequest,
+} from './controllers';
+
 const router = new Router();
 
-router.get('/', miscController.healthcheck);
-router.get('/health', miscController.healthcheck);
-router.post('/execute', evaluatorController.scoreTransaction);
-router.post('/result-test', evaluatorController.testResult);
+router.get('/', handleHealthCheck);
+router.get('/health', handleHealthCheck);
+router.post('/execute', handleScoring);
+router.post('/result-test', handleTestRequest);
 
 export default router;
