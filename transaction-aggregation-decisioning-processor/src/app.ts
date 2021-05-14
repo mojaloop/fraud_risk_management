@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import Koa from 'koa';
 import bodyParser from 'koa-bodyparser';
-import router from './routes';
 import { configuration } from './config';
 import { initializeRedis } from './clients/redisClient';
 import { Server } from 'http';
+import router from './routes';
 
 class App extends Koa {
   public servers: Server[];

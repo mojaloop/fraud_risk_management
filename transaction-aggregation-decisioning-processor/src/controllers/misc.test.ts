@@ -1,5 +1,5 @@
 import { Context } from 'koa';
-import { healthcheck, monitorTransaction } from './misc';
+import { handleHealthCheck, handleMonitorTransaction } from './misc';
 
 describe('test misc functions', () => {
   test('should healtcheck return UP', () => {
@@ -9,7 +9,7 @@ describe('test misc functions', () => {
       },
     };
 
-    const ctxTest = healthcheck(ctx as Context);
+    const ctxTest = handleHealthCheck(ctx as Context);
 
     expect(ctxTest.body).toMatchObject({
       status: 'UP',
@@ -23,7 +23,7 @@ describe('test misc functions', () => {
       },
     };
 
-    const ctxTest = monitorTransaction(ctx as Context);
+    const ctxTest = handleMonitorTransaction(ctx as Context);
 
     expect(ctxTest.body).toMatchObject({
       result: 'Transaction is valid',

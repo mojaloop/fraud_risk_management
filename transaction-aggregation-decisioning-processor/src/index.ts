@@ -3,7 +3,8 @@ import { Context } from 'koa';
 import App from './app';
 import apm from 'elastic-apm-node';
 import { LoggerService } from './helpers';
-if (configuration.apmLogging) {
+
+if (configuration.dev === 'production') {
   apm.start({
     serviceName: configuration.apmServiceName,
     secretToken: configuration.apmSecretToken,

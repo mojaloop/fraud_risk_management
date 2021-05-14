@@ -16,7 +16,6 @@ export const configuration: IConfig = {
   redisAuth: <string>process.env.REDIS_AUTH,
   redisHost: <string>process.env.REDIS_HOST,
   redisPort: parseInt(process.env.REDIS_PORT!, 10),
-  apmLogging: <boolean>(process.env.APM_LOGGING === 'true'),
   redisConnection: <boolean>(process.env.REDIS_CONNECTION === 'true'),
   apmServiceName: <string>process.env.APM_SERVICE_NAME,
   apmURL: <string>process.env.APM_URL,
