@@ -1,11 +1,11 @@
 import { Context } from 'koa';
 
-const monitorTransaction = (ctx: Context): Context => {
+const handleMonitorTransaction = (ctx: Context): Context => {
   ctx.body = { result: 'Transaction is valid' };
   return ctx;
 };
 
-const healthcheck = (ctx: Context): Context => {
+const handleHealthCheck = (ctx: Context): Context => {
   const data = {
     status: 'UP',
   };
@@ -14,4 +14,4 @@ const healthcheck = (ctx: Context): Context => {
   return ctx;
 };
 
-export { monitorTransaction, healthcheck };
+export { handleMonitorTransaction, handleHealthCheck };

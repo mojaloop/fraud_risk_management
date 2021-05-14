@@ -1,20 +1,22 @@
 import { Context } from 'koa';
 import axios from 'axios';
-import { IConfig } from '../../interfaces';
-import { getScores, appendScore, deleteTransactionRecord } from '../../clients';
-import { getScore } from './getScore';
-import { iScore } from './types';
-import { LoggerService } from '../../helpers';
+import { IConfig } from '../interfaces';
+import { getScores, appendScore, deleteTransactionRecord } from '../clients';
+import { getScore } from '../services/evaluation';
+import { iScore } from '../interfaces/iScore';
+import { LoggerService } from '../helpers';
 
-const createPostRequest = (config: IConfig, requestBody: iScore) => {
+const createPostRequest = async (config: IConfig, requestBody: iScore) => {
   const route = `http://${config.transactionRoutingHostname}:${config.transactionRoutingPort}/${config.transactionRoutingPath}`;
-  axios.post(route, requestBody);
+  await axios.post(route, requestBody);
 };
 
 /**
  * @description Only 1 channel for MVP
+ * @param ctx get request data
+ * @returns response
  */
-export const scoreTransaction = async (ctx: Context): Promise<Context> => {
+const handleScoring = async (ctx: Context): Promise<Context> => {
   try {
     const channelsNeeded = [28];
     const { redisClient, configuration } = ctx.state;
@@ -26,10 +28,15 @@ export const scoreTransaction = async (ctx: Context): Promise<Context> => {
      */
     if (channelsNeeded.length === 1) {
       const requestBody = getScore([score], transactionID);
-      await createPostRequest(configuration, requestBody);
-      ctx.status = 200;
-      ctx.body = requestBody;
-      return ctx;
+
+      try {
+        await createPostRequest(configuration, requestBody);
+        ctx.status = 200;
+        ctx.body = requestBody;
+        return ctx;
+      } catch (error) {
+        LoggerService.error(error);
+      }
     }
 
     const jsonChannelsResults = await getScores(redisClient, transactionID);
@@ -39,10 +46,15 @@ export const scoreTransaction = async (ctx: Context): Promise<Context> => {
      */
     if (jsonChannelsResults === 'null') {
       const body = `{"${channelNumber}": ${score}`;
-      await appendScore(redisClient, transactionID, body);
-      ctx.body = { result: 'Channel result saved' };
-      ctx.response.status = 200;
-      return ctx;
+      try {
+        await appendScore(redisClient, transactionID, body);
+
+        ctx.body = { result: 'Channel result saved' };
+        ctx.response.status = 200;
+        return ctx;
+      } catch (error) {
+        LoggerService.error(error);
+      }
     }
 
     /**
@@ -85,8 +97,15 @@ export const scoreTransaction = async (ctx: Context): Promise<Context> => {
   return ctx;
 };
 
-export const testResult = async (ctx: Context): Promise<Context> => {
+/**
+ * @description check test the request transaction
+ * @param ctx get request data
+ * @returns response with ctx
+ */
+const handleTestRequest = async (ctx: Context): Promise<Context> => {
   LoggerService.log(JSON.stringify(ctx.request.body));
   ctx.status = 201;
   return ctx;
 };
+
+export { handleTestRequest, handleScoring };
