@@ -5,6 +5,6 @@ const router = new Router();
 router.get('/', miscController.healthcheck);
 router.get('/health', miscController.healthcheck);
 // Change this to your liking
-router.post('/execute', miscController.healthcheck);
+router.post('/execute', miscController.monitorTransaction);
 
 export default router;

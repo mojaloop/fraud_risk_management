@@ -21,13 +21,8 @@ class App extends Koa {
 
   async _configureRoutes(): Promise<void> {
     // Bootstrap application router
-    const {
-      redisDB,
-      redisAuth,
-      redisHost,
-      redisPort,
-      redisConnection,
-    } = configuration;
+    const { redisDB, redisAuth, redisHost, redisPort, redisConnection } =
+      configuration;
 
     if (redisConnection) {
       const redisClient = await initializeRedis(
