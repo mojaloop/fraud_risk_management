@@ -26,10 +26,22 @@ const config: Config.InitialOptions = {
   collectCoverageFrom: ['src/**/*.{ts,js}', '!src/**/*.d.ts'],
 
   // The directory where Jest should output its coverage files
-  coverageDirectory: 'coverage',
+  coverageDirectory: '<rootDir>/coverage/',
 
   // An array of regexp pattern strings used to skip coverage collection
-  coveragePathIgnorePatterns: ['/node_modules/'],
+  coveragePathIgnorePatterns: [
+    '/node_modules/',
+    './src/interfaces',
+    './src/models',
+    './src/test',
+    'interfaces',
+    '.module.ts',
+    '.mock.ts',
+    './src/index.ts',
+    './src/clients/arangodb.ts',
+    './src/clients/index.ts',
+    './src/clients/redisClient.ts',
+  ],
 
   // Indicates which provider should be used to instrument code for coverage
   coverageProvider: 'v8',
@@ -155,9 +167,7 @@ const config: Config.InitialOptions = {
   testMatch: ['**/*.test.ts'],
 
   // An array of regexp pattern strings that are matched against all test paths, matched tests are skipped
-  // testPathIgnorePatterns: [
-  //   "/node_modules/"
-  // ],
+  testPathIgnorePatterns: ['/node_modules/'],
 
   // The regexp pattern or array of patterns that Jest uses to detect test files
   // testRegex: '(/__tests__/.*|(\\.|/)(test|spec))\\.(ts|js)$',

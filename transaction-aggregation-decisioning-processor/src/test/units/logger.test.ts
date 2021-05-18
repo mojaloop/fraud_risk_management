@@ -1,6 +1,8 @@
 /* eslint-disable no-console */
 import { LoggerService } from '../../helpers/logger';
 
+Date.now = jest.fn(() => new Date(Date.UTC(2021, 5, 14)).valueOf());
+
 describe('Logger Service', () => {
   let consoleLoggerSpy: jest.SpyInstance;
   let consoleWarnSpy: jest.SpyInstance;
