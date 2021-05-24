@@ -2,7 +2,7 @@
 // config settings, env variables
 import path from 'path';
 import { config as dotenv } from 'dotenv';
-import { IConfig } from 'types/iConfig';
+import { IConfig } from '@interfaces/index';
 
 // Load .env file into process.env if it exists. This is convenient for running locally.
 dotenv({

@@ -21,9 +21,9 @@
       "@protos/*": ["protos/*"],
       "@utils/*": ["src/utils/*"],
       "@models/*": ["models/*"],
-      "types/*": ["@types/*"]
+      "@interface/*": ["@interface/*"]
     }
   },
-  "include": ["typings/global.d.ts", "src/**/*", "protos/*", "@types/*", "models/*"],
+  "include": ["typings/global.d.ts", "src/**/*", "protos/*", "@interfaces/*", "models/*"],
   "exclude": ["node_modules", "dist", "__tests__"]
 }
