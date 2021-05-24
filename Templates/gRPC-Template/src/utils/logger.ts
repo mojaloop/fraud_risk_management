@@ -6,13 +6,18 @@ export type Parameter = [unknown?, ...unknown[]];
 /**
  * Logger Class
  */
-export class Logger {
+class Logger {
   private readonly rootDir: string = dirname((<NodeModule>require.main).filename);
 
   constructor() {
     if (process.env.pm_id) {
       this.rootDir = this.rootDir.replace('/dist', '/src');
     }
+  }
+
+  public log(...args: Parameter): void {
+    args.push(`- ${this.trace()}`);
+    console.log(...args);
   }
 
   public info(...args: Parameter): void {

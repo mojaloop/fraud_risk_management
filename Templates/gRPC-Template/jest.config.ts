@@ -41,6 +41,7 @@ const config: Config.InitialOptions = {
     './src/clients/arangodb.ts',
     './src/clients/index.ts',
     './src/clients/redisClient.ts',
+    './jest.config.ts',
   ],
 
   // Indicates which provider should be used to instrument code for coverage
