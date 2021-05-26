@@ -14,8 +14,8 @@
     "lint": "yarn lint:eslint && yarn lint:prettier",
     "lint:eslint": "eslint \"**/*.ts\"",
     "lint:prettier": "prettier --check \"**/*.ts\"",
-    "test": "jest --config=jest.config.ts --passWithNoTests",
-    "test:watch": "jest --config=jest.config.ts --watch",
+    "test": "jest --config=jest.config.ts --passWithNoTests --no-cache",
+    "test:watch": "jest --config=jest.config.ts --watch --no-cache",
     "test:unit": "yarn test ./src/test/unit",
     "test:integration": "yarn test ./src/test/integration --detectOpenHandles"
   },

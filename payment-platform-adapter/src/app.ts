@@ -5,8 +5,6 @@ import bodyParser from 'koa-bodyparser';
 import * as swagger from 'swagger2';
 import { ui, validate } from 'swagger2-koa';
 import router from './routes';
-import { configuration } from './config';
-import { initializeRedis } from './clients/redisClient';
 import { Server } from 'http';
 
 class App extends Koa {
@@ -21,25 +19,10 @@ class App extends Koa {
 
   async _configureRoutes(): Promise<void> {
     // Bootstrap application router
-    const { redisDB, redisAuth, redisHost, redisPort, redisConnection } =
-      configuration;
-
-    if (redisConnection) {
-      const redisClient = await initializeRedis(
-        redisDB,
-        redisHost,
-        redisPort,
-        redisAuth,
-      );
-      this.use((ctx, next) => {
-        ctx.state.redisClient = redisClient;
-        return next();
-      });
-    }
     const readSwagger = swagger.loadDocumentSync('src/mojaloop-api.yaml');
     const swaggerDocument: swagger.Document = readSwagger as swagger.Document;
     this.use(ui(swaggerDocument, '/swagger'));
-    this.use(validate(swaggerDocument));
+    // this.use(validate(swaggerDocument));
     this.use(bodyParser());
     this.use(router.routes());
     this.use(router.allowedMethods());

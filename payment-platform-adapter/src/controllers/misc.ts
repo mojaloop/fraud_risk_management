@@ -8,7 +8,7 @@ const monitorTransaction = (ctx: Context): Context => {
 
   try {
     const frmTransaction = new CustomerCreditTransferInitiation(transaction);
-    ctx.body = { frmTransaction };
+    ctx.body = frmTransaction;
     ctx.status = 200;
     return ctx;
   } catch (err) {
