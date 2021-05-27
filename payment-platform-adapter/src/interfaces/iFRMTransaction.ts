@@ -69,6 +69,7 @@ class ActiveOrHistoricCurrencyAndAmount {}
 class Amount {
   InstructedAmount: ActiveOrHistoricCurrencyAndAmount =
     new ActiveOrHistoricCurrencyAndAmount();
+
   EquivalentAmount: EquivalentAmount = new EquivalentAmount();
 }
 
@@ -157,13 +158,8 @@ export class CustomerCreditTransferInitiation {
         // this.PaymentInformation.CreditTransferTransactionInformation.CreditorAccount.Name =
         transaction.payee.name;
       this.PaymentInformation.CreditTransferTransactionInformation.Creditor.Name = `${transaction.payee.personalInfo.complexName.firstName} ${transaction.payee.personalInfo.complexName.middleName} ${transaction.payee.personalInfo.complexName.lastName}`;
-      try {
-        this.PaymentInformation.CreditTransferTransactionInformation.Creditor.Identification.PrivateIdentification.DateAndPlaceOfBirth.Birthdate =
-          new Date(transaction.payee.personalInfo.dateOfBirth);
-      } catch {
-        this.PaymentInformation.CreditTransferTransactionInformation.Creditor.Identification.PrivateIdentification.DateAndPlaceOfBirth.Birthdate =
-          new Date();
-      }
+      this.PaymentInformation.CreditTransferTransactionInformation.Creditor.Identification.PrivateIdentification.DateAndPlaceOfBirth.Birthdate =
+        new Date(transaction.payee.personalInfo.dateOfBirth);
     }
 
     if (transaction.payer) {
@@ -180,25 +176,16 @@ export class CustomerCreditTransferInitiation {
         transaction.payer.merchantClassificationCode;
       this.PaymentInformation.DebtorAccount.Proxy = transaction.payer.name;
       this.PaymentInformation.Debtor.Name = `${transaction.payer.personalInfo.complexName.firstName} ${transaction.payer.personalInfo.complexName.middleName} ${transaction.payer.personalInfo.complexName.lastName}`;
-      try {
-        this.PaymentInformation.Debtor.Identification.PrivateIdentification.DateAndPlaceOfBirth.Birthdate =
-          new Date(transaction.payer.personalInfo.dateOfBirth);
-      } catch {
-        this.PaymentInformation.Debtor.Identification.PrivateIdentification.DateAndPlaceOfBirth.Birthdate =
-          new Date();
-      }
+      this.PaymentInformation.Debtor.Identification.PrivateIdentification.DateAndPlaceOfBirth.Birthdate =
+        new Date(transaction.payer.personalInfo.dateOfBirth);
     }
 
     if (transaction.amount) {
       // transaction.amountType
       this.PaymentInformation.CreditTransferTransactionInformation.Amount.EquivalentAmount.CurrencyOfTransfer =
         transaction.amount.currency;
-      try {
-        this.PaymentInformation.CreditTransferTransactionInformation.Amount.EquivalentAmount.Amount =
-          Number.parseFloat(transaction.amount.amount);
-      } catch {
-        this.PaymentInformation.CreditTransferTransactionInformation.Amount.EquivalentAmount.Amount = 0;
-      }
+      this.PaymentInformation.CreditTransferTransactionInformation.Amount.EquivalentAmount.Amount =
+        Number.parseFloat(transaction.amount.amount);
     }
 
     if (transaction.fees) {

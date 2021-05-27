@@ -45,10 +45,10 @@ describe('Logger Service', () => {
   });
 
   describe('Warn', () => {
-    it('should log a message with defined operation', async () => {
+    it('should log a Warn message with defined operation', async () => {
       const expectedMessage = 'ExpectedWarnMessage';
       const operation = 'TestService';
-      await LoggerService.warn(expectedMessage);
+      await LoggerService.warn(expectedMessage, operation);
       await LoggerService.warn(expectedMessage);
       expect(console.warn).toHaveBeenCalledTimes(2);
 
@@ -57,14 +57,27 @@ describe('Logger Service', () => {
   });
 
   describe('Error', () => {
-    it('should log a string message with defined operation', async () => {
+    it('should log a Error message with defined operation', async () => {
       const expectedMessage = 'ExpectedWarnMessage';
       const operation = 'TestService';
-      await LoggerService.error(expectedMessage, undefined, operation);
+      await LoggerService.error(
+        expectedMessage,
+        new Error('some error'),
+        operation,
+      );
       const measuredArgs = consoleErrorSpy.mock.calls[0][0];
       expect(measuredArgs).toMatch(
         getTestRegex(expectedMessage, 'ERROR', operation),
       );
+    });
+
+    it('should log a Error message with message as Error', async () => {
+      const expectedMessage = 'ExpectedWarnMessage';
+      const operation = 'TestService';
+      const error = new Error('some error');
+      error.stack = 'Some stack';
+      await LoggerService.error(error, new Error('some internal error'));
+      expect(console.error).toHaveBeenCalledTimes(1);
     });
   });
 });

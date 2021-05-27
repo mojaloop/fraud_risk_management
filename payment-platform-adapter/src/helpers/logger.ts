@@ -43,7 +43,7 @@ export abstract class LoggerService {
     let errMessage = typeof message === 'string' ? message : message.stack;
 
     if (innerError) {
-      errMessage += `\r\n${innerError.stack}`;
+      errMessage += `\r\n${innerError.message}`;
     }
 
     isDebugging &&
