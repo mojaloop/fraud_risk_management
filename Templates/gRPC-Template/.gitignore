@@ -3,7 +3,6 @@
 .DS_Store
 /dist/
 
-
 # Logs
 logs
 *.log
@@ -77,3 +76,6 @@ jspm_packages/
 
 # FuseBox cache
 .fusebox/
+
+# OpenFaas
+template

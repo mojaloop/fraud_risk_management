@@ -1,16 +1,17 @@
 import { Server, ServerCredentials } from '@grpc/grpc-js';
-
 import { Greeter, GreeterService } from './services/Greeter';
 import { Health, HealthService, healthStatus, ServingStatus } from './services/Health';
 import { logger } from './utils';
-
 // https://github.com/grpc/grpc/issues/6976
 // https://pm2.io/doc/en/runtime/guide/load-balancing/#cluster-environment-variable
-let port = 50051;
+let gRPCport = 50051;
 if (process.env.NODE_APP_INSTANCE) {
-  port += Number(process.env.NODE_APP_INSTANCE);
+  gRPCport += Number(process.env.NODE_APP_INSTANCE);
 }
 
+/**
+ * gRPC Server
+ */
 // Do not use @grpc/proto-loader
 const server: Server = new Server({
   'grpc.max_receive_message_length': -1,
@@ -19,7 +20,8 @@ const server: Server = new Server({
 
 server.addService(GreeterService, new Greeter());
 server.addService(HealthService, new Health());
-server.bindAsync(`0.0.0.0:${port}`, ServerCredentials.createInsecure(), (err: Error | null, bindPort: number) => {
+
+server.bindAsync(`0.0.0.0:${gRPCport}`, ServerCredentials.createInsecure(), (err: Error | null, bindPort: number) => {
   if (err) {
     throw err;
   }
