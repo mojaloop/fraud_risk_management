@@ -1,6 +1,6 @@
 import { Context } from 'koa';
 import Router from 'koa-router';
-import SayHello from '../controller/sayHello';
+import SayHello from './controller/sayHello';
 
 const router = new Router();
 

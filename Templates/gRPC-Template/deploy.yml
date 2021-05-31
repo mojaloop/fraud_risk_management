@@ -3,10 +3,10 @@ provider:
   name: openfaas
   gateway: http://20.90.137.195:8080
 functions:
-  off-grpc-template-client:
+  off-grpc-template-server-1:
     namespace: frm-meshed
     lang: dockerfile
     handler: .
-    image: frmacr.azurecr.io/grpc-template-client:latest
+    image: frmacr.azurecr.io/grpc-template-server-1:latest
     secrets:
       - frmpullsecret

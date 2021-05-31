@@ -1,11 +1,10 @@
-import { ListValue, Struct, Value } from 'google-protobuf/google/protobuf/struct_pb';
+import { Value } from 'google-protobuf/google/protobuf/struct_pb';
 
 import { HelloRequest, HelloResponse } from '../../models/helloworld_pb';
 import { clientService } from '../clientService';
 import { logger } from '../utils';
 
 const param: HelloRequest = new HelloRequest();
-
 const SayHello = async (): Promise<string> => {
   /**
    * rpc sayHello with Promise
