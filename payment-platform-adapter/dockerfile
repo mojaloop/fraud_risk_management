@@ -20,8 +20,6 @@ ENV NPM_CONFIG_LOGLEVEL warn
 RUN chown app:app -R /home/app \
     && chmod 777 /tmp
 
-USER app
-
 # Create a folder named function
 RUN mkdir -p /home/app
 

@@ -1,7 +1,7 @@
 version: 1.0
 provider:
   name: openfaas
-  gateway: http://20.49.140.12:8080
+  gateway: http://20.90.137.195:8080
 language: node14
 fprocess: node build/index.js
 functions:
