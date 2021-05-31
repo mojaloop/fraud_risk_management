@@ -1,0 +1,102 @@
+{
+  "name": "grpc-template",
+  "version": "0.1.0",
+  "description": "Node.js (TypeScript) gRPC Structure for FRM",
+  "main": "dist/src/server.js",
+  "engines": {
+    "node": ">=14"
+  },
+  "types": "dist/index.d.ts",
+  "keywords": [
+    "mojaloop",
+    "frm"
+  ],
+  "contributors": [
+    {
+      "name": "Joey Goksu",
+      "email": "me@joeygoksu.com"
+    }
+  ],
+  "license": "ISC",
+  "scripts": {
+    "prebuild": "node bin/proto",
+    "build": "rimraf dist && tsc --project tsconfig.json",
+    "build:debug": "rimraf dist && tsc --project tsconfig.json --traceResolution",
+    "prestart": "npm run build",
+    "start": "node dist/src/server",
+    "client": "node dist/src/client",
+    "health": "node dist/src/health",
+    "cleanup": "rm -rf dist template jest.config.js jest.config.js.map node_modules",
+    "fix": "yarn fix:prettier && yarn fix:eslint",
+    "fix:eslint": "eslint --fix \"**/*.ts\"",
+    "fix:prettier": "prettier --write \"**/*.ts\"",
+    "lint": "yarn lint:eslint && yarn lint:prettier",
+    "lint:eslint": "eslint \"**/*.ts\"",
+    "lint:prettier": "prettier --check \"**/*.ts\"",
+    "test": "jest --config=jest.config.ts --passWithNoTests",
+    "test:watch": "jest --config=jest.config.ts --watch",
+    "test:unit": "yarn test ./src/test/units",
+    "test:integration": "yarn test ./src/test/integrations --detectOpenHandles"
+  },
+  "dependencies": {
+    "@grpc/grpc-js": "^1.3.2",
+    "@types/google-protobuf": "^3.15.2",
+    "@types/koa": "^2.13.1",
+    "@types/koa-bodyparser": "^4.3.0",
+    "@types/koa-router": "^7.4.2",
+    "arangojs": "^7.5.0",
+    "dotenv": "^10.0.0",
+    "elastic-apm-node": "^3.15.0",
+    "google-protobuf": "^3.17.1",
+    "koa": "^2.13.1",
+    "koa-bodyparser": "^4.3.0",
+    "koa-router": "^10.0.0",
+    "redis": "^3.1.2"
+  },
+  "devDependencies": {
+    "@types/arangodb": "^3.5.11",
+    "@types/elastic-apm-node": "^2.7.0",
+    "@types/jest": "^26.0.23",
+    "@types/node": "^15.6.1",
+    "@types/redis": "^2.8.28",
+    "@typescript-eslint/eslint-plugin": "^4.25.0",
+    "@typescript-eslint/parser": "^4.25.0",
+    "dtslint": "^4.0.9",
+    "eslint": "^7.27.0",
+    "eslint-config-airbnb-typescript": "^12.3.1",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-config-standard": "^16.0.2",
+    "eslint-import-resolver-typescript": "^2.4.0",
+    "eslint-plugin-import": "^2.23.3",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^3.4.0",
+    "eslint-plugin-promise": "^5.1.0",
+    "eslint-plugin-sonarjs": "^0.7.0",
+    "eslint-plugin-standard": "^5.0.0",
+    "grpc-tools": "^1.11.1",
+    "grpc_tools_node_protoc_ts": "^5.2.2",
+    "husky": "4.3.8",
+    "jest": "^27.0.0",
+    "lint-staged": "^11.0.0",
+    "prettier": "^2.3.0",
+    "protobufjs": "^6.11.2",
+    "rimraf": "^3.0.2",
+    "shelljs": "^0.8.4",
+    "ts-jest": "^26.5.6",
+    "ts-node": "^10.0.0",
+    "typedoc": "^0.20.36",
+    "typescript": "^4.2.4"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "pre-push": "npm run test"
+    }
+  },
+  "lint-staged": {
+    "*.{js,ts}": [
+      "eslint --fix",
+      "prettier --write"
+    ]
+  }
+}
