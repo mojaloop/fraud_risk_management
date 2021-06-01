@@ -18,7 +18,12 @@ export default async function Execute(context: Context): Promise<Context> {
   await forkJoin(
     channelMap.map((channel) => {
       channelCounter++;
-      return sendRule(channel.endpoint, transaction);
+      try {
+        return sendRule(channel.endpoint, transaction);
+      } catch (err) {
+        LoggerService.error(err);
+        return err;
+      }
     }),
   ).toPromise();
   context.body = `[ChannelRouter][Result] ${channelCounter} Channels initiated for transaction ID: ${transaction.TransactionID}`;
@@ -26,7 +31,10 @@ export default async function Execute(context: Context): Promise<Context> {
   return context;
 }
 
-async function sendRule(endpoint: string, req: ITransaction) {
+async function sendRule(
+  endpoint: string,
+  req: ITransaction,
+): Promise<void | Error> {
   const toSend = JSON.stringify(req);
   await executePost(endpoint, toSend);
 }
@@ -48,8 +56,14 @@ async function executePost(
     const req = http.request(endpoint, options, (res) => {
       LoggerService.log(`Rule response statusCode: ${res.statusCode}`);
       if (res.statusCode !== 200) {
-        LoggerService.trace(`StatusCode != 200, request:\r\n${request}`);
+        LoggerService.trace('StatusCode != 200');
+        resolve();
       }
+
+      res.on('error', (d) => {
+        LoggerService.error(d);
+        resolve(d);
+      });
 
       res.on('data', (d) => {
         LoggerService.log(`Rule response data: ${d.toString()}`);
