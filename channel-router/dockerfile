@@ -20,8 +20,6 @@ ENV NPM_CONFIG_LOGLEVEL warn
 RUN chown app:app -R /home/app \
     && chmod 777 /tmp
 
-USER app
-
 # Create a folder named function
 RUN mkdir -p /home/app
 
@@ -55,15 +53,15 @@ ENV read_timeout="15s"
 
 ENV prefix_logs="false"
 
-ENV NODE_ENV=development
+ENV FUNCTION_NAME=channel-router
+ENV NODE_ENV=dev
 ENV PORT=3000
-ENV REDIS_CHANNEL_SCORING_DB=1
-ENV REDIS_AUTH='PASSWORDHERE'
-ENV REDIS_HOST='REDIS-HOST'
-ENV REDIS_PORT=6379
-ENV CHANNEL_ROUTING_HOSTNAME=http://127.0.0.1:8080
-ENV CHANNEL_ROUTING_PORT=3000
-ENV CHANNEL_ROUTING_PATH=result-test
+ENV CHANNEL_MAP='[{"name":"Channel1", "endpoint": "http://20.90.137.195:8080/function/off-channel-orchestrator.frm/Execute"}]'
+ 
+ENV APM_LOGGING=false
+ENV APM_SERVICE_NAME=channel-router
+ENV APM_URL=127.0.0.1:4857
+ENV APM_SECRET_TOKEN=secrettokenhere
 
 HEALTHCHECK --interval=3s CMD [ -e /tmp/.lock ] || exit 1
 
