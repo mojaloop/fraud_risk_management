@@ -1,0 +1,22 @@
+version: 1.0
+
+provider:
+  name: openfaas
+  gateway: http://20.49.140.12:8080
+
+functions:
+  off-transaction-aggregation-decisioning:
+    lang: dockerfile
+    handler: .
+    image: frmacr.azurecr.io/transaction-aggregation-decisioning:latest
+    labels:
+      com.openfaas.scale.min: 1
+      com.openfaas.scale.max: 20
+      com.openfaas.scale.zero: true
+    annotations:
+      com.openfaas.health.http.path: /health
+      com.openfaas.health.http.initialDelay: "45s"
+    environment_file:
+      - environment.yml
+    secrets:
+      - frmpullsecret

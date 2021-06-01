@@ -14,4 +14,3 @@ functions:
       com.openfaas.health.http.initialDelay: "45s"
     secrets:
       - frmpullsecret
-
