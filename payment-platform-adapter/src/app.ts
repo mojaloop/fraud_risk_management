@@ -22,7 +22,7 @@ class App extends Koa {
     const readSwagger = swagger.loadDocumentSync('src/mojaloop-api.yaml');
     const swaggerDocument: swagger.Document = readSwagger as swagger.Document;
     this.use(ui(swaggerDocument, '/swagger'));
-    // this.use(validate(swaggerDocument));
+    this.use(validate(swaggerDocument));
     this.use(bodyParser());
     this.use(router.routes());
     this.use(router.allowedMethods());
