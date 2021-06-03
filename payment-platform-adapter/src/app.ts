@@ -13,6 +13,7 @@ class App extends Koa {
     super();
 
     // bodyparser needs to be loaded first in order to work
+    this.use(bodyParser());
     this.servers = [];
     this._configureRoutes();
   }
@@ -23,7 +24,6 @@ class App extends Koa {
     const swaggerDocument: swagger.Document = readSwagger as swagger.Document;
     this.use(ui(swaggerDocument, '/swagger'));
     this.use(validate(swaggerDocument));
-    this.use(bodyParser());
     this.use(router.routes());
     this.use(router.allowedMethods());
   }
