@@ -35,25 +35,20 @@
   ],
   "license": "ISC",
   "dependencies": {
-    "arangojs": "^7.5.0",
     "axios": "^0.21.1",
     "dotenv": "^8.2.0",
     "elastic-apm-node": "^3.14.0",
     "koa": "^2.13.1",
     "koa-bodyparser": "^4.3.0",
-    "koa-router": "^10.0.0",
-    "redis": "^3.1.2",
-    "rxjs": "^7.0.1"
+    "koa-router": "^10.0.0"
   },
   "devDependencies": {
-    "@types/arangodb": "^3.5.11",
     "@types/elastic-apm-node": "^2.7.0",
     "@types/jest": "^26.0.23",
     "@types/koa": "^2.13.1",
     "@types/koa-bodyparser": "^4.3.0",
     "@types/koa-router": "^7.4.2",
     "@types/node": "^14.14.43",
-    "@types/redis": "^2.8.28",
     "@types/supertest": "^2.0.10",
     "@typescript-eslint/eslint-plugin": "^4.15.0",
     "@typescript-eslint/parser": "^4.15.0",

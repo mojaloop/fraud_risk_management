@@ -1,5 +1,4 @@
 import { Context } from 'koa';
-import { forkJoin } from 'rxjs';
 import { configuration } from '../config';
 import { IChannelMap, ITransaction } from '../interfaces';
 import http from 'http';
@@ -15,17 +14,18 @@ export default async function Execute(context: Context): Promise<Context> {
   transaction = Object.assign(transaction, context.request.body);
 
   let channelCounter = 0;
-  await forkJoin(
-    channelMap.map((channel) => {
-      channelCounter++;
-      try {
-        return sendRule(channel.endpoint, transaction);
-      } catch (err) {
-        LoggerService.error(err);
-        return err;
-      }
-    }),
-  ).toPromise();
+
+  const arrayOfPromises = channelMap.map((channel) => {
+    channelCounter++;
+    try {
+      return sendRule(channel.endpoint, transaction);
+    } catch (err) {
+      LoggerService.error(err);
+      return err;
+    }
+  });
+  await Promise.all(arrayOfPromises)
+
   context.body = `[ChannelRouter][Result] ${channelCounter} Channels initiated for transaction ID: ${transaction.TransactionID}`;
   context.status = 200;
   return context;

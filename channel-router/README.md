@@ -1,6 +1,6 @@
 # channel-router
 
-This is a channel-router for a OpenFaas function. This template should be used for future services, like typologies and rules.
+This is a channel-router for a OpenFaas function. 
 
 ## Setup
 Just copy this project to create your own, and change the name of the project inside the package.json.
