@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "41e4d815-dd8c-48b0-9d15-1e8b0d4758bb",
+		"_postman_id": "535c17fd-90e3-4fd4-99a4-a92329e3095b",
 		"name": "tms-api",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -66,7 +66,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"TransactionID\": \"123e4567-e89b-12d3-a456-426614174000\",\n  \"ILPSourceAccountAddress\": \"Bank1.MSISDN.2507122015\",\n  \"ILPDestinationAccountAddress\": \"Bank2.MSISDN.25094672092\",\n  \"PayerContactNo\": \"2507122015\",\n  \"PayeeContactNo\": \"25094672092\",\n  \"Amount\": \"250.40\",\n  \"Fee\": \"250.40\",\n  \"Payer\": {\n    \"PartyIDType\": \"string\", \n    \"PersonalIdentifierType\": \"string\",\n    \"PartyID\": \"string\",\n    \"PartyName\": \"string\"\n  },\n  \"Payee\": {\n    \"PartyName\": \"string\"\n  },\n  \"SourceAccountBalance\": \"5000.30\",\n  \"SourceAccountTransactionLimit\": \"500\",\n  \"SourceAccountDailyLimit\": \"1500\",\n  \"SourceAccountPINDate\": \"10/10/2010\",\n  \"PayerDeviceIMEI\": \"19283747590379\",\n  \"PayerICCID\": \"39iejdi3948\",\n  \"Location\": \"Ghana\",\n  \"Transaction\": {\n    \"AuthenticationType\": \"string\"\n  },\n  \"TransactionType\": {\n    \"TransactionScenario\": \"string\",\n    \"TransactionInitiator\": \"string\",\n    \"TransactionInitiatorType\": \"string\"\n  }\n}"
+					"raw": "{\n  \"quoteId\": \"d8f030c9-72a7-4c66-b06b-b7668890c923\",\n  \"transactionId\": \"025f8eca-693f-4fcf-83ea-8392837e1b25\",\n  \"payer\": {\n    \"partyIdInfo\": {\n      \"partyIdType\": \"MSISDN\",\n      \"partyIdentifier\": \"2948459328\",\n      \"fspId\": \"payer\"\n    },\n    \"personalInfo\": {\n      \"complexName\": {\n        \"firstName\": \"Mats\",\n        \"lastName\": \"Hagman\"\n      },\n      \"dateOfBirth\": \"1983-10-25\"\n    }\n  },\n  \"payee\": {\n    \"partyIdInfo\": {\n      \"partyIdType\": \"MSISDN\",\n      \"partyIdentifier\": \"23423345\",\n      \"fspId\": \"payee\"\n    }\n  },\n  \"amountType\": \"SEND\",\n  \"amount\": {\n    \"amount\": \"10\",\n    \"currency\": \"USD\"\n  },\n  \"transactionType\": {\n    \"scenario\": \"TRANSFER\",\n    \"initiator\": \"PAYER\",\n    \"initiatorType\": \"CONSUMER\"\n  },\n  \"note\": \"hej\"\n}"
 				},
 				"url": {
 					"raw": "{{TMS_API}}/monitor/transaction",
@@ -107,7 +107,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"TransactionID\": \"123e4567-e89b-12d3-a456-426614174000\",\n  \"ILPSourceAccountAddress\": \"Bank1.MSISDN.2507122015\",\n  \"ILPDestinationAccountAddress\": \"Bank2.MSISDN.25094672092\",\n  \"PayerContactNo\": \"250712201a\",\n  \"PayeeContactNo\": \"25094672092\",\n  \"Amount\": \"250.40\",\n  \"Fee\": \"250.40\",\n  \"Payer\": {\n    \"PartyIDType\": \"string\",\n    \"PersonalIdentifierType\": \"string\",\n    \"PartyID\": \"string\",\n    \"PartyName\": \"string\"\n  },\n  \"Payee\": {\n    \"PartyName\": \"string\"\n  },\n  \"SourceAccountBalance\": \"5000.30\",\n  \"SourceAccountTransactionLimit\": \"500\",\n  \"SourceAccountDailyLimit\": \"1500\",\n  \"SourceAccountPINDate\": \"10/10/2010\",\n  \"PayerDeviceIMEI\": \"19283747590379\",\n  \"PayerICCID\": \"39iejdi3948\",\n  \"Location\": \"Ghana\",\n  \"Transaction\": {\n    \"AuthenticationType\": \"string\"\n  },\n  \"TransactionType\": {\n    \"TransactionScenario\": \"string\",\n    \"TransactionInitiator\": \"string\",\n    \"TransactionInitiatorType\": \"string\"\n  }\n}"
+					"raw": "{\n  \"transactionId\": \"025f8eca-693f-4fcf-83ea-8392837e1b25\",\n  \"payer\": {\n    \"partyIdInfo\": {\n      \"partyIdType\": \"MSISDN\",\n      \"partyIdentifier\": \"2948459328\",\n      \"fspId\": \"payer\"\n    },\n    \"personalInfo\": {\n      \"complexName\": {\n        \"firstName\": \"Mats\",\n        \"lastName\": \"Hagman\"\n      },\n      \"dateOfBirth\": \"1983-10-25\"\n    }\n  },\n  \"payee\": {\n    \"partyIdInfo\": {\n      \"partyIdType\": \"MSISDN\",\n      \"partyIdentifier\": \"23423345\",\n      \"fspId\": \"payee\"\n    }\n  },\n  \"amountType\": \"SEND\",\n  \"amount\": {\n    \"amount\": \"10\",\n    \"currency\": \"USD\"\n  },\n  \"transactionType\": {\n    \"scenario\": \"TRANSFER\",\n    \"initiator\": \"PAYER\",\n    \"initiatorType\": \"CONSUMER\"\n  },\n  \"note\": \"hej\"\n}"
 				},
 				"url": {
 					"raw": "{{TMS_API}}/monitor/transaction",

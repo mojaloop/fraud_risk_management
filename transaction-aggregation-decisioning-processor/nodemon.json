@@ -11,11 +11,10 @@
     "*.test.ts"
   ],
   "env": {
-    "NODE_ENV": "dev"
+    "NODE_ENV": "development"
   },
   "execMap": {
     "ts": "ts-node"
-
   },
   "exec": "ts-node ./src/index.ts"
 }

@@ -1,0 +1,12 @@
+@startuml gRPC Use-Case
+participant "gRPC Server" as server
+participant "gRPC Client 1" as client1
+participant "gRPC Client 2" as client2
+participant "gRPC Client 3" as client3
+client1 -> server: Proto Request
+server -> client1: Proto Response
+client2 -> server: Proto Request
+server -> client2: Proto Response
+client3 -> server: Proto Request
+server -> client3: Proto Response
+@enduml

@@ -1,0 +1,10 @@
+environment:
+  node_env: development
+  port: 3000
+  redis_channel_scoring_db: 1
+  redis_auth: "PASSWORDHERE"
+  redis_host: "REDIS-HOST"
+  redis_port: 6379
+  channel_routing_hostname: http://127.0.0.1:8080
+  channel_routing_port: 3000
+  channel_routing_path: result-test
