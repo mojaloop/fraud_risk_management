@@ -15,7 +15,6 @@
   },
   "execMap": {
     "ts": "ts-node"
-
   },
   "exec": "ts-node ./src/index.ts"
 }
