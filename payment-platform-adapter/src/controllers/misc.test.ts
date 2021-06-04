@@ -18,7 +18,7 @@ describe('test misc functions', () => {
     });
   });
 
-  test('should monitorTransaction result is VALID', () => {
+  test('should monitorTransaction result is VALID', async () => {
     const mlTran = JSON.parse(
       '{  "quoteId": "guid",  "transactionId": "string",  "transactionRequestId": "string",  "payee": {    "partyIdInfo": {      "partyIdType": "MSISDN",      "partyIdentifier": "string",      "partySubIdOrType": "string",      "fspId": "string",      "extensionList": {        "extension": [          {            "key": "string",            "value": "string"          }        ]      }    },    "merchantClassificationCode": "merchCode",    "name": "string",    "personalInfo": {      "complexName": {        "firstName": "string",        "middleName": "string",        "lastName": "string"      },      "dateOfBirth": "string"    }  },  "payer": {    "partyIdInfo": {      "partyIdType": "MSISDN",      "partyIdentifier": "string",      "partySubIdOrType": "string",      "fspId": "string",      "extensionList": {        "extension": [          {            "key": "string",            "value": "string"          }        ]      }    },    "merchantClassificationCode": "merchCode",    "name": "string",    "personalInfo": {      "complexName": {        "firstName": "string",        "middleName": "string",        "lastName": "string"      },      "dateOfBirth": "string"    }  },  "amountType": "SEND",  "amount": {    "currency": "AED",    "amount": "string"  },  "fees": {    "currency": "AED",    "amount": "string"  },  "transactionType": {    "scenario": "DEPOSIT",    "subScenario": "string",    "initiator": "PAYER",    "initiatorType": "CONSUMER",    "refundInfo": {      "originalTransactionId": "string",      "refundReason": "string"    },    "balanceOfPayments": "string"  },  "geoCode": {    "latitude": "string",    "longitude": "string"  },  "note": "string",  "expiration": "string",  "extensionList": {    "extension": [      {        "key": "string",        "value": "string"      }    ]  }}',
     );
@@ -28,15 +28,15 @@ describe('test misc functions', () => {
       },
     };
 
-    const ctxTest = monitorTransaction(ctx as Context);
+    const ctxTest = await monitorTransaction(ctx as Context);
     const expected = JSON.stringify(
       new CustomerCreditTransferInitiation(mlTran),
     ); // .SupplementaryData["payer.merchantClassificationCode"].toString();
 
-    expect(JSON.stringify(ctxTest.body)).toMatch(expected);
+    expect(JSON.stringify((ctxTest.body as any)["frmTransaction"].toString())).toMatch(expected);
   });
 
-  test('should monitorTransaction result is INVALID', () => {
+  test('should monitorTransaction result is INVALID', async () => {
     const mlTran = JSON.parse('{"Nothing":"Something"}');
     const ctx = {
       request: {
@@ -44,7 +44,7 @@ describe('test misc functions', () => {
       },
     };
 
-    const ctxTest = monitorTransaction(ctx as Context);
+    const ctxTest = await monitorTransaction(ctx as Context);
     expect(ctxTest.status.toString()).toMatch('500');
   });
 });

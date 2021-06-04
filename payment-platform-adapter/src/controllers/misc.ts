@@ -1,14 +1,18 @@
+import axios from 'axios';
 import { Context } from 'koa';
+import { configuration } from '../config';
 import { CustomerCreditTransferInitiation } from '../interfaces/iFRMTransaction';
 import { iMLTransaction } from '../interfaces/iMLTransaction';
 
-const monitorTransaction = (ctx: Context): Context => {
+const monitorTransaction = async (ctx: Context): Promise<Context> => {
   let transaction = {} as iMLTransaction;
   transaction = Object.assign(transaction, ctx.request.body);
 
   try {
     const frmTransaction = new CustomerCreditTransferInitiation(transaction);
-    ctx.body = frmTransaction;
+    const tmsReply = await axios.post(configuration.tmsEndpoint, frmTransaction);
+
+    ctx.body = { tmsReply: (tmsReply.data ?? ""), frmTransaction: frmTransaction }
     ctx.status = 200;
     return ctx;
   } catch (err) {
