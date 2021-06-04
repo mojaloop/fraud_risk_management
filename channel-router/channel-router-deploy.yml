@@ -1,0 +1,16 @@
+version: 1.0
+provider:
+  name: openfaas
+  gateway: http://20.90.137.195:8080
+language: node14
+fprocess: node build/index.js
+functions:
+  off-channel-router:
+    lang: dockerfile
+    handler: .
+    image: frmacr.azurecr.io/channel-router:latest
+    annotations:
+      com.openfaas.health.http.path: /health
+      com.openfaas.health.http.initialDelay: '45s'
+    secrets:
+      - frmpullsecret
