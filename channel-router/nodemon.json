@@ -1,0 +1,19 @@
+{
+  "watch": ["./src"],
+  "ext": ".ts,.js",
+  "ignore": [
+    ".git",
+    "node_modules/",
+    "dist/",
+    "build",
+    "coverage/",
+    "src/**/*.spec.ts",
+    "*.test.ts"
+  ],
+  "env": {
+    "NODE_ENV": "dev"
+  },
+  "execMap": {
+    "ts": "ts-node"
+  }
+}
