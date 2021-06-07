@@ -34,6 +34,7 @@ describe('Logger Service', () => {
 
   describe('Log', () => {
     it('should log a message with defined operation', async () => {
+      LoggerService.isDebugging = true;
       const expectedMessage = 'ExpectedLogMessage';
       const operation = 'TestService';
       await LoggerService.log(expectedMessage, operation);
@@ -42,15 +43,38 @@ describe('Logger Service', () => {
 
       consoleLoggerSpy.mockRestore();
     });
+
+    it('should not log a message with defined operation', async () => {
+      LoggerService.isDebugging = false;
+      const expectedMessage = 'ExpectedLogMessage';
+      const operation = 'TestService';
+      await LoggerService.log(expectedMessage, operation);
+      await LoggerService.log(expectedMessage);
+      expect(consoleLoggerSpy).toHaveBeenCalledTimes(0);
+
+      consoleLoggerSpy.mockRestore();
+    });
   });
 
   describe('Warn', () => {
     it('should log a Warn message with defined operation', async () => {
+      LoggerService.isDebugging = true;
       const expectedMessage = 'ExpectedWarnMessage';
       const operation = 'TestService';
       await LoggerService.warn(expectedMessage, operation);
       await LoggerService.warn(expectedMessage);
       expect(console.warn).toHaveBeenCalledTimes(2);
+
+      consoleWarnSpy.mockRestore();
+    });
+
+    it('should not log a Warn message with defined operation', async () => {
+      LoggerService.isDebugging = false;
+      const expectedMessage = 'ExpectedWarnMessage';
+      const operation = 'TestService';
+      await LoggerService.warn(expectedMessage, operation);
+      await LoggerService.warn(expectedMessage);
+      expect(console.warn).toHaveBeenCalledTimes(0);
 
       consoleWarnSpy.mockRestore();
     });

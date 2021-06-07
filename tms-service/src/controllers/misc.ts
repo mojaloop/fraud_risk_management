@@ -1,15 +1,30 @@
 import { Context } from 'koa';
 import { config } from '../config';
 import axios from 'axios';
+import apm from 'elastic-apm-node';
+import { LoggerService } from '../helpers/logger';
+
+async function sendRequest(body: any) {
+  const route = `http://${config.nifiHost}:${config.nifiPort}${config.nifiRoute}`;
+  const nifiResponse = await axios.post(route, body);
+  LoggerService.log(`Response received from NiFi: ${nifiResponse}`);
+}
 
 const monitorTransaction = async (ctx: Context): Promise<Context> => {
   try {
     const { body } = ctx.request;
-    const route = `http://${config.nifiHost}:${config.nifiPort}${config.nifiRoute}`;
-    const x = await axios.post(route, body);
-    ctx.body = { result: 'Transaction is valid' };
+    if (config.apmLogging) {
+      const span = apm.startSpan("Sending request to NiFi");
+      await sendRequest(body);
+      if (span)
+        span.end()
+    } else {
+      await sendRequest(body);
+    }
+    ctx.status = 200;
+    ctx.body = { result: 'Transaction is valid and transaction submitted.' };
   } catch (e) {
-    console.error(e);
+    LoggerService.error(e);
     ctx.status = 500;
     ctx.body = e;
   }
