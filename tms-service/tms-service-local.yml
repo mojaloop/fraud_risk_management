@@ -5,7 +5,7 @@ provider:
 language: node14
 fprocess: node build/index.js
 functions:
-  off-frm-tms-service:
+  off-frm-transaction-monitoring-service:
     lang: dockerfile
     handler: .
-    image: localhost:5000/frm-tms-service:latest
+    image: localhost:5000/frm-transaction-monitoring-service:latest

@@ -53,15 +53,14 @@ ENV read_timeout="15s"
 
 ENV prefix_logs="false"
 
-ENV NODE_ENV=development
+ENV FUNCTION_NAME=payment-platfrom-adapter
 ENV PORT=3000
-ENV REDIS_CHANNEL_SCORING_DB=1
-ENV REDIS_AUTH='PASSWORDHERE'
-ENV REDIS_HOST='REDIS-HOST'
-ENV REDIS_PORT=6379
-ENV CHANNEL_ROUTING_HOSTNAME=http://127.0.0.1:8080
-ENV CHANNEL_ROUTING_PORT=3000
-ENV CHANNEL_ROUTING_PATH=result-test
+ENV TMS_ENDPOINT=http://gateway.frm:8080/function/off-transaction-monitoring-service.frm-meshed/monitor/transaction
+ENV APM_LOGGING=true
+ENV APM_SERVICE_NAME=payment-platfrom-adapter
+ENV APM_URL=http://apm-server-apm-server.frm:8200
+ENV APM_SECRET_TOKEN=token string here
+ENV NODE_ENV=dev
 
 HEALTHCHECK --interval=3s CMD [ -e /tmp/.lock ] || exit 1
 

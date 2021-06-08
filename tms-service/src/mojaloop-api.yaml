@@ -51,7 +51,7 @@ paths:
           description: "Validates request params"
           required: true
           schema:
-            $ref: "#/definitions/PaymentInformation"
+            $ref: "#/definitions/CustomerCreditTransferInitiationV11"
       responses:
         200:
           description: "successful operation"
@@ -183,6 +183,18 @@ definitions:
             type: "string"
             example: "Transaction is valid"
   
+  CustomerCreditTransferInitiationV11:
+    type: object
+    properties:
+      GroupHeader:
+        $ref: "#/definitions/GroupHeader"
+      PaymentInformation:
+        $ref: "#/definitions/PaymentInformation"
+      SupplementaryData:
+        $ref: "#/definitions/SupplementaryData"
+    required:
+      - GroupHeader
+      - PaymentInformation
   PaymentInformation: 
     type: object
     properties: 
@@ -372,7 +384,9 @@ definitions:
               fees.currency: 
                 type: string
               fees.amount: 
-                type: string
+                type: number
+                format: float
+                minimum: 0
           PaymentTypeInformation: 
             type: object
             properties: 

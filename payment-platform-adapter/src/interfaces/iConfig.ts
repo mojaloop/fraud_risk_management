@@ -1,8 +1,8 @@
 export interface IConfig {
   functionName: string;
   port: number;
+  tmsEndpoint: string;
   apmLogging: boolean;
-  redisConnection: boolean;
   apmServiceName: string;
   apmSecretToken: string;
   apmURL: string;

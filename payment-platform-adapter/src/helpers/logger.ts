@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any, no-console */
 import { configuration } from '../config';
 
-const isDebugging = true; // configuration.dev === 'dev';
 
 export abstract class LoggerService {
   private static source = configuration.functionName;
+  public static isDebugging = configuration.dev === 'dev';
 
   private static timeStamp() {
     const dateObj = new Date();
@@ -18,19 +18,17 @@ export abstract class LoggerService {
   }
 
   static log(message: string, serviceOperation?: string): Promise<void> | any {
-    isDebugging &&
+    this.isDebugging &&
       console.log(
-        `[${LoggerService.timeStamp()}][${LoggerService.source}${
-          serviceOperation ? ' - ' + serviceOperation : ''
+        `[${LoggerService.timeStamp()}][${LoggerService.source}${serviceOperation ? ' - ' + serviceOperation : ''
         }][INFO] - ${message}`,
       );
   }
 
   static warn(message: string, serviceOperation?: string): Promise<void> | any {
-    isDebugging &&
+    this.isDebugging &&
       console.warn(
-        `[${LoggerService.timeStamp()}][${LoggerService.source}${
-          serviceOperation ? ' - ' + serviceOperation : ''
+        `[${LoggerService.timeStamp()}][${LoggerService.source}${serviceOperation ? ' - ' + serviceOperation : ''
         }][WARN] - ${message}`,
       );
   }
@@ -46,11 +44,10 @@ export abstract class LoggerService {
       errMessage += `\r\n${innerError.message}`;
     }
 
-    isDebugging &&
-      console.error(
-        `[${LoggerService.timeStamp()}][${LoggerService.source}${
-          serviceOperation ? ' - ' + serviceOperation : ''
-        }][ERROR] - ${errMessage}`,
-      );
+    //this.isDebugging &&
+    console.error(
+      `[${LoggerService.timeStamp()}][${LoggerService.source}${serviceOperation ? ' - ' + serviceOperation : ''
+      }][ERROR] - ${errMessage}`,
+    );
   }
 }

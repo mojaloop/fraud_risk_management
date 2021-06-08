@@ -1,6 +1,16 @@
 import { config } from './config';
 import { Context } from 'koa';
 import App from './app';
+import apm from 'elastic-apm-node';
+
+if (config.apmLogging) {
+  apm.start({
+    serviceName: config.apmServiceName,
+    secretToken: config.apmSecretToken,
+    serverUrl: config.apmURL,
+    usePathAsTransactionName: true,
+  });
+}
 
 const app = new App();
 

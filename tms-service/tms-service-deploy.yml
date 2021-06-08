@@ -1,14 +1,14 @@
 version: 1.0
 provider:
   name: openfaas
-  gateway: http://20.49.140.12:8080
+  gateway: http://20.90.137.195:8080
 language: node14
 fprocess: node build/index.js
 functions:
-  off-tms-service:
+  off-transaction-monitoring-service:
     lang: dockerfile
     handler: .
-    image: frmacr.azurecr.io/frm-tms-service:latest
+    image: frmacr.azurecr.io/frm-transaction-monitoring-service:latest
     annotations:
       com.openfaas.health.http.path: /health
       com.openfaas.health.http.initialDelay: "45s"
