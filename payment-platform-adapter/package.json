@@ -35,6 +35,8 @@
   ],
   "license": "ISC",
   "dependencies": {
+    "@log4js-node/logstash-http": "^1.1.0",
+    "@log4js-node/logstashudp": "^1.2.1",
     "arangojs": "^7.5.0",
     "axios": "^0.21.1",
     "dotenv": "8.2.0",
@@ -42,6 +44,7 @@
     "koa": "^2.13.1",
     "koa-bodyparser": "^4.3.0",
     "koa-router": "^10.0.0",
+    "log4js": "^6.3.0",
     "redis": "^3.1.2",
     "swagger2": "^3.0.0",
     "swagger2-koa": "^3.0.0"
@@ -53,6 +56,7 @@
     "@types/koa": "^2.13.1",
     "@types/koa-bodyparser": "^4.3.0",
     "@types/koa-router": "^7.4.2",
+    "@types/log4js": "^2.3.5",
     "@types/node": "^14.14.43",
     "@types/redis": "^2.8.28",
     "@types/supertest": "^2.0.10",

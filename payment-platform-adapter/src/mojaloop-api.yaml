@@ -1,101 +1,127 @@
-swagger: "2.0"
+swagger: '2.0'
 info:
-  title: "Swagger Example"
+  title: 'Swagger Example'
   description: >
     FRM transaction validation.
-  version: "0.1.0"
+  version: '0.1.0'
 schemes:
-  - "http"
+  - 'http'
 paths:
   /:
     get:
-      summary: "Check the status of the service"
+      summary: 'Check the status of the service'
       description: "If the service is up and running correctly the response will be 'UP'"
       consumes:
-        - "application/json"
+        - 'application/json'
       produces:
-        - "application/json"
+        - 'application/json'
       responses:
         200:
-          description: "successful operation"
+          description: 'successful operation'
           schema:
-            $ref: "#/definitions/Health"
+            $ref: '#/definitions/Health'
         500:
-          $ref: "#/responses/500"
+          $ref: '#/responses/500'
   /health:
     get:
-      summary: "Check the status of the service"
+      summary: 'Check the status of the service'
       description: "If the service is up and running correctly the response will be 'UP'"
       consumes:
-        - "application/json"
+        - 'application/json'
       produces:
-        - "application/json"
+        - 'application/json'
       responses:
         200:
-          description: "successful operation"
+          description: 'successful operation'
           schema:
-            $ref: "#/definitions/Health"
+            $ref: '#/definitions/Health'
         500:
-          $ref: "#/responses/500"
+          $ref: '#/responses/500'
   /execute:
     post:
-      summary: "Monitor transaction"
-      description: "Mojaloop Transation"
+      summary: 'Monitor transaction'
+      description: 'Mojaloop Transation'
       consumes:
-        - "application/json"
+        - 'application/json'
       produces:
-        - "application/json"
+        - 'application/json'
       parameters:
-        - in: "body"
-          name: "body"
-          description: "Validates request params"
+        - in: 'body'
+          name: 'body'
+          description: 'Validates request params'
           required: true
           schema:
-            $ref: "#/definitions/mojaloopQuotePostRequest"
+            $ref: '#/definitions/mojaloopQuotePostRequest'
       responses:
         200:
-          description: "successful operation"
+          description: 'successful operation'
           schema:
-            $ref: "#/definitions/CustomerCreditTransferInitiationV11"
+            $ref: '#/definitions/CustomerCreditTransferInitiationV11'
         400:
-          $ref: "#/responses/400"
+          $ref: '#/responses/400'
         401:
-          $ref: "#/responses/401"
+          $ref: '#/responses/401'
         500:
-          $ref: "#/responses/500"
+          $ref: '#/responses/500'
+  /transfers:
+    post:
+      summary: 'Transfer'
+      description: 'Mojaloop transfer message interpreter'
+      consumes:
+        - 'application/json'
+      produces:
+        - 'application/json'
+      parameters:
+        - in: 'body'
+          name: 'body'
+          description: 'Validates request params'
+          required: true
+      responses:
+        200:
+          description: 'successful operation'
+          schema:
+            $ref: '#/definitions/Transfer'
+        400:
+          $ref: '#/responses/400'
+        401:
+          $ref: '#/responses/401'
+        500:
+          $ref: '#/responses/500'
 
 responses:
   400:
     description: Bad Request
     schema:
-      $ref: "#/definitions/Error"
+      $ref: '#/definitions/Error'
   401:
     description: Unauthorized
     schema:
-      $ref: "#/definitions/Error"
+      $ref: '#/definitions/Error'
   500:
     description: Internal Server Error
     schema:
-      $ref: "#/definitions/Error"
+      $ref: '#/definitions/Error'
 
 definitions:
   Health:
-    type: "object"
+    type: 'object'
     properties:
       status:
-        type: "string"
+        type: 'string'
         enum:
-          - "UP"
-          - "DOWN"
+          - 'UP'
+          - 'DOWN'
+  Transfer:
+    type: 'object'
   Transaction:
-    type: "object"
+    type: 'object'
     required:
       - AuthenticationType
     properties:
       AuthenticationType:
         type: string
   TransactionType:
-    type: "object"
+    type: 'object'
     required:
       - TransactionScenario
     properties:
@@ -106,7 +132,7 @@ definitions:
       TransactionInitiatorType:
         type: string
   partyIdInfo:
-    type: "object"
+    type: 'object'
     required:
       - partyIdType
       - partyIdentifier
@@ -116,45 +142,45 @@ definitions:
       - firstName
       - lastName
   personalInfo:
-    type: "object"
+    type: 'object'
     required:
       - complexName
       - dateOfBirth
     properties:
       complexName:
-        $ref: "#/definitions/complexName"
+        $ref: '#/definitions/complexName'
       dateOfBirth:
-        type: "string"
+        type: 'string'
   Payer:
-    type: "object"
+    type: 'object'
     required:
       - partyIdInfo
       - personalInfo
     properties:
       partyIdInfo:
-        $ref: "#/definitions/partyIdInfo"
+        $ref: '#/definitions/partyIdInfo'
       personalInfo:
-        $ref: "#/definitions/personalInfo"
+        $ref: '#/definitions/personalInfo'
   Payee:
-    type: "object"
+    type: 'object'
     required:
       - partyIdInfo
     properties:
       partyIdInfo:
-        $ref: "#/definitions/partyIdInfo"
+        $ref: '#/definitions/partyIdInfo'
   amount:
-    type: "object"
+    type: 'object'
     required:
       - amount
       - currency
   transactionType:
-    type: "object"
+    type: 'object'
     required:
       - scenario
       - initiator
       - initiatorType
-  mojaloopQuotePostRequest: 
-    type: "object"
+  mojaloopQuotePostRequest:
+    type: 'object'
     required:
       - quoteId
       - transactionId
@@ -169,203 +195,203 @@ definitions:
       transactionId:
         type: string
       payer:
-        $ref: "#/definitions/Payer"
+        $ref: '#/definitions/Payer'
       payee:
-        $ref: "#/definitions/Payee"
+        $ref: '#/definitions/Payee'
       amountType:
         type: string
       amount:
-        $ref: "#/definitions/amount"
+        $ref: '#/definitions/amount'
       transactionType:
-        $ref: "#/definitions/transactionType"
+        $ref: '#/definitions/transactionType'
   CustomerCreditTransferInitiationV11:
     type: object
     properties:
       GroupHeader:
-        $ref: "#/definitions/GroupHeader"
+        $ref: '#/definitions/GroupHeader'
       PaymentInformation:
-        $ref: "#/definitions/PaymentInformation"
+        $ref: '#/definitions/PaymentInformation'
       SupplementaryData:
-        $ref: "#/definitions/SupplementaryData"
+        $ref: '#/definitions/SupplementaryData'
     required:
       - GroupHeader
       - PaymentInformation
-  PaymentInformation: 
+  PaymentInformation:
     type: object
-    properties: 
-      PaymentInformationIdentification: 
+    properties:
+      PaymentInformationIdentification:
         type: string
         maxLength: 35
-      CreditTransferTransactionInformation: 
+      CreditTransferTransactionInformation:
         type: object
-        properties: 
-          PaymentIdentification: 
+        properties:
+          PaymentIdentification:
             type: object
-            properties: 
-              EndToEndIdentification: 
+            properties:
+              EndToEndIdentification:
                 type: string
                 maxLength: 35
             required:
               - EndToEndIdentification
-          CreditorAccount: 
+          CreditorAccount:
             type: object
-            properties: 
-              Identification: 
+            properties:
+              Identification:
                 type: object
-                properties: 
-                  Identification: 
+                properties:
+                  Identification:
                     type: string
-                  Other: 
+                  Other:
                     type: object
-                    properties: 
-                      Identification: 
+                    properties:
+                      Identification:
                         type: string
                         maxLength: 34
-                      SchemeName: 
+                      SchemeName:
                         type: object
-                        properties: 
-                          Proprietary: 
+                        properties:
+                          Proprietary:
                             type: string
                             maxLength: 35
                         required:
                           - Proprietary
-                      PrivateIdentification: 
+                      PrivateIdentification:
                         type: object
-                        properties: 
-                          DateAndPlaceOfBirth: 
+                        properties:
+                          DateAndPlaceOfBirth:
                             type: object
-                            properties: 
-                              Birthdate: 
+                            properties:
+                              Birthdate:
                                 type: string
-                      ContactDetails: 
+                      ContactDetails:
                         type: object
-                        properties: 
-                          MobileNumber: 
+                        properties:
+                          MobileNumber:
                             type: string
-                    required: 
+                    required:
                       - Identification
-                  SchemeName: 
+                  SchemeName:
                     type: object
-                    properties: 
-                      Proprietary: 
+                    properties:
+                      Proprietary:
                         type: string
                         maxLength: 35
                     required:
                       - Proprietary
-                  PrivateIdentification: 
+                  PrivateIdentification:
                     type: object
-                    properties: 
-                      DateAndPlaceOfBirth: 
+                    properties:
+                      DateAndPlaceOfBirth:
                         type: object
-                        properties: 
-                          Birthdate: 
+                        properties:
+                          Birthdate:
                             type: string
-                  ContactDetails: 
+                  ContactDetails:
                     type: object
-                    properties: 
-                      MobileNumber: 
+                    properties:
+                      MobileNumber:
                         type: string
-              Proxy: 
+              Proxy:
                 type: string
-              Name: 
+              Name:
                 type: string
-          CreditorAgent: 
+          CreditorAgent:
             type: object
-            properties: 
-              FinancialInstitutionIdentification: 
+            properties:
+              FinancialInstitutionIdentification:
                 type: object
-                properties: 
-                  ClearingSystemMemberIdentification: 
+                properties:
+                  ClearingSystemMemberIdentification:
                     type: object
-                    properties: 
-                      MemberIdentification: 
+                    properties:
+                      MemberIdentification:
                         type: string
                         maxLength: 35
-                    required: 
+                    required:
                       - MemberIdentification
-          Creditor: 
+          Creditor:
             type: object
-            properties: 
-              Name: 
+            properties:
+              Name:
                 type: string
                 maxLength: 140
-              Identification: 
+              Identification:
                 type: object
-                properties: 
-                  Identification: 
+                properties:
+                  Identification:
                     type: string
-                  Other: 
+                  Other:
                     type: object
-                    properties: 
-                      Identification: 
+                    properties:
+                      Identification:
                         type: string
-                      SchemeName: 
+                      SchemeName:
                         type: object
-                        properties: 
-                          Proprietary: 
+                        properties:
+                          Proprietary:
                             type: string
                             maxLength: 35
                         required:
                           - Proprietary
-                      PrivateIdentification: 
+                      PrivateIdentification:
                         type: object
-                        properties: 
-                          DateAndPlaceOfBirth: 
+                        properties:
+                          DateAndPlaceOfBirth:
                             type: object
-                            properties: 
-                              Birthdate: 
+                            properties:
+                              Birthdate:
                                 type: string
                                 format: date
                               ProvinceOfBirth:
                                 type: string
-                              CityOfBirth: 
+                              CityOfBirth:
                                 type: string
                                 maxLength: 35
-                              CountryOfBirth: 
+                              CountryOfBirth:
                                 type: string
                                 pattern: '[A-Z]{2,2}'
                             required:
                               - Birthdate
                               - CityOfBirth
                               - CountryOfBirth
-                      ContactDetails: 
+                      ContactDetails:
                         type: object
-                        properties: 
-                          MobileNumber: 
+                        properties:
+                          MobileNumber:
                             type: string
-                  SchemeName: 
+                  SchemeName:
                     type: object
-                    properties: 
-                      Proprietary: 
+                    properties:
+                      Proprietary:
                         type: string
                         maxLength: 35
                     required:
                       - Proprietary
-                  PrivateIdentification: 
+                  PrivateIdentification:
                     type: object
-                    properties: 
-                      DateAndPlaceOfBirth: 
+                    properties:
+                      DateAndPlaceOfBirth:
                         type: object
-                        properties: 
-                          Birthdate: 
+                        properties:
+                          Birthdate:
                             type: string
-                  ContactDetails: 
+                  ContactDetails:
                     type: object
-                    properties: 
-                      MobileNumber: 
+                    properties:
+                      MobileNumber:
                         type: string
-          Amount: 
+          Amount:
             type: object
-            properties: 
-              InstructedAmount: 
+            properties:
+              InstructedAmount:
                 type: object
-              EquivalentAmount: 
+              EquivalentAmount:
                 type: object
-                properties: 
-                  CurrencyOfTransfer: 
+                properties:
+                  CurrencyOfTransfer:
                     type: string
                     pattern: '[A-Z]{3,3}'
-                  Amount: 
+                  Amount:
                     type: number
                     format: float
                     minimum: 0
@@ -373,282 +399,282 @@ definitions:
                 required:
                   - CurrencyOfTransfer
                   - Amount
-          SupplementaryData: 
+          SupplementaryData:
             type: object
-            properties: 
-              fees.currency: 
+            properties:
+              fees.currency:
                 type: string
-              fees.amount: 
+              fees.amount:
                 type: number
                 format: float
                 minimum: 0
-          PaymentTypeInformation: 
+          PaymentTypeInformation:
             type: object
-            properties: 
-              CategoryPurpose: 
+            properties:
+              CategoryPurpose:
                 type: object
-                properties: 
-                  Proprietary: 
+                properties:
+                  Proprietary:
                     type: string
                     maxLength: 35
                 required:
                   - Proprietary
-          RegulatoryReporting: 
+          RegulatoryReporting:
             type: object
-            properties: 
-              Details: 
+            properties:
+              Details:
                 type: object
-                properties: 
-                  Code: 
+                properties:
+                  Code:
                     type: string
                     maxLength: 10
-          RemittanceInformation: 
+          RemittanceInformation:
             type: object
-            properties: 
-              Structured: 
+            properties:
+              Structured:
                 type: object
-                properties: 
-                  AdditionalRemittanceInformation: 
+                properties:
+                  AdditionalRemittanceInformation:
                     type: string
                     maxLength: 140
-      DebtorAccount: 
+      DebtorAccount:
         type: object
-        properties: 
-          Identification: 
+        properties:
+          Identification:
             type: object
-            properties: 
-              Identification: 
+            properties:
+              Identification:
                 type: string
-              Other: 
+              Other:
                 type: object
-                properties: 
-                  Identification: 
+                properties:
+                  Identification:
                     type: string
                     maxLength: 34
-                  SchemeName: 
+                  SchemeName:
                     type: object
-                    properties: 
-                      Proprietary: 
+                    properties:
+                      Proprietary:
                         type: string
                         maxLength: 35
                     required:
                       - Proprietary
-                  PrivateIdentification: 
+                  PrivateIdentification:
                     type: object
-                    properties: 
-                      DateAndPlaceOfBirth: 
+                    properties:
+                      DateAndPlaceOfBirth:
                         type: object
-                        properties: 
-                          Birthdate: 
+                        properties:
+                          Birthdate:
                             type: string
-                  ContactDetails: 
+                  ContactDetails:
                     type: object
-                    properties: 
-                      MobileNumber: 
+                    properties:
+                      MobileNumber:
                         type: string
-              SchemeName: 
+              SchemeName:
                 type: object
-                properties: 
-                  Proprietary: 
+                properties:
+                  Proprietary:
                     type: string
                     maxLength: 35
                 required:
                   - Proprietary
-              PrivateIdentification: 
+              PrivateIdentification:
                 type: object
-                properties: 
-                  DateAndPlaceOfBirth: 
+                properties:
+                  DateAndPlaceOfBirth:
                     type: object
-                    properties: 
-                      Birthdate: 
+                    properties:
+                      Birthdate:
                         type: string
-              ContactDetails: 
+              ContactDetails:
                 type: object
-                properties: 
-                  MobileNumber: 
-                    type: string            
-            required: 
+                properties:
+                  MobileNumber:
+                    type: string
+            required:
               - Identification
-          Proxy: 
+          Proxy:
             type: string
-          Name: 
+          Name:
             type: string
             maxLength: 140
-      DebtorAgent: 
+      DebtorAgent:
         type: object
-        properties: 
-          FinancialInstitutionIdentification: 
+        properties:
+          FinancialInstitutionIdentification:
             type: object
-            properties: 
-              ClearingSystemMemberIdentification: 
+            properties:
+              ClearingSystemMemberIdentification:
                 type: object
-                properties: 
-                  MemberIdentification: 
+                properties:
+                  MemberIdentification:
                     type: string
                     maxLength: 35
                 required:
                   - MemberIdentification
-      Debtor: 
+      Debtor:
         type: object
-        properties: 
-          Name: 
+        properties:
+          Name:
             type: string
             maxLength: 140
-          Identification: 
+          Identification:
             type: object
-            properties: 
-              Identification: 
+            properties:
+              Identification:
                 type: string
-              Other: 
+              Other:
                 type: object
-                properties: 
-                  Identification: 
+                properties:
+                  Identification:
                     type: string
-                  SchemeName: 
+                  SchemeName:
                     type: object
-                    properties: 
-                      Proprietary: 
+                    properties:
+                      Proprietary:
                         type: string
                         maxLength: 35
                     required:
                       - Proprietary
-                  PrivateIdentification: 
+                  PrivateIdentification:
                     type: object
-                    properties: 
-                      DateAndPlaceOfBirth: 
+                    properties:
+                      DateAndPlaceOfBirth:
                         type: object
-                        properties: 
-                          Birthdate: 
+                        properties:
+                          Birthdate:
                             type: string
-                  ContactDetails: 
+                  ContactDetails:
                     type: object
-                    properties: 
-                      MobileNumber: 
+                    properties:
+                      MobileNumber:
                         type: string
-              SchemeName: 
+              SchemeName:
                 type: object
-                properties: 
-                  Proprietary: 
+                properties:
+                  Proprietary:
                     type: string
                     maxLength: 35
                 required:
                   - Proprietary
-              PrivateIdentification: 
+              PrivateIdentification:
                 type: object
-                properties: 
-                  DateAndPlaceOfBirth: 
+                properties:
+                  DateAndPlaceOfBirth:
                     type: object
-                    properties: 
-                      Birthdate: 
+                    properties:
+                      Birthdate:
                         type: string
                         format: date
                       ProvinceOfBirth:
                         type: string
-                      CityOfBirth: 
+                      CityOfBirth:
                         type: string
                         maxLength: 35
-                      CountryOfBirth: 
+                      CountryOfBirth:
                         type: string
                         pattern: '[A-Z]{2,2}'
                     required:
                       - Birthdate
                       - CityOfBirth
-                      - CountryOfBirth              
-              ContactDetails: 
+                      - CountryOfBirth
+              ContactDetails:
                 type: object
-                properties: 
-                  MobileNumber: 
+                properties:
+                  MobileNumber:
                     type: string
-    required: 
+    required:
       - PaymentInformationIdentification
       - CreditTransferTransactionInformation
       - DebtorAccount
       - DebtorAgent
       - Debtor
-  SupplementaryData: 
+  SupplementaryData:
     type: object
-    properties: 
-      payee.merchantClassificationCode: 
+    properties:
+      payee.merchantClassificationCode:
         type: string
-      payer.merchantClassificationCode: 
+      payer.merchantClassificationCode:
         type: string
-      transactionType.initiatorType: 
+      transactionType.initiatorType:
         type: string
-      geoCode.latitude: 
+      geoCode.latitude:
         type: string
-      geoCode.longitude: 
+      geoCode.longitude:
         type: string
-  GroupHeader: 
+  GroupHeader:
     type: object
-    properties: 
-      InitiatingParty: 
+    properties:
+      InitiatingParty:
         type: object
-        properties: 
-          Name: 
+        properties:
+          Name:
             type: string
             maxLength: 140
-          Identification: 
+          Identification:
             type: object
-            properties: 
-              Identification: 
+            properties:
+              Identification:
                 type: string
-              Other: 
+              Other:
                 type: object
-                properties: 
-                  Identification: 
+                properties:
+                  Identification:
                     type: string
-                  SchemeName: 
+                  SchemeName:
                     type: object
-                    properties: 
-                      Proprietary: 
+                    properties:
+                      Proprietary:
                         type: string
                         maxLength: 35
                     required:
                       - Proprietary
-                  PrivateIdentification: 
+                  PrivateIdentification:
                     type: object
-                    properties: 
-                      DateAndPlaceOfBirth: 
+                    properties:
+                      DateAndPlaceOfBirth:
                         type: object
-                        properties: 
-                          Birthdate: 
+                        properties:
+                          Birthdate:
                             type: string
-                  ContactDetails: 
+                  ContactDetails:
                     type: object
-                    properties: 
-                      MobileNumber: 
+                    properties:
+                      MobileNumber:
                         type: string
-              SchemeName: 
+              SchemeName:
                 type: object
-                properties: 
-                  Proprietary: 
+                properties:
+                  Proprietary:
                     type: string
                     maxLength: 35
                 required:
                   - Proprietary
-              PrivateIdentification: 
+              PrivateIdentification:
                 type: object
-                properties: 
-                  DateAndPlaceOfBirth: 
+                properties:
+                  DateAndPlaceOfBirth:
                     type: object
-                    properties: 
-                      Birthdate: 
+                    properties:
+                      Birthdate:
                         type: string
-              ContactDetails: 
+              ContactDetails:
                 type: object
-                properties: 
-                  MobileNumber: 
+                properties:
+                  MobileNumber:
                     type: string
                     pattern: '\+[0-9]{1,3}-[0-9()+\-]{1,30}'
 
   Error:
-    type: "object"
+    type: 'object'
     properties:
       data:
-        type: "object"
+        type: 'object'
         properties:
           error:
-            type: "string"
+            type: 'string'
 parameters:
   accept:
     in: header

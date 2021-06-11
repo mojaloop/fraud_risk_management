@@ -64,7 +64,7 @@ export interface payer {
   personalInfo: personalInfo;
 }
 
-export interface iMLTransaction {
+export interface iMLQuote {
   quoteId: string;
   transactionId: string;
   transactionRequestId: string;
