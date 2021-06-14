@@ -59,8 +59,10 @@ ENV TMS_ENDPOINT=http://gateway.frm:8080/function/off-transaction-monitoring-ser
 ENV APM_LOGGING=true
 ENV APM_SERVICE_NAME=payment-platfrom-adapter
 ENV APM_URL=http://apm-server-apm-server.frm:8200
-ENV APM_SECRET_TOKEN=token string here
+ENV APM_SECRET_TOKEN=
 ENV NODE_ENV=dev
+ENV LOGSTASH_HOST=my-release-logstash.frm-meshed
+ENV LOGSTASH_PORT=8080
 
 HEALTHCHECK --interval=3s CMD [ -e /tmp/.lock ] || exit 1
 
