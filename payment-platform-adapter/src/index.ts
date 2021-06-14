@@ -4,6 +4,7 @@ import { Context } from 'koa';
 import App from './app';
 import apm from 'elastic-apm-node';
 import { LoggerService } from './helpers';
+import log4js from 'log4js';
 
 if (configuration.apmLogging) {
   apm.start({
@@ -24,6 +25,7 @@ export function handleError(err: Error, ctx: Context): void {
 
 export function terminate(signal: NodeJS.Signals): void {
   try {
+    log4js.shutdown();
     app.terminate();
   } finally {
     LoggerService.warn(`Signal: ${signal}; event: 'terminate'; 'App is terminated'`);

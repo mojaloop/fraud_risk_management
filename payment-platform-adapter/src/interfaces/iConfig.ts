@@ -7,4 +7,6 @@ export interface IConfig {
   apmSecretToken: string;
   apmURL: string;
   dev: string;
+  logstashHost: string;
+  logstashPort: number;
 }

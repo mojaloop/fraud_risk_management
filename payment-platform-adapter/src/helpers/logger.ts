@@ -1,6 +1,34 @@
-/* eslint-disable @typescript-eslint/no-explicit-any, no-console */
+/* eslint-disable @typescript-eslint/no-explicit-any, no-logger */
 import { configuration } from '../config';
+import log4js from 'log4js';
 
+/*
+ Sample logstash config:
+   udp {
+    codec => json
+    port => 10001
+    queue_size => 2
+    workers => 2
+    type => myAppType
+  }
+*/
+
+log4js.configure({
+  appenders: {
+    logstash: {
+      type: '@log4js-node/logstash-http',
+      url: `http://${configuration.logstashHost}:${configuration.logstashPort}/_bulk`, 
+      application: 'logstash-log4js', 
+      logType: 'application', 
+      logChannel: configuration.functionName
+    }
+  },
+  categories: {
+    default: { appenders: ['logstash'], level: 'info' }
+  }
+});
+
+const logger = log4js.getLogger();
 
 export abstract class LoggerService {
   private static source = configuration.functionName;
@@ -19,7 +47,7 @@ export abstract class LoggerService {
 
   static log(message: string, serviceOperation?: string): Promise<void> | any {
     this.isDebugging &&
-      console.log(
+      logger.info(
         `[${LoggerService.timeStamp()}][${LoggerService.source}${serviceOperation ? ' - ' + serviceOperation : ''
         }][INFO] - ${message}`,
       );
@@ -27,7 +55,7 @@ export abstract class LoggerService {
 
   static warn(message: string, serviceOperation?: string): Promise<void> | any {
     this.isDebugging &&
-      console.warn(
+      logger.warn(
         `[${LoggerService.timeStamp()}][${LoggerService.source}${serviceOperation ? ' - ' + serviceOperation : ''
         }][WARN] - ${message}`,
       );
@@ -45,7 +73,7 @@ export abstract class LoggerService {
     }
 
     //this.isDebugging &&
-    console.error(
+    logger.error(
       `[${LoggerService.timeStamp()}][${LoggerService.source}${serviceOperation ? ' - ' + serviceOperation : ''
       }][ERROR] - ${errMessage}`,
     );

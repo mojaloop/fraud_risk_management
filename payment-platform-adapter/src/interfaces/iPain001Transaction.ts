@@ -1,4 +1,4 @@
-import { iMLTransaction } from './iMLTransaction';
+import { iMLQuote } from './iMLQuote';
 
 String.prototype.toMobileNumber = function (this: string) {
   if (!this || this.length < 4)
@@ -145,7 +145,7 @@ export class CustomerCreditTransferInitiation {
   PaymentInformation: PaymentInformation = new PaymentInformation();
   SupplementaryData: SupplementaryData = new SupplementaryData(); // {"payer.merchantClassificationCode": "value", "payee.merchantClassificationCode": "value", "initiatorType": "person", "latitude": "123.45", "longitude": "1234.56"}
 
-  constructor(transaction: iMLTransaction) {
+  constructor(transaction: iMLQuote) {
     if (transaction === undefined) return;
     this.PaymentInformation.PaymentInformationIdentification =
       transaction.quoteId;

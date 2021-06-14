@@ -18,4 +18,6 @@ export const configuration: IConfig = {
   apmSecretToken: <string>process.env.APM_SECRET_TOKEN,
   apmURL: <string>process.env.APM_URL,
   dev: <string>process.env.NODE_ENV,
+  logstashHost: <string>process.env.LOGSTASH_HOST,
+  logstashPort: parseInt(process.env.LOGSTASH_PORT!, 10),
 };

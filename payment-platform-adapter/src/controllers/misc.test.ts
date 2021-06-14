@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { Context } from 'koa';
 import { configuration } from '../config';
-import { CustomerCreditTransferInitiation } from '../interfaces/iFRMTransaction';
+import { CustomerCreditTransferInitiation } from '../interfaces/iPain001Transaction';
 import { healthcheck, monitorTransaction } from './misc';
 
 describe('test misc functions', () => {
