@@ -1,83 +1,85 @@
-# TMS Service
+# TMS-Service
 
 The TMS service is a NodeJs REST-API service that ingests a FRM transaction and validates if it has the correct format.
 
-## Available Calls
+## Installation
 
-This service consist on a simple post request to validate a transaction.
-
-### GET - Online
-
-The online get request will respond with a message stating that the service is running and online.
-As a note, any get requests will return the online message since this service only uses POST for execution.
-
-**Example:**  
-Request:
-
-``` http
-http://{{host}}:{{port}}/
+```sh
+yarn
 ```
 
-Response:  
+## Build
 
-``` json
-{"status":"UP"}
+```sh
+yarn build # *.ts Also, triggers prebuild script
 ```
 
-### POST - Transaction
+1. Build proto files into typescript
+2. Build the project
 
-Validates that the Transaction body conforms to the Swagger validation.
+## Server Start
 
-**Example:**  
-
-Request:
-
-``` http
-http://{{host}}:{{port}}/monitor/transaction
+```sh
+yarn start # Builds and start the server
 ```
 
-Request Body:
+## Client Health Test
 
-``` json
-{
-  "TransactionID": "123e4567-e89b-12d3-a456-426614174000",
-  "ILPSourceAccountAddress": "Bank1.MSISDN.2507122015",
-  "ILPDestinationAccountAddress": "Bank2.MSISDN.25094672092",
-  "PayerContactNo": "2507122015",
-  "PayeeContactNo": "25094672092",
-  "Amount": "250.40",
-  "Fee": "250.40",
-  "Payer": {
-    "PartyIDType": "string", 
-    "PersonalIdentifierType": "string",
-    "PartyID": "string",
-    "PartyName": "string"
-  },
-  "Payee": {
-    "PartyName": "string"
-  },
-  "SourceAccountBalance": "5000.30",
-  "SourceAccountTransactionLimit": "500",
-  "SourceAccountDailyLimit": "1500",
-  "SourceAccountPINDate": "10/10/2010",
-  "PayerDeviceIMEI": "19283747590379",
-  "PayerICCID": "39iejdi3948",
-  "Location": "Ghana",
-  "Transaction": {
-    "AuthenticationType": "string"
-  },
-  "TransactionType": {
-    "TransactionScenario": "string",
-    "TransactionInitiator": "string",
-    "TransactionInitiatorType": "string"
+```sh
+curl --location --request GET 'localhost:3000/'
+```
+
+```json
+// Response
+{ "service": "Service-Name", "status": "UP" }
+```
+
+### gRPC Client Function
+
+We can create proto request with the grpc client functions.
+
+1. Create proto request with client function
+2. Triggers grpc server function
+3. Do the job and response
+
+```javascript
+class TMSService {
+  private readonly client: TMSClient = new TMSClient(`localhost:${config.grpcport}`, credentials.createInsecure());
+
+  public async execute(param: ExecuteRequest, metadata: Metadata = new Metadata()): Promise<ExecuteResponse> {
+    return new Promise((resolve: Resolve<ExecuteResponse>, reject: Reject): void => {
+      this.client.execute(param, metadata, (err: ServiceError | null, res: ExecuteResponse) => {
+        if (err) {
+          return reject(err);
+        }
+
+        resolve(res);
+      });
+    });
   }
 }
 ```
 
-Response:
+### gRPC Server Function
 
-``` text
-{
-  "result": "Transaction is valid"
-}
+```javascript
+public async execute(call: ServerUnaryCall<ExecuteRequest, ExecuteResponse>, callback: sendUnaryData<ExecuteResponse>): Promise<void> {
+    try {
+      const body = call.request.getBody();
+
+      const res: ExecuteResponse = new ExecuteResponse();
+
+      res.setData(res.getData());
+
+      callback(null, res);
+    } catch (e) {
+      logger.error(e);
+    }
+  }
 ```
+
+### References
+
+- [Node.js gRPC](https://grpc.io/grpc/node/grpc.html)
+- [Protocol Buffers](https://developers.google.com/protocol-buffers/docs/proto3)
+- [TypeScript d.ts plugin for gRPC Tools](https://github.com/agreatfool/grpc_tools_node_protoc_ts)

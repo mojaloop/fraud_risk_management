@@ -2,8 +2,6 @@ version: 1.0
 provider:
   name: openfaas
   gateway: http://20.90.137.195:8080
-language: node14
-fprocess: node build/index.js
 functions:
   off-transaction-monitoring-service:
     lang: dockerfile
