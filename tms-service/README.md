@@ -1,5 +1,7 @@
 # TMS-Service
 
+The TMS service is a NodeJs REST-API service that ingests a FRM transaction and validates if it has the correct format.
+
 ## Installation
 
 ```sh
