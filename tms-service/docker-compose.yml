@@ -1,5 +1,0 @@
-version: '2'
-services:
-  node:
-    image: frm-tms-service
-    restart: 'no'
