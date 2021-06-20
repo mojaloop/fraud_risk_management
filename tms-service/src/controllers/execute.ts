@@ -4,14 +4,6 @@ import { logger } from '../utils';
 import { FlowFileRequest } from '../../models/nifi_pb';
 import { nifiService } from '../clients/nifi';
 
-interface IRequest extends Context {
-  body: {
-    groupheader: any;
-    paymentinformation: any;
-    supplementarydata: any;
-  };
-}
-
 export const monitorTransaction = async (ctx: Context): Promise<Context> => {
   try {
     const reqData = ctx.body;

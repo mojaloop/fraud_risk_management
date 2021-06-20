@@ -18,7 +18,7 @@ log4js.configure({
   appenders: {
     logstash: {
       type: '@log4js-node/logstash-http',
-      url: `http://${configuration.logstashHost}:${configuration.logstashPort}/_bulk`,
+      url: `http://${config.logstashHost}:${config.logstashPort}/_bulk`,
       application: 'logstash-log4js',
       logType: 'application',
       logChannel: config.serviceName,
@@ -37,7 +37,7 @@ export type Parameter = [unknown?, ...unknown[]];
 class Logger {
   private readonly rootDir: string = dirname((<NodeModule>require.main).filename);
 
-  logger = log4js.getLogger();
+  log4js = log4js.getLogger();
 
   constructor() {
     if (process.env.pm_id) {
@@ -47,22 +47,22 @@ class Logger {
 
   public log(...args: Parameter): void {
     args.push(`- ${this.trace()}`);
-    logger.log(...args);
+    this.log4js.log(...args);
   }
 
   public info(...args: Parameter): void {
     args.push(`- ${this.trace()}`);
-    logger.info(...args);
+    this.log4js.info(...args);
   }
 
   public warn(...args: Parameter): void {
     args.push(`- ${this.trace()}`);
-    logger.warn(...args);
+    this.log4js.warn(...args);
   }
 
   public error(...args: Parameter): void {
     args.push(`- ${this.trace()}`);
-    logger.error(...args);
+    this.log4js.error(...args);
   }
 
   private trace(): string {
