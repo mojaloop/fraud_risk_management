@@ -2,11 +2,11 @@
   "name": "tms-service",
   "version": "0.0.1",
   "description": "Node.js (TypeScript) gRPC Service for TMS FRM",
-  "main": "dist/src/server.js",
+  "main": "build/src/server.js",
   "engines": {
     "node": ">=14"
   },
-  "types": "dist/index.d.ts",
+  "types": "build/index.d.ts",
   "keywords": [
     "mojaloop",
     "frm"
@@ -20,13 +20,13 @@
   "license": "ISC",
   "scripts": {
     "prebuild": "node bin/proto",
-    "build": "rimraf dist && tsc --project tsconfig.json && yarn run copy-files",
+    "build": "rimraf build && tsc --project tsconfig.json && yarn run copy-files",
     "prestart": "npm run build",
-    "start": "node dist/src/server",
+    "start": "node build/src/server",
     "dev": "ts-node-dev --respawn --transpile-only ./src/server.ts",
-    "client": "node dist/src/client",
-    "cleanup": "rm -rf dist template jest.config.js jest.config.js.map node_modules yarn.lock",
-    "copy-files": "copyfiles mojaloop-api.yaml dist/src",
+    "client": "node build/src/client",
+    "cleanup": "rm -rf build template jest.config.js jest.config.js.map node_modules yarn.lock",
+    "copy-files": "copyfiles mojaloop-api.yaml build/src",
     "fix": "yarn fix:prettier && yarn fix:eslint",
     "fix:eslint": "eslint --fix \"**/*.ts\"",
     "fix:prettier": "prettier --write \"**/*.ts\"",
