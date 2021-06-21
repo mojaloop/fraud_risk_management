@@ -6,6 +6,7 @@ import bodyParser from 'koa-bodyparser';
 import { Server } from 'http';
 import router from './router';
 import { logger } from './utils';
+import path from 'path';
 
 class App extends Koa {
   public servers: Server[];
@@ -21,7 +22,7 @@ class App extends Koa {
   }
 
   configureMiddlewares(): void {
-    const readSwagger = swagger.loadDocumentSync('./mojaloop-api.yaml');
+    const readSwagger = swagger.loadDocumentSync(path.join(__dirname, 'mojaloop-api.yaml'));
     const swaggerDocument: swagger.Document = readSwagger as swagger.Document;
     this.use(ui(swaggerDocument, '/swagger'));
     this.use(validate(swaggerDocument));
