@@ -1,8 +1,8 @@
 import { Context, Next } from 'koa';
-import { HealthCheckRequest } from '../../models/health_pb';
+import { HealthCheckRequest } from '../models/health_pb';
 import { healthService } from '../clients/health';
 import { config } from '../config';
-import { logger } from '../utils';
+import { LoggerService } from '../utils';
 
 export const healthCheck = async (ctx: Context, next: Next): Promise<void | Context> => {
   try {
@@ -41,8 +41,6 @@ export const healthCheck = async (ctx: Context, next: Next): Promise<void | Cont
 
     await next();
   } catch (error) {
-    logger.error(error);
-
-    ctx.body = { result: 'Something went wrong' };
+    ctx.body = { result: 'Something went wrong', error };
   }
 };

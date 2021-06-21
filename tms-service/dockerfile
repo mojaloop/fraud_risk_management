@@ -16,10 +16,6 @@ RUN apk add --no-cache -t build-dependencies git make gcc g++ python libtool aut
 # Turn down the verbosity to default level.
 ENV NPM_CONFIG_LOGLEVEL warn
 
-# chmod for tmp is for a buildkit issue
-# RUN chown app:app -R /home/app \
-# && chmod 777 /tmp
-
 USER app
 
 # Create a folder named function
@@ -57,13 +53,8 @@ ENV GRPC_PORT=50051
 ENV NIFI_HOST="new-new-nifi.frm"
 ENV NIFI_PORT=50051
 
-ENV LOGSTASH_HOST="127.0.0.1"
+ENV LOGSTASH_HOST=127.0.0.1
 ENV LOGSTASH_PORT=3000
-
-ENV APM_LOGGING=true
-ENV APM_SERVICE_NAME="transaction-monitoring-service"
-ENV APM_URL="http://apm-server-apm-server.frm:8200"
-ENV APM_SECRET_TOKEN="secrethere"
 
 HEALTHCHECK --interval=3s CMD [ -e /tmp/.lock ] || exit 1
 

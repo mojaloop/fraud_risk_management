@@ -1,7 +1,7 @@
 /* eslint-disable */
 import { Context } from 'koa';
-import { logger } from '../utils';
-import { FlowFileRequest } from '../../models/nifi_pb';
+import { LoggerService } from '../utils';
+import { FlowFileRequest } from '../models/nifi_pb';
 import { nifiService } from '../clients/nifi';
 
 export const monitorTransaction = async (ctx: Context): Promise<Context> => {
@@ -15,8 +15,6 @@ export const monitorTransaction = async (ctx: Context): Promise<Context> => {
 
     ctx.body = { result: resp.getBody() };
   } catch (e) {
-    logger.error(e);
-
     ctx.status = 500;
     ctx.body = e;
   }

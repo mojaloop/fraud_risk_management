@@ -1,8 +1,9 @@
+/* eslint-disable no-console */
 import { Server, ServerCredentials } from '@grpc/grpc-js';
 import Health from './services/health';
 import NiFi from './services/nifi';
 
-import { logger } from './utils';
+import { LoggerService } from './utils';
 import App from './app';
 import { config } from './config';
 
@@ -37,10 +38,10 @@ export const runServer = (): void => {
     }
 
     app.listen(config.restport, () => {
-      logger.info({ event: 'execute' }, `API restServer listening on PORT ${config.restport}`);
+      LoggerService.log(`API restServer listening on PORT ${config.restport}`);
     });
 
-    logger.info(`gRPC:Server:${bindPort}`, new Date().toLocaleString());
+    LoggerService.log(`gRPC:Server:${bindPort}`, new Date().toLocaleString());
     server.start();
   });
 };

@@ -1,18 +1,6 @@
-/* eslint-disable no-console, @typescript-eslint/keyword-spacing */
-import { dirname } from 'path';
-import log4js from 'log4js';
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { config } from '../config';
-
-/*
- Sample logstash config:
-   udp {
-    codec => json
-    port => 10001
-    queue_size => 2
-    workers => 2
-    type => myAppType
-  }
-*/
+import log4js from 'log4js';
 
 log4js.configure({
   appenders: {
@@ -29,55 +17,46 @@ log4js.configure({
   },
 });
 
-export type Parameter = [unknown?, ...unknown[]];
+const logger = log4js.getLogger();
 
-/**
- * Logger Class
- */
-class Logger {
-  private readonly rootDir: string = dirname((<NodeModule>require.main).filename);
+export abstract class LoggerService {
+  private static source = config.serviceName;
+  public static isDebugging = config.dev === 'dev';
 
-  log4js = log4js.getLogger();
+  private static timeStamp() {
+    const dateObj = new Date();
 
-  constructor() {
-    if (process.env.pm_id) {
-      this.rootDir = this.rootDir.replace('/dist', '/src');
-    }
+    let date = dateObj.toISOString();
+    date = date.substring(0, date.indexOf('T'));
+
+    const time = dateObj.toLocaleTimeString([], { hour12: false });
+
+    return `${date} ${time}`;
   }
 
-  public log(...args: Parameter): void {
-    args.push(`- ${this.trace()}`);
-    this.log4js.log(...args);
+  static log(message: string, serviceOperation?: string): Promise<void> | any {
+    this.isDebugging &&
+      logger.info(
+        `[${LoggerService.timeStamp()}][${LoggerService.source}${serviceOperation ? ' - ' + serviceOperation : ''}][INFO] - ${message}`,
+      );
   }
 
-  public info(...args: Parameter): void {
-    args.push(`- ${this.trace()}`);
-    this.log4js.info(...args);
+  static warn(message: string, serviceOperation?: string): Promise<void> | any {
+    this.isDebugging &&
+      logger.warn(
+        `[${LoggerService.timeStamp()}][${LoggerService.source}${serviceOperation ? ' - ' + serviceOperation : ''}][WARN] - ${message}`,
+      );
   }
 
-  public warn(...args: Parameter): void {
-    args.push(`- ${this.trace()}`);
-    this.log4js.warn(...args);
-  }
+  static error(message: string | Error, innerError?: Error, serviceOperation?: string): Promise<void> | any {
+    let errMessage = typeof message === 'string' ? message : message.stack;
 
-  public error(...args: Parameter): void {
-    args.push(`- ${this.trace()}`);
-    this.log4js.error(...args);
-  }
-
-  private trace(): string {
-    const lines: string[] = (<string>new Error().stack).split('\n').slice(1);
-    const lineMatch: RegExpMatchArray | null = /at (?:(.+)\s+)?\(?(?:(.+?):(\d+):(\d+)|([^)]+))\)?/.exec(lines[2]);
-
-    if (!lineMatch || lineMatch[2] === null || lineMatch[3] === null) {
-      return '';
+    if (innerError) {
+      errMessage += `\r\n${innerError.message}`;
     }
 
-    const fileName: string = lineMatch[2].split(this.rootDir)[1];
-    const line: string = lineMatch[3];
-
-    return `${fileName}:${line}`;
+    logger.error(
+      `[${LoggerService.timeStamp()}][${LoggerService.source}${serviceOperation ? ' - ' + serviceOperation : ''}][ERROR] - ${errMessage}`,
+    );
   }
 }
-
-export const logger: Logger = new Logger();

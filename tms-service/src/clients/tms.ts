@@ -1,8 +1,8 @@
 import { credentials, Metadata, ServiceError } from '@grpc/grpc-js';
 import { config } from '../config';
 
-import { TMSClient } from '../../models/tms_grpc_pb';
-import { ExecuteRequest, ExecuteResponse } from '../../models/tms_pb';
+import { TMSClient } from '../models/tms_grpc_pb';
+import { ExecuteRequest, ExecuteResponse } from '../models/tms_pb';
 
 /**
  * gRPC TMS Service

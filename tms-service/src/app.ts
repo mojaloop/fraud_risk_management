@@ -5,7 +5,7 @@ import { ui, validate } from 'swagger2-koa';
 import bodyParser from 'koa-bodyparser';
 import { Server } from 'http';
 import router from './router';
-import { logger } from './utils';
+import { LoggerService } from './utils';
 import path from 'path';
 
 class App extends Koa {
@@ -27,11 +27,11 @@ class App extends Koa {
     this.use(ui(swaggerDocument, '/swagger'));
     this.use(validate(swaggerDocument));
 
-    // logger
+    // LoggerService Middleware
     this.use(async (ctx, next) => {
       await next();
       const rt = ctx.response.get('X-Response-Time');
-      logger.log(`${ctx.method} ${ctx.url} - ${rt}`);
+      LoggerService.log(`${ctx.method} ${ctx.url} - ${rt}`);
     });
 
     // x-response-time

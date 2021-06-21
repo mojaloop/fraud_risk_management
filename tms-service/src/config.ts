@@ -15,7 +15,6 @@ const config: IConfig = {
   grpcport: parseInt(process.env.GRPC_PORT!, 10) || 50051,
   nifiHost: process.env.NIFI_HOST!,
   nifiPort: parseInt(process.env.NIFI_PORT!, 10) || 3000,
-  nifiRoute: process.env.NIFI_ROUTE!,
   logstashHost: <string>process.env.LOGSTASH_HOST,
   logstashPort: parseInt(process.env.LOGSTASH_PORT!, 10),
 };
