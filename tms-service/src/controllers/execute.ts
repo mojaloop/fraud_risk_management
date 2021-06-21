@@ -14,9 +14,12 @@ export const monitorTransaction = async (ctx: Context): Promise<Context> => {
     const resp = await nifiService.send(param);
 
     ctx.body = { result: resp.getBody() };
-  } catch (e) {
+  } catch (error) {
+    LoggerService.log(error as string);
     ctx.status = 500;
-    ctx.body = e;
+    ctx.body = {
+      error: error,
+    };
   }
 
   return ctx;

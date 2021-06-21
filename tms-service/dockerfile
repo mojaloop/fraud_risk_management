@@ -27,6 +27,7 @@ WORKDIR /home/app
 COPY ./package.json ./
 COPY ./yarn.lock ./
 COPY tsconfig.json ./
+COPY ./mojaloop-api.yaml ./
 
 # Install dependencies
 RUN yarn install

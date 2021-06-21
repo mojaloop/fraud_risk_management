@@ -41,6 +41,7 @@ export const healthCheck = async (ctx: Context, next: Next): Promise<void | Cont
 
     await next();
   } catch (error) {
+    LoggerService.log(error as string);
     ctx.body = { result: 'Something went wrong', error };
   }
 };
