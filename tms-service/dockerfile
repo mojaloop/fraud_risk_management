@@ -16,10 +16,6 @@ RUN apk add --no-cache -t build-dependencies git make gcc g++ python libtool aut
 # Turn down the verbosity to default level.
 ENV NPM_CONFIG_LOGLEVEL warn
 
-# chmod for tmp is for a buildkit issue
-# RUN chown app:app -R /home/app \
-# && chmod 777 /tmp
-
 USER app
 
 # Create a folder named function
@@ -30,15 +26,21 @@ WORKDIR /home/app
 
 COPY ./package.json ./
 COPY ./yarn.lock ./
+COPY tsconfig.json ./
+COPY ./mojaloop-api.yaml ./
 
 # Install dependencies
-RUN yarn
+RUN yarn install
 
-COPY ./dist ./
+COPY ./src ./src
+COPY ./global.d.ts ./
+
+# Build the project
+RUN yarn run build
 
 # Environment variables for openfaas
 ENV cgi_headers="true"
-ENV fprocess="node ./src/server.js"
+ENV fprocess="node ./build/server.js"
 ENV mode="http"
 ENV upstream_url="http://127.0.0.1:3000"
 
@@ -48,13 +50,17 @@ ENV read_timeout="15s"
 
 ENV prefix_logs="false"
 
+# Service-Based Enviroment Variables
 ENV SERVICE_NAME="tms-service"
 ENV NODE_ENV="dev"
 ENV REST_PORT=3000
 ENV GRPC_PORT=50051
 
-ENV NIFI_GRPC="new-new-nifi.frm"
+ENV NIFI_HOST="new-new-nifi.frm"
 ENV NIFI_PORT=50051
+
+ENV LOGSTASH_HOST=127.0.0.1
+ENV LOGSTASH_PORT=3000
 
 HEALTHCHECK --interval=3s CMD [ -e /tmp/.lock ] || exit 1
 

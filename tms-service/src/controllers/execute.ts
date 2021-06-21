@@ -1,16 +1,8 @@
 /* eslint-disable */
 import { Context } from 'koa';
-import { logger } from '../utils';
-import { FlowFileRequest } from '../../models/nifi_pb';
+import { LoggerService } from '../utils';
+import { FlowFileRequest } from '../models/nifi_pb';
 import { nifiService } from '../clients/nifi';
-
-interface IRequest extends Context {
-  body: {
-    groupheader: any;
-    paymentinformation: any;
-    supplementarydata: any;
-  };
-}
 
 export const monitorTransaction = async (ctx: Context): Promise<Context> => {
   try {
@@ -22,11 +14,12 @@ export const monitorTransaction = async (ctx: Context): Promise<Context> => {
     const resp = await nifiService.send(param);
 
     ctx.body = { result: resp.getBody() };
-  } catch (e) {
-    logger.error(e);
-
+  } catch (error) {
+    LoggerService.log(error as string);
     ctx.status = 500;
-    ctx.body = e;
+    ctx.body = {
+      error: error,
+    };
   }
 
   return ctx;

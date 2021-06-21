@@ -17,6 +17,12 @@ yarn build # *.ts Also, triggers prebuild script
 1. Build proto files into typescript
 2. Build the project
 
+If proto files doesn't exist in the model folder you may need to run
+
+```sh
+yarn build:proto
+```
+
 ## Server Start
 
 ```sh

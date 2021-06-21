@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 import { sendUnaryData, ServerUnaryCall, UntypedHandleCall } from '@grpc/grpc-js';
-import { logger } from '../utils';
-import { IFlowFileServiceServer, FlowFileServiceService } from '../../models/nifi_grpc_pb';
-import { FlowFileReply, FlowFileRequest } from '../../models/nifi_pb';
+import { IFlowFileServiceServer, FlowFileServiceService } from '../models/nifi_grpc_pb';
+import { FlowFileReply, FlowFileRequest } from '../models/nifi_pb';
 
 /**
  * gRPC Health Check
@@ -12,16 +11,12 @@ class Execute implements IFlowFileServiceServer {
   [method: string]: UntypedHandleCall;
 
   public send(call: ServerUnaryCall<FlowFileRequest, FlowFileReply>, callback: sendUnaryData<FlowFileReply>): void {
-    try {
-      const body = call.request.toObject();
-      const res: FlowFileReply = new FlowFileReply();
+    const body = call.request.toObject();
+    const res: FlowFileReply = new FlowFileReply();
 
-      res.setBody(body.toString());
+    res.setBody(body.toString());
 
-      callback(null, res);
-    } catch (e) {
-      logger.error(e);
-    }
+    callback(null, res);
   }
 }
 

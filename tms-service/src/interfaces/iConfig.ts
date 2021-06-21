@@ -5,7 +5,6 @@ export interface IConfig {
   grpcport: number;
   nifiHost: string;
   nifiPort: number;
-  nifiRoute: string;
   logstashHost: string;
   logstashPort: number;
 }
