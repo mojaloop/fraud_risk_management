@@ -26,15 +26,20 @@ WORKDIR /home/app
 
 COPY ./package.json ./
 COPY ./yarn.lock ./
+COPY tsconfig.json ./
 
 # Install dependencies
-RUN yarn
+RUN yarn install
 
-COPY ./build ./
+COPY ./src ./src
+COPY ./global.d.ts ./
+
+# Build the project
+RUN yarn run build
 
 # Environment variables for openfaas
 ENV cgi_headers="true"
-ENV fprocess="node ./src/server.js"
+ENV fprocess="node ./build/server.js"
 ENV mode="http"
 ENV upstream_url="http://127.0.0.1:3000"
 

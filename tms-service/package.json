@@ -2,7 +2,6 @@
   "name": "tms-service",
   "version": "0.0.1",
   "description": "Node.js (TypeScript) gRPC Service for TMS FRM",
-  "main": "build/src/server.js",
   "engines": {
     "node": ">=14"
   },
@@ -19,9 +18,8 @@
   ],
   "license": "ISC",
   "scripts": {
-    "prebuild": "node bin/proto",
-    "build": "rimraf build && tsc --project tsconfig.json && yarn run copy-files",
-    "prestart": "npm run build",
+    "build:proto": "node bin/proto",
+    "build": "tsc --project tsconfig.json && yarn run copy-files",
     "start": "node build/server",
     "dev": "ts-node-dev --respawn --transpile-only ./src/server.ts",
     "client": "node build/src/client",
