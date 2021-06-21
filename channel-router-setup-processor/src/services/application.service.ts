@@ -11,17 +11,13 @@ export class ApplicationService {
     this.logicService = new LogicService();
   }
 
-  async getOnline(
-    ctx: Context,
-  ) {
+  async getOnline(ctx: Context) {
     LoggerService.log('Received Online Request - Status: Online');
     ctx.status = 200;
     ctx.body = 'Channel-Orchestrator is online.';
   }
 
-  async execute(
-    ctx: Context,
-  ) {
+  async execute(ctx: Context) {
     let request!: ExecuteRequest;
     LoggerService.log('Start - Handle execute request');
     try {

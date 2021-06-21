@@ -1,9 +1,9 @@
-import { RedisClient } from 'redis';
-import { config } from '../config';
-import { LoggerService } from './logger.service';
-import { RedisClientService } from './redis-client.service';
+import { RedisClient } from "redis";
+import { config } from "../config";
+import { LoggerService } from "./logger.service";
+import { RedisClientService } from "./redis-client.service";
 
-describe('Redis Client Service', () => {
+describe("Redis Client Service", () => {
   const configData = config;
   let service: RedisClientService;
 
@@ -11,7 +11,7 @@ describe('Redis Client Service', () => {
     service = new RedisClientService();
   });
 
-  it('should initialize the redis client', () => {
+  it("should initialize the redis client", () => {
     const redisOptions = (service.client as Partial<RedisClient> & {
       options: {
         host: string;
@@ -27,18 +27,18 @@ describe('Redis Client Service', () => {
     expect(redisOptions.db).toBe(configData.redisDB);
   });
 
-  describe('Get', () => {
-    const expectedResult = 'Some Result';
+  describe("Get", () => {
+    const expectedResult = "Some Result";
     let errorSpy: jest.SpyInstance;
     let redisGetSpy: jest.SpyInstance;
 
     beforeEach(() => {
       errorSpy = jest
-        .spyOn(LoggerService, 'error')
+        .spyOn(LoggerService, "error")
         .mockImplementation(() => Promise.resolve());
 
       redisGetSpy = jest
-        .spyOn(service.client, 'GET')
+        .spyOn(service.client, "GET")
         .mockImplementation((key, cb) => {
           if (cb) {
             cb(null, expectedResult);
@@ -47,17 +47,17 @@ describe('Redis Client Service', () => {
         });
     });
 
-    it('should query redis with a get based on key and respond with the response', async () => {
-      const key = 'SomeKey';
+    it("should query redis with a get based on key and respond with the response", async () => {
+      const key = "SomeKey";
       const result = await service.get(key);
 
       expect(redisGetSpy).toBeCalledWith(key, expect.anything());
       expect(result).toEqual(expectedResult);
     });
 
-    it('should query redis with a get based on key and respond with empty and handle error on redis error', async () => {
-      const key = 'SomeKey';
-      const internalError = new Error('InternalError');
+    it("should query redis with a get based on key and respond with empty and handle error on redis error", async () => {
+      const key = "SomeKey";
+      const internalError = new Error("InternalError");
 
       redisGetSpy.mockImplementation((key, cb) => {
         if (cb) {
@@ -69,8 +69,12 @@ describe('Redis Client Service', () => {
       const result = await service.get(key);
 
       expect(redisGetSpy).toBeCalledWith(key, expect.anything());
-      expect(errorSpy).toBeCalledWith(`Error while getting ${key} from Redis with message:`, internalError, 'RedisClient');
-      expect(result).toEqual('');
+      expect(errorSpy).toBeCalledWith(
+        `Error while getting ${key} from Redis with message:`,
+        internalError,
+        "RedisClient"
+      );
+      expect(result).toEqual("");
     });
   });
 });

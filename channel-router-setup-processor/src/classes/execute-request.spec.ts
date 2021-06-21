@@ -1,16 +1,16 @@
-import { ExecuteRequest } from './execute-request';
+import { ExecuteRequest } from "./execute-request";
 
 const getMockRequest = () => {
   return {
-    TransactionID: 'SOMEGUID',
-    PayerContactNo: '0828288546',
-    PayeeContactNo: '0793456891',
+    TransactionID: "SOMEGUID",
+    PayerContactNo: "0828288546",
+    PayeeContactNo: "0793456891",
   };
 };
 
-describe('Execute Request', () => {
-  describe('Constructor', () => {
-    it('should validate a complete execute request', () => {
+describe("Execute Request", () => {
+  describe("Constructor", () => {
+    it("should validate a complete execute request", () => {
       const mockInit = getMockRequest();
 
       const result = new ExecuteRequest(mockInit);
@@ -20,14 +20,14 @@ describe('Execute Request', () => {
       expect(result.TransactionID).toEqual(mockInit.TransactionID);
     });
 
-    it('should validate a malformed request, no init passed', () => {
+    it("should validate a malformed request, no init passed", () => {
       const expectedErrorMessage =
-        'Execution request was not received in the request body';
+        "Execution request was not received in the request body";
       let expectedError!: Error;
       try {
-        const init = null as unknown as Partial<ExecuteRequest>;
+        const init = (null as unknown) as Partial<ExecuteRequest>;
         const result = new ExecuteRequest(init);
-        fail('Test should have thrown and handled an exception');
+        fail("Test should have thrown and handled an exception");
       } catch (error) {
         expectedError = error;
       }
@@ -35,15 +35,15 @@ describe('Execute Request', () => {
       expect(expectedError.message).toEqual(expectedErrorMessage);
     });
 
-    it('should validate a malformed request, no transaction ID', () => {
+    it("should validate a malformed request, no transaction ID", () => {
       const mockInit = getMockRequest();
-      mockInit.TransactionID = '';
+      mockInit.TransactionID = "";
       const expectedErrorMessage =
-        'Transaction ID is not present in execution request.';
+        "Transaction ID is not present in execution request.";
       let expectedError!: Error;
       try {
         const result = new ExecuteRequest(mockInit);
-        fail('Test should have thrown and handled an exception');
+        fail("Test should have thrown and handled an exception");
       } catch (error) {
         expectedError = error;
       }
@@ -51,15 +51,15 @@ describe('Execute Request', () => {
       expect(expectedError.message).toEqual(expectedErrorMessage);
     });
 
-    it('should validate a malformed request, no payer contact no', () => {
+    it("should validate a malformed request, no payer contact no", () => {
       const mockInit = getMockRequest();
-      mockInit.PayerContactNo = '';
+      mockInit.PayerContactNo = "";
       const expectedErrorMessage =
-        'PayerContactNo is not present in execution request.';
+        "PayerContactNo is not present in execution request.";
       let expectedError!: Error;
       try {
         const result = new ExecuteRequest(mockInit);
-        fail('Test should have thrown and handled an exception');
+        fail("Test should have thrown and handled an exception");
       } catch (error) {
         expectedError = error;
       }
@@ -67,15 +67,15 @@ describe('Execute Request', () => {
       expect(expectedError.message).toEqual(expectedErrorMessage);
     });
 
-    it('should validate a malformed request, no payee contact no', () => {
+    it("should validate a malformed request, no payee contact no", () => {
       const mockInit = getMockRequest();
-      mockInit.PayeeContactNo = '';
+      mockInit.PayeeContactNo = "";
       const expectedErrorMessage =
-        'PayeeContactNo is not present in execution request.';
+        "PayeeContactNo is not present in execution request.";
       let expectedError!: Error;
       try {
         const result = new ExecuteRequest(mockInit);
-        fail('Test should have thrown and handled an exception');
+        fail("Test should have thrown and handled an exception");
       } catch (error) {
         expectedError = error;
       }

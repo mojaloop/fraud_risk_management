@@ -24,7 +24,7 @@ export interface ITransaction {
   SourceAccountPINDate: string;
   SourceAccountTransactionLimit: string;
   TransactionAuthenticationType: string;
-  TransactionID: string;  
+  TransactionID: string;
   TransactionType: {
     AmountType: string;
     TransactionScenario: string;
@@ -32,4 +32,3 @@ export interface ITransaction {
     TransactionInitiatorType: string;
   };
 }
-  

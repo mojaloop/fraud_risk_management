@@ -2,7 +2,6 @@ import path from 'path';
 import { config as dotenv } from 'dotenv';
 import { IConfig } from './interfaces/iConfig';
 
-
 // Load .env file into process.env if it exists. This is convenient for running locally.
 dotenv({
   path: path.resolve(__dirname, '../.env'),
@@ -18,5 +17,4 @@ export const config: IConfig = {
   logstashPort: parseInt(process.env.LOGSTASH_PORT!, 10),
   grpcport: parseInt(process.env.GRPC_PORT!, 10) || 50051,
   networkMap: <string>process.env.NETWORK_MAP,
-
 };
