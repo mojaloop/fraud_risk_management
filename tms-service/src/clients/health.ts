@@ -1,9 +1,9 @@
 import { credentials, Metadata, ServiceError } from '@grpc/grpc-js';
 import { config } from '../config';
 
-import { HealthClient } from '../../models/health_grpc_pb';
-import { HealthCheckRequest, HealthCheckResponse } from '../../models/health_pb';
-import { logger } from '../utils';
+import { HealthClient } from '../models/health_grpc_pb';
+import { HealthCheckRequest, HealthCheckResponse } from '../models/health_pb';
+import { LoggerService } from '../utils';
 
 /**
  * gRPC HealthCheck Service
@@ -16,16 +16,16 @@ class HealthCheckService {
     return new Promise((resolve: Resolve<HealthCheckResponse>, reject: Reject): void => {
       this.client.check(param, metadata, (err: ServiceError | null, res: HealthCheckResponse) => {
         if (err) {
-          logger.error('healthCheck:', err);
+          LoggerService.error('healthCheck:', err);
           return reject(err);
         }
 
         const status: HealthCheckResponse.ServingStatus = res.getStatus();
         if (status !== HealthCheckResponse.ServingStatus.SERVING) {
-          return logger.error('healthCheck:', status);
+          return LoggerService.error(`healthCheck: ${status}`);
         }
 
-        logger.info('healthCheck:', status);
+        LoggerService.log(`healthCheck: ${status}`);
 
         resolve(res);
       });

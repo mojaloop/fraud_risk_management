@@ -1,6 +1,6 @@
 import { sendUnaryData, ServerUnaryCall, status, UntypedHandleCall } from '@grpc/grpc-js';
-import { HealthService, IHealthServer } from '../../models/health_grpc_pb';
-import { HealthCheckRequest, HealthCheckResponse } from '../../models/health_pb';
+import { HealthService, IHealthServer } from '../models/health_grpc_pb';
+import { HealthCheckRequest, HealthCheckResponse } from '../models/health_pb';
 import { ServiceError } from '../utils';
 
 const { ServingStatus } = HealthCheckResponse;
