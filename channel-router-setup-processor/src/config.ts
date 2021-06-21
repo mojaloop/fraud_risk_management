@@ -13,6 +13,10 @@ export const config: IConfig = {
   redisAuth: <string>process.env.REDIS_AUTH,
   redisHost: <string>process.env.REDIS_HOST,
   redisPort: parseInt(process.env.REDIS_PORT!, 10),
-  typologyMap: <string>process.env.TYPOLOGY_MAP,
-  hostPort: parseInt(process.env.HOST_PORT!, 10),
+  restPort: parseInt(process.env.REST_PORT!, 10),
+  logstashHost: <string>process.env.LOGSTASH_HOST,
+  logstashPort: parseInt(process.env.LOGSTASH_PORT!, 10),
+  grpcport: parseInt(process.env.GRPC_PORT!, 10) || 50051,
+  networkMap: <string>process.env.NETWORK_MAP,
+
 };

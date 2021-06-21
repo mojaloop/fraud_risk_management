@@ -3,6 +3,9 @@ export interface IConfig {
   redisAuth: string;
   redisHost: string;
   redisPort: number;
-  typologyMap: string;
-  hostPort: number;
+  grpcport: number;
+  restPort: number;
+  logstashHost: string;
+  logstashPort: number;
+  networkMap: string;
 }
