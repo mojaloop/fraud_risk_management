@@ -19,7 +19,7 @@ if (config.apmLogging) {
   });
 }
 
-export const runServer = (): void => {
+export const runServer = async (): Promise<void> => {
   const appService: ApplicationService = new ApplicationService();
 
   /**
@@ -55,20 +55,25 @@ export const runServer = (): void => {
   
   server.addService(Health.service, Health.handler);
   server.addService(ChannelRouter.service, ChannelRouter.handler);
-  server.addService(RuleEngineServer.service, RuleEngineServer.handler);
+  // server.addService(RuleEngineServer.service, RuleEngineServer.handler);
 
-  server.bindAsync(`0.0.0.0:${config.grpcport}`, ServerCredentials.createInsecure(), (err: Error | null, bindPort: number) => {
+  await server.bindAsync(`0.0.0.0:${config.grpcport}`, ServerCredentials.createInsecure(), (err: Error | null, bindPort: number) => {
     if (err) {
       throw err;
     }
 
-    app.listen(config.restPort, () => {
-      LoggerService.log(`API restServer listening on PORT ${config.restPort}`);
-    });
+    // app.listen(config.restPort, () => {
+    //   console.log(`API restServer listening on PORT ${config.restPort}`);
+    // });
 
-    LoggerService.log(`gRPC:Server:${bindPort}`, new Date().toLocaleString());
+    console.log(`gRPC:Server:${bindPort}`, new Date().toLocaleString());
     server.start();
   });
 
 }
-
+try{
+runServer();
+}
+catch(err) {
+  console.log(err);
+}

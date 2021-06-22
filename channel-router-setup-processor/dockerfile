@@ -11,17 +11,10 @@ RUN addgroup -S app && adduser -S -g app app
 
 RUN apk --no-cache add curl ca-certificates
 
-RUN apk add --no-cache -t build-dependencies git make gcc g++ python libtool autoconf automake yarn \
-    && cd $(npm root -g)/npm \
-    && npm config set unsafe-perm true \
-    && npm install -g node-gyp
+RUN apk add --no-cache -t build-dependencies git make gcc g++ python libtool autoconf automake yarn
 
 # Turn down the verbosity to default level.
 ENV NPM_CONFIG_LOGLEVEL warn
-
-# chmod for tmp is for a buildkit issue
-RUN chown app:app -R /home/app \
-    && chmod 777 /tmp
 
 # Create a folder named function
 RUN mkdir -p /home/app
@@ -29,9 +22,11 @@ RUN mkdir -p /home/app
 # Wrapper/boot-strapper
 WORKDIR /home/app
 
-COPY package.json ./
-COPY yarn.lock ./
-COPY tsconfig.json ./
+COPY ./package.json ./
+COPY ./yarn.lock ./
+COPY ./tsconfig.json ./
+COPY ./mojaloop-api.yaml ./
+COPY ./global.d.ts ./
 
 # Install dependencies
 # RUN yarn run cleanup
@@ -60,7 +55,7 @@ ENV REDIS_HOST='my-redis-master'
 # ENV REDIS_HOST='10.75.132.57'
 ENV REDIS_PORT=6379
 ENV REDIS_DB=0
-ENV NETWORK_MAP='[{"typologyName":"typology28","typologyEndpoint":"http://gateway:8080/function/off-typology-28/execute","rules":[{"ruleName":"rule2","ruleEndpoint":"http://gateway:8080/function/off-rule-002/execute"}]},{"typologyName":"typology214","typologyEndpoint":"http://gateway:8080/function/off-typology-214/execute","rules":[{"ruleName":"rule3","ruleEndpoint":"http://gateway:8080/function/off-rule-003/execute"}]}]'
+ENV NETWORK_MAP='[{"typologyName":"typology28","typologyEndpoint":"http://gateway:8080/function/off-typology-28.frm/execute","rules":[{"ruleName":"rule2","ruleEndpoint":"http://gateway:8080/function/off-rule-002.frm/execute"}]},{"typologyName":"typology214","typologyEndpoint":"http://gateway:8080/function/off-typology-214.frm/execute","rules":[{"ruleName":"rule3","ruleEndpoint":"http://gateway:8080/function/off-rule-003.frm/execute"}]}]'
 ENV REST_PORT=3000
 
 ENV FUNCTION_NAME=channel-router-setup-processor
@@ -71,8 +66,6 @@ ENV APM_SECRET_TOKEN=eyJhbGciOiJSUzI1NiIsImtpZCI6InRDZTJLUVotZU9ZdXN3cldINktjLTk
 ENV NODE_ENV=dev
 ENV LOGSTASH_HOST=my-release-logstash.frm-meshed
 ENV LOGSTASH_PORT=8080
-
-
 
 ENV prefix_logs="false"
 

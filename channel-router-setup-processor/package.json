@@ -9,7 +9,7 @@
     "build": "tsc --project tsconfig.json && yarn run copy-files",
     "cleanup": "rm -rf build template jest.config.js jest.config.js.map node_modules yarn.lock",
     "copy-files": "copyfiles mojaloop-api.yaml build",
-    "start": "npm run build && node build/index.js",
+    "start": "node build/index",
     "start:dev": "env $(cat .env.template) nodemon",
     "fix": "yarn fix:prettier && yarn fix:eslint",
     "fix:eslint": "eslint --fix \"**/*.ts\"",
@@ -19,7 +19,6 @@
     "lint:prettier": "prettier --check \"**/*.ts\"",
     "test": "jest --config=jest.config.js",
     "test:watch": "jest --config=jest.config.js --watch"
-    
   },
   "keywords": [],
   "contributors": [
@@ -33,6 +32,7 @@
     "@log4js-node/logstash-http": "^1.1.0",
     "@types/async": "^3.2.5",
     "@types/redis": "^2.8.28",
+    "@types/google-protobuf": "^3.15.2",
     "async": "^3.2.0",
     "copyfiles": "^2.4.1",
     "dotenv": "^8.2.0",
@@ -47,11 +47,11 @@
     "koa-router": "^10.0.0",
     "log4js": "^6.3.0",
     "protobufjs": "^6.11.2",
-    "redis": "^3.0.2"
+    "redis": "^3.0.2",
+    "shelljs": "^0.8.4"
   },
   "devDependencies": {
     "@types/express": "^4.17.11",
-    "@types/google-protobuf": "^3.15.2",
     "@types/jest": "^26.0.20",
     "@types/koa": "^2.13.1",
     "@types/koa-bodyparser": "^4.3.0",

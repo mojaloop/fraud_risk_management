@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 import { sendUnaryData, ServerUnaryCall, UntypedHandleCall } from '@grpc/grpc-js';
-import { IFlowFileServiceServer, FlowFileServiceService } from '../models/ruleEngine_grpc_pb';
-import { FlowFileReply, FlowFileRequest } from '../models/ruleEngine_pb';
+import { IFlowFileServiceServer, FlowFileServiceService } from '../models/channelRouter_grpc_pb';
+import { FlowFileReply, FlowFileRequest } from '../models/channelRouter_pb';
 
 /**
  * gRPC Health Check

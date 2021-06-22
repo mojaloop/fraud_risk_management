@@ -12,7 +12,7 @@ interface IFlowFileServiceService extends grpc.ServiceDefinition<grpc.UntypedSer
 }
 
 interface IFlowFileServiceService_ISend extends grpc.MethodDefinition<channelRouter_pb.FlowFileRequest, channelRouter_pb.FlowFileReply> {
-    path: "/org.apache.channelRouter.processors.grpc.FlowFileService/Send";
+    path: "/channelRouterService.FlowFileService/Send";
     requestStream: false;
     responseStream: false;
     requestSerialize: grpc.serialize<channelRouter_pb.FlowFileRequest>;

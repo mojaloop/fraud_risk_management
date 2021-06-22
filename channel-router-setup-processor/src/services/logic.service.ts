@@ -8,10 +8,8 @@ import { Rule, Typology, TypologyMap } from '../classes/typology-map';
 import { LoggerService } from './logger.service';
 
 export class LogicService {
-  redisClient: RedisClientService;
 
   constructor() {
-    this.redisClient = new RedisClientService();
   }
 
   async handleTransaction(req: ExecuteRequest) {
