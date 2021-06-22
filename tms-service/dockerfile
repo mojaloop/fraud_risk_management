@@ -26,14 +26,14 @@ WORKDIR /home/app
 
 COPY ./package.json ./
 COPY ./yarn.lock ./
-COPY tsconfig.json ./
+COPY ./tsconfig.json ./
 COPY ./mojaloop-api.yaml ./
+COPY ./global.d.ts ./
 
 # Install dependencies
 RUN yarn install
 
 COPY ./src ./src
-COPY ./global.d.ts ./
 
 # Build the project
 RUN yarn run build
@@ -51,8 +51,8 @@ ENV read_timeout="15s"
 ENV prefix_logs="false"
 
 # Service-Based Enviroment Variables
-ENV SERVICE_NAME="tms-service"
-ENV NODE_ENV="dev"
+ENV SERVICE_NAME="tmsService"
+ENV NODE_ENV="prod"
 ENV REST_PORT=3000
 ENV GRPC_PORT=50051
 

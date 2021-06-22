@@ -46,4 +46,12 @@ export const runServer = (): void => {
   });
 };
 
+process.on('uncaughtException', (err) => {
+  LoggerService.error(`process on uncaughtException error: ${err}`);
+});
+
+process.on('unhandledRejection', (err) => {
+  LoggerService.error(`process on unhandledRejection error: ${err}`);
+});
+
 runServer();
