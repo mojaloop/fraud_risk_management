@@ -26,14 +26,16 @@ WORKDIR /home/app
 
 COPY ./package.json ./
 COPY ./yarn.lock ./
-COPY tsconfig.json ./
+COPY ./tsconfig.json ./
+
+COPY ./src ./src
+COPY ./protos ./
+COPY ./global.d.ts ./
 COPY ./mojaloop-api.yaml ./
+COPY ./protos ./src/models
 
 # Install dependencies
 RUN yarn install
-
-COPY ./src ./src
-COPY ./global.d.ts ./
 
 # Build the project
 RUN yarn run build
