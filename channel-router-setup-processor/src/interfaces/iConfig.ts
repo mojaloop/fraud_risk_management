@@ -8,4 +8,10 @@ export interface IConfig {
   logstashHost: string;
   logstashPort: number;
   networkMap: string;
+  functionName: string;
+  ruleEndpoint: string;
+  apmLogging:boolean;
+  apmSecretToken: string;
+  apmURL: string;
+  dev: string;
 }

@@ -1,3 +1,22 @@
+import { config } from "../config";
+import log4js from 'log4js';
+
+log4js.configure({
+  appenders: {
+    logstash: {
+      type: '@log4js-node/logstash-http',
+      url: `http://${config.logstashHost}:${config.logstashPort}/_bulk`, 
+      application: 'logstash-log4js', 
+      logType: 'application', 
+      logChannel: config.functionName
+    }
+  },
+  categories: {
+    default: { appenders: ['logstash'], level: 'info' }
+  }
+});
+
+const logger = log4js.getLogger();
 export abstract class LoggerService {
   private static source = 'Channel-Orchestrator';
   private static timeStamp() {

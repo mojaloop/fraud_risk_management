@@ -18,7 +18,7 @@ export class LogicService {
     const rules: Rule[] = new Array<Rule>();
     const typologyMap = Object.assign(
       new Array<TypologyMap>(),
-      JSON.parse(config.typologyMap),
+      JSON.parse(config.networkMap),
     );
 
     // Deduplicate all rules
