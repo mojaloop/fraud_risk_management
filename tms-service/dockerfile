@@ -26,23 +26,23 @@ WORKDIR /home/app
 
 COPY ./package.json ./
 COPY ./yarn.lock ./
-COPY ./tsconfig.json ./
+# COPY ./tsconfig.json ./
 
-COPY ./src ./src
-COPY ./protos ./
-COPY ./global.d.ts ./
-COPY ./mojaloop-api.yaml ./
-COPY ./protos ./src/models
+# COPY ./src ./src
+# COPY ./global.d.ts ./
+# COPY ./mojaloop-api.yaml ./
+
+COPY ./build ./build
 
 # Install dependencies
 RUN yarn install
 
 # Build the project
-RUN yarn run build
+# RUN yarn build
 
 # Environment variables for openfaas
 ENV cgi_headers="true"
-ENV fprocess="node ./build/server.js"
+ENV fprocess="node ./build/src/server"
 ENV mode="http"
 ENV upstream_url="http://127.0.0.1:3000"
 
@@ -54,7 +54,7 @@ ENV prefix_logs="false"
 
 # Service-Based Enviroment Variables
 ENV SERVICE_NAME="tms-service"
-ENV NODE_ENV="dev"
+ENV NODE_ENV="prod"
 ENV REST_PORT=3000
 ENV GRPC_PORT=50051
 
