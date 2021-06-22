@@ -19,12 +19,11 @@
   "license": "ISC",
   "scripts": {
     "build:proto": "node bin/proto",
-    "build": "tsc --project tsconfig.json && yarn run copy-files",
+    "build": "tsc --project tsconfig.json && yarn run cf",
     "start": "node build/server",
     "dev": "ts-node-dev --respawn --transpile-only ./src/server.ts",
-    "client": "node build/src/client",
     "cleanup": "rm -rf build template jest.config.js jest.config.js.map node_modules yarn.lock",
-    "copy-files": "copyfiles mojaloop-api.yaml build",
+    "cf": "copyfiles mojaloop-api.yaml build",
     "fix": "yarn fix:prettier && yarn fix:eslint",
     "fix:eslint": "eslint --fix \"**/*.ts\"",
     "fix:prettier": "prettier --write \"**/*.ts\"",
@@ -32,7 +31,6 @@
     "lint:eslint": "eslint \"**/*.ts\"",
     "lint:prettier": "prettier --check \"**/*.ts\"",
     "test": "jest --config=jest.config.ts --passWithNoTests",
-    "test2": "jest --config=jest.config.ts --passWithNoTests ./__tests__/integrations/rest.test.ts",
     "test:watch": "jest --config=jest.config.ts --watch",
     "test:unit": "yarn test ./__tests__/units",
     "test:integration": "yarn test ./__tests__/integrations --detectOpenHandles"

@@ -26,7 +26,7 @@ yarn build:proto
 ## Server Start
 
 ```sh
-yarn start # Builds and start the server
+yarn start # Start the server
 ```
 
 ## Client Health Test
