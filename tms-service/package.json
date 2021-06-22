@@ -20,10 +20,10 @@
   "scripts": {
     "build:proto": "node bin/proto",
     "build": "tsc --project tsconfig.json && yarn run cf",
-    "start": "node build/server",
+    "start": "node build/src/server",
     "dev": "ts-node-dev --respawn --transpile-only ./src/server.ts",
     "cleanup": "rm -rf build template jest.config.js jest.config.js.map node_modules yarn.lock",
-    "cf": "copyfiles mojaloop-api.yaml build",
+    "cf": "copyfiles mojaloop-api.yaml build/src",
     "fix": "yarn fix:prettier && yarn fix:eslint",
     "fix:eslint": "eslint --fix \"**/*.ts\"",
     "fix:prettier": "prettier --write \"**/*.ts\"",
