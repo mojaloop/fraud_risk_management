@@ -1,4 +1,3 @@
-/* eslint-disable */
 import { Context } from 'koa';
 import { LoggerService } from '../utils';
 import { FlowFileRequest } from '../models/nifi_pb';
@@ -6,7 +5,7 @@ import { nifiService } from '../clients/nifi';
 
 export const monitorTransaction = async (ctx: Context): Promise<Context> => {
   try {
-    const reqData = ctx.body;
+    const reqData = ctx.request.body;
     const param: FlowFileRequest = new FlowFileRequest();
 
     param.setContent(JSON.stringify(reqData));
