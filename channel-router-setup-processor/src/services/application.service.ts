@@ -12,7 +12,6 @@ export class ApplicationService {
   }
 
   async getOnline(ctx: Context) {
-    LoggerService.log('Received Online Request - Status: Online');
     ctx.status = 200;
     ctx.body = 'Channel-Orchestrator is online.';
   }

@@ -7,7 +7,7 @@
   "scripts": {
     "build:proto": "node bin/proto",
     "build": "tsc --project tsconfig.json && yarn run copy-files",
-    "cleanup": "rm -rf build template jest.config.js jest.config.js.map node_modules yarn.lock",
+    "cleanup": "rem -rf build template jest.config.js jest.config.js.map node_modules yarn.lock",
     "copy-files": "copyfiles mojaloop-api.yaml build",
     "start": "node build/index",
     "start:dev": "env $(cat .env.template) nodemon",

@@ -18,7 +18,7 @@ log4js.configure({
 
 const logger = log4js.getLogger();
 export abstract class LoggerService {
-  private static source = 'Channel-Orchestrator';
+  
   private static timeStamp() {
     const dateObj = new Date();
 
@@ -31,24 +31,24 @@ export abstract class LoggerService {
   }
 
   static async trace(message: string, serviceOperation?: string) {
-    console.trace(
-      `[${LoggerService.timeStamp()}][${LoggerService.source}${
+    logger.trace(
+      `[${LoggerService.timeStamp()}][${config.functionName}${
         serviceOperation ? ' - ' + serviceOperation : ''
       }][TRACE] - ${message}`,
     );
   }
 
   static async log(message: string, serviceOperation?: string) {
-    console.log(
-      `[${LoggerService.timeStamp()}][${LoggerService.source}${
+    logger.info(
+      `[${LoggerService.timeStamp()}][${config.functionName}${
         serviceOperation ? ' - ' + serviceOperation : ''
       }][INFO] - ${message}`,
     );
   }
 
   static async warn(message: string, serviceOperation?: string) {
-    console.warn(
-      `[${LoggerService.timeStamp()}][${LoggerService.source}${
+    logger.warn(
+      `[${LoggerService.timeStamp()}][${config.functionName}${
         serviceOperation ? ' - ' + serviceOperation : ''
       }][WARN] - ${message}`,
     );
@@ -59,15 +59,14 @@ export abstract class LoggerService {
     innerError?: Error,
     serviceOperation?: string,
   ) {
-    const source = 'Channel-Orchestrator';
     let errMessage = typeof message === 'string' ? message : message.stack;
 
     if (innerError) {
       errMessage += `\r\n${innerError.stack}`;
     }
 
-    console.error(
-      `[${LoggerService.timeStamp()}][${LoggerService.source}${
+    logger.error(
+      `[${LoggerService.timeStamp()}][${config.functionName}${
         serviceOperation ? ' - ' + serviceOperation : ''
       }][ERROR] - ${errMessage}`,
     );

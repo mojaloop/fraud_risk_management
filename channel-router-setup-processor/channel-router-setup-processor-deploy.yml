@@ -2,14 +2,13 @@ version: 1.0
 provider:
   name: openfaas
   gateway: http://20.90.137.195:8080
-language: node14
-fprocess: node build/index.js
 functions:
   off-channel-router-setup-processor:
     namespace: frm-meshed
     lang: dockerfile
     handler: .
-    image: frmacr.azurecr.io/off-channel-router-setup-processor:latest
+    version: 1.3
+    image: frmacr.azurecr.io/off-channel-router-setup-processor:1.3
     annotations:
       com.openfaas.health.http.path: /health
       com.openfaas.health.http.initialDelay: "45s"

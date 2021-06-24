@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 import { sendUnaryData, ServerUnaryCall, UntypedHandleCall } from '@grpc/grpc-js';
 import { ExecuteRequest } from '../classes/execute-request';
-import { IFlowFileServiceServer, FlowFileServiceService } from '../models/channelRouter_grpc_pb';
-import { FlowFileReply, FlowFileRequest } from '../models/channelRouter_pb';
+import { IFlowFileServiceServer, FlowFileServiceService } from '../models/nifi_grpc_pb';
+import { FlowFileReply, FlowFileRequest } from '../models/nifi_pb';
 import { LoggerService } from '../services/logger.service';
 import { LogicService } from '../services/logic.service';
 
@@ -15,18 +15,18 @@ class Execute implements IFlowFileServiceServer {
 
   public async send(call: ServerUnaryCall<FlowFileRequest, FlowFileReply>, callback: sendUnaryData<FlowFileReply>): Promise<void> {
     const body = call.request.toObject();
+
     const res: FlowFileReply = new FlowFileReply();
 
     let request!: ExecuteRequest;
     LoggerService.log('Start - Handle execute request');
     try {
-      const reqData = Buffer.from(body.content.toString(), 'base64').toString();
+      const reqData = Buffer.from(call.request.getContent_asB64(), 'base64').toString();
+      LoggerService.log(`gRPC string request received with data: ${reqData ?? ""}`);
       request = new ExecuteRequest(JSON.parse(reqData));
     } catch (parseError) {
       const failMessage = 'Failed to parse execution request.';
-
       LoggerService.error(failMessage, parseError, 'ApplicationService');
-
       LoggerService.log('End - Handle execute request');
       res.setResponsecode(0);
       callback(null, res);

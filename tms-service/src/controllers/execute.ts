@@ -6,11 +6,10 @@ import { nifiService } from '../clients/nifi';
 
 export const monitorTransaction = async (ctx: Context): Promise<Context> => {
   try {
-    const reqData = ctx.body;
+    const reqData = ctx.request.body;
     const param: FlowFileRequest = new FlowFileRequest();
-
-    param.setContent(JSON.stringify(reqData));
-
+    let objJsonB64 = Buffer.from(JSON.stringify(reqData)).toString("base64");
+    param.setContent(objJsonB64);
     const resp = await nifiService.send(param);
 
     ctx.body = { result: resp.getBody() };

@@ -55,7 +55,7 @@ ENV prefix_logs="false"
 
 ENV FUNCTION_NAME=payment-platfrom-adapter
 ENV PORT=3000
-ENV TMS_ENDPOINT=http://gateway.frm:8080/function/off-transaction-monitoring-service.frm-meshed/monitor/transaction
+ENV TMS_ENDPOINT=http://gateway.frm:8080/function/off-transaction-monitoring-service.frm-meshed/execute
 ENV APM_LOGGING=true
 ENV APM_SERVICE_NAME=payment-platfrom-adapter
 ENV APM_URL=http://apm-server-apm-server.frm:8200

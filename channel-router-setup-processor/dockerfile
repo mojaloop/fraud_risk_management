@@ -25,7 +25,6 @@ WORKDIR /home/app
 COPY ./package.json ./
 COPY ./yarn.lock ./
 COPY ./tsconfig.json ./
-COPY ./mojaloop-api.yaml ./
 COPY ./global.d.ts ./
 
 # Install dependencies
@@ -57,7 +56,7 @@ ENV REDIS_PORT=6379
 ENV REDIS_DB=0
 ENV NETWORK_MAP='[{"typologyName":"typology28","typologyEndpoint":"http://gateway:8080/function/off-typology-28.frm/execute","rules":[{"ruleName":"rule2","ruleEndpoint":"http://gateway:8080/function/off-rule-002.frm/execute"}]},{"typologyName":"typology214","typologyEndpoint":"http://gateway:8080/function/off-typology-214.frm/execute","rules":[{"ruleName":"rule3","ruleEndpoint":"http://gateway:8080/function/off-rule-003.frm/execute"}]}]'
 ENV REST_PORT=3000
-
+ENV GRPC_PORT=50051
 ENV FUNCTION_NAME=channel-router-setup-processor
 ENV RULE_ENDPOINT=http://gateway.frm:8080/function/
 ENV APM_LOGGING=true

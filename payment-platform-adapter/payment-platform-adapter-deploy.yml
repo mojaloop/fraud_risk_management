@@ -6,6 +6,7 @@ language: node14
 fprocess: node build/index.js
 functions:
   off-payment-platform-adapter:
+    namespace: frm-meshed
     lang: dockerfile
     handler: .
     image: frmacr.azurecr.io/payment-platform-adapter:latest
