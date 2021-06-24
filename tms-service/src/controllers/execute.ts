@@ -1,4 +1,3 @@
-/* eslint-disable */
 import { Context } from 'koa';
 import { LoggerService } from '../utils';
 import { FlowFileRequest } from '../models/nifi_pb';
