@@ -20,11 +20,7 @@ export class RedisClientService {
       // Get the value of a key.
       this.client.GET(key, (err, reply) => {
         if (err) {
-          LoggerService.error(
-            `Error while getting ${key} from Redis with message:`,
-            err,
-            'RedisClient',
-          );
+          LoggerService.error(`Error while getting ${key} from Redis with message:`, err, 'RedisClient');
           resolve('');
         } else {
           resolve(reply!);

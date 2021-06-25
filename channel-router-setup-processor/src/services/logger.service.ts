@@ -1,24 +1,23 @@
-import { config } from "../config";
+import { config } from '../config';
 import log4js from 'log4js';
 
 log4js.configure({
   appenders: {
     logstash: {
       type: '@log4js-node/logstash-http',
-      url: `http://${config.logstashHost}:${config.logstashPort}/_bulk`, 
-      application: 'logstash-log4js', 
-      logType: 'application', 
-      logChannel: config.functionName
-    }
+      url: `http://${config.logstashHost}:${config.logstashPort}/_bulk`,
+      application: 'logstash-log4js',
+      logType: 'application',
+      logChannel: config.functionName,
+    },
   },
   categories: {
-    default: { appenders: ['logstash'], level: 'info' }
-  }
+    default: { appenders: ['logstash'], level: 'info' },
+  },
 });
 
 const logger = log4js.getLogger();
 export abstract class LoggerService {
-  
   private static timeStamp() {
     const dateObj = new Date();
 
@@ -32,33 +31,23 @@ export abstract class LoggerService {
 
   static async trace(message: string, serviceOperation?: string) {
     logger.trace(
-      `[${LoggerService.timeStamp()}][${config.functionName}${
-        serviceOperation ? ' - ' + serviceOperation : ''
-      }][TRACE] - ${message}`,
+      `[${LoggerService.timeStamp()}][${config.functionName}${serviceOperation ? ' - ' + serviceOperation : ''}][TRACE] - ${message}`,
     );
   }
 
   static async log(message: string, serviceOperation?: string) {
     logger.info(
-      `[${LoggerService.timeStamp()}][${config.functionName}${
-        serviceOperation ? ' - ' + serviceOperation : ''
-      }][INFO] - ${message}`,
+      `[${LoggerService.timeStamp()}][${config.functionName}${serviceOperation ? ' - ' + serviceOperation : ''}][INFO] - ${message}`,
     );
   }
 
   static async warn(message: string, serviceOperation?: string) {
     logger.warn(
-      `[${LoggerService.timeStamp()}][${config.functionName}${
-        serviceOperation ? ' - ' + serviceOperation : ''
-      }][WARN] - ${message}`,
+      `[${LoggerService.timeStamp()}][${config.functionName}${serviceOperation ? ' - ' + serviceOperation : ''}][WARN] - ${message}`,
     );
   }
 
-  static async error(
-    message: string | Error,
-    innerError?: Error,
-    serviceOperation?: string,
-  ) {
+  static async error(message: string | Error, innerError?: Error, serviceOperation?: string) {
     let errMessage = typeof message === 'string' ? message : message.stack;
 
     if (innerError) {
@@ -66,9 +55,7 @@ export abstract class LoggerService {
     }
 
     logger.error(
-      `[${LoggerService.timeStamp()}][${config.functionName}${
-        serviceOperation ? ' - ' + serviceOperation : ''
-      }][ERROR] - ${errMessage}`,
+      `[${LoggerService.timeStamp()}][${config.functionName}${serviceOperation ? ' - ' + serviceOperation : ''}][ERROR] - ${errMessage}`,
     );
   }
 }

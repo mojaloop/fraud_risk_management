@@ -31,7 +31,7 @@ export class ApplicationService {
     }
 
     try {
-      const result = await this.logicService.handleTransaction(request);
+      const result = this.logicService.handleTransactionLegacy(request);
       ctx.body = result;
       ctx.status = 200;
     } catch (processError) {

@@ -13,11 +13,7 @@ class Rule {
   ruleEndpoint: string;
   typologies: Array<Typology>;
 
-  constructor(
-    ruleName: string,
-    ruleEndpoint: string,
-    typologies: Array<Typology>,
-  ) {
+  constructor(ruleName: string, ruleEndpoint: string, typologies: Array<Typology>) {
     this.ruleName = ruleName;
     this.ruleEndpoint = ruleEndpoint;
     this.typologies = typologies;

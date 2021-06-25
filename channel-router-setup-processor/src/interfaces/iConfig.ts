@@ -10,7 +10,7 @@ export interface IConfig {
   networkMap: string;
   functionName: string;
   ruleEndpoint: string;
-  apmLogging:boolean;
+  apmLogging: boolean;
   apmSecretToken: string;
   apmURL: string;
   dev: string;

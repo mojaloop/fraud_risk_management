@@ -22,8 +22,8 @@ export const runServer = async (): Promise<void> => {
   const appService: ApplicationService = new ApplicationService();
 
   /**
- * KOA Rest Server
- */
+   * KOA Rest Server
+   */
   const app = new Koa();
 
   const router = new Router();
@@ -42,16 +42,15 @@ export const runServer = async (): Promise<void> => {
     console.log(`API server listening on PORT ${config.restPort}`);
   });
 
-
   /**
- * gRPC Server
- */
+   * gRPC Server
+   */
   const messageSendLimit = 4194304;
   const server: Server = new Server({
     'grpc.max_receive_message_length': -1,
     'grpc.max_send_message_length': messageSendLimit,
   });
-  
+
   server.addService(Health.service, Health.handler);
   server.addService(ChannelRouter.service, ChannelRouter.handler);
   // server.addService(RuleEngineServer.service, RuleEngineServer.handler);
@@ -68,11 +67,9 @@ export const runServer = async (): Promise<void> => {
     console.log(`gRPC:Server:${bindPort}`, new Date().toLocaleString());
     server.start();
   });
-
-}
-try{
-runServer();
-}
-catch(err) {
+};
+try {
+  runServer();
+} catch (err) {
   console.log(err);
 }

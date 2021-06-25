@@ -9,38 +9,26 @@ import { LoggerService } from '../services/logger.service';
  */
 class HealthCheckService {
   // https://github.com/grpc/grpc-node/issues/54
-  private readonly client: HealthClient = new HealthClient(
-    `localhost:${config.grpcport}`,
-    credentials.createInsecure(),
-  );
+  private readonly client: HealthClient = new HealthClient(`localhost:${config.grpcport}`, credentials.createInsecure());
 
-  public check(
-    param: HealthCheckRequest,
-    metadata: Metadata = new Metadata(),
-  ): Promise<HealthCheckResponse> {
-    return new Promise(
-      (resolve: Resolve<HealthCheckResponse>, reject: Reject): void => {
-        this.client.check(
-          param,
-          metadata,
-          (err: ServiceError | null, res: HealthCheckResponse) => {
-            if (err) {
-              LoggerService.error('healthCheck:', err);
-              return reject(err);
-            }
+  public check(param: HealthCheckRequest, metadata: Metadata = new Metadata()): Promise<HealthCheckResponse> {
+    return new Promise((resolve: Resolve<HealthCheckResponse>, reject: Reject): void => {
+      this.client.check(param, metadata, (err: ServiceError | null, res: HealthCheckResponse) => {
+        if (err) {
+          LoggerService.error('healthCheck:', err);
+          return reject(err);
+        }
 
-            const status: HealthCheckResponse.ServingStatus = res.getStatus();
-            if (status !== HealthCheckResponse.ServingStatus.SERVING) {
-              return LoggerService.error(`healthCheck: ${status}`);
-            }
+        const status: HealthCheckResponse.ServingStatus = res.getStatus();
+        if (status !== HealthCheckResponse.ServingStatus.SERVING) {
+          return LoggerService.error(`healthCheck: ${status}`);
+        }
 
-            LoggerService.log(`healthCheck: ${status}`);
+        LoggerService.log(`healthCheck: ${status}`);
 
-            resolve(res);
-          },
-        );
-      },
-    );
+        resolve(res);
+      });
+    });
   }
 }
 

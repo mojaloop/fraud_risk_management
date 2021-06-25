@@ -1,25 +1,24 @@
+/* eslint-disable */
 String.prototype.toMobileNumber = function (this: string) {
-  if (!this || this.length < 4)
-    return this;
+  if (!this || this.length < 4) return this;
   let toReturn = this.replace('+', '');
   toReturn = `+${toReturn.substr(0, 3)}-${toReturn.substr(3)}`;
   return toReturn;
 };
-
 
 class PaymentIdentification {
   EndToEndIdentification = ''; // transactionId
 }
 
 class ContactDetails {
-  MobileNumber = ""; // Initiator
+  MobileNumber = ''; // Initiator
 }
 
 class DateAndPlaceOfBirth {
   Birthdate: string = new Date().toISOString().split('T')[0];
-  ProvinceOfBirth = "Uknown";
-  CityOfBirth = "";
-  CountryOfBirth: string = "ZAR";
+  ProvinceOfBirth = 'Uknown';
+  CityOfBirth = '';
+  CountryOfBirth = 'ZAR';
 }
 
 class SchemeName {
@@ -74,11 +73,10 @@ class EquivalentAmount {
   Amount = 0; // amount
 }
 
-class ActiveOrHistoricCurrencyAndAmount { }
+class ActiveOrHistoricCurrencyAndAmount {}
 
 class Amount {
-  InstructedAmount: ActiveOrHistoricCurrencyAndAmount =
-    new ActiveOrHistoricCurrencyAndAmount();
+  InstructedAmount: ActiveOrHistoricCurrencyAndAmount = new ActiveOrHistoricCurrencyAndAmount();
 
   EquivalentAmount: EquivalentAmount = new EquivalentAmount();
 }
@@ -94,13 +92,11 @@ class ClearingSystemMemberIdentification {
 }
 
 class FinancialInstitutionIdentification {
-  ClearingSystemMemberIdentification: ClearingSystemMemberIdentification =
-    new ClearingSystemMemberIdentification();
+  ClearingSystemMemberIdentification: ClearingSystemMemberIdentification = new ClearingSystemMemberIdentification();
 }
 
 class Agent {
-  FinancialInstitutionIdentification: FinancialInstitutionIdentification =
-    new FinancialInstitutionIdentification();
+  FinancialInstitutionIdentification: FinancialInstitutionIdentification = new FinancialInstitutionIdentification();
 }
 
 class SupplementaryData {
@@ -112,8 +108,7 @@ class StructuredRemittanceInformation {
 }
 
 class RemittanceInformation {
-  Structured: StructuredRemittanceInformation =
-    new StructuredRemittanceInformation();
+  Structured: StructuredRemittanceInformation = new StructuredRemittanceInformation();
 }
 
 class CreditTransferTransactionInformation {
@@ -130,8 +125,7 @@ class CreditTransferTransactionInformation {
 
 class PaymentInformation {
   PaymentInformationIdentification = ''; // quoteId
-  CreditTransferTransactionInformation: CreditTransferTransactionInformation =
-    new CreditTransferTransactionInformation();
+  CreditTransferTransactionInformation: CreditTransferTransactionInformation = new CreditTransferTransactionInformation();
 
   DebtorAccount: Account = new Account();
   DebtorAgent: Agent = new Agent();

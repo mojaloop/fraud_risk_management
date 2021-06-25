@@ -1,4 +1,3 @@
 declare interface String {
-    toMobileNumber(): string;
+  toMobileNumber(): string;
 }
-

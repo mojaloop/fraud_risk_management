@@ -13,7 +13,7 @@ import { LogicService } from '../services/logic.service';
 class Execute implements IFlowFileServiceServer {
   [method: string]: UntypedHandleCall;
 
-  public async send(call: ServerUnaryCall<FlowFileRequest, FlowFileReply>, callback: sendUnaryData<FlowFileReply>): Promise<void> {
+  public send(call: ServerUnaryCall<FlowFileRequest, FlowFileReply>, callback: sendUnaryData<FlowFileReply>): void {
     const body = call.request.toObject();
 
     const res: FlowFileReply = new FlowFileReply();
@@ -22,30 +22,31 @@ class Execute implements IFlowFileServiceServer {
     LoggerService.log('Start - Handle execute request');
     try {
       const reqData = Buffer.from(call.request.getContent_asB64(), 'base64').toString();
-      LoggerService.log(`gRPC string request received with data: ${reqData ?? ""}`);
+      LoggerService.log(`gRPC string request received with data: ${reqData ?? ''}`);
       request = new CustomerCreditTransferInitiation(JSON.parse(reqData));
     } catch (parseError) {
       const failMessage = 'Failed to parse execution request.';
       LoggerService.error(failMessage, parseError, 'ApplicationService');
       LoggerService.log('End - Handle execute request');
       res.setResponsecode(0);
+      res.setBody(failMessage);
       callback(null, res);
       return;
     }
 
     try {
       const logicService = new LogicService();
-      const result = await logicService.handleTransaction(request);
-      LoggerService.log(result);
+      logicService.handleTransaction(request, callback);
       res.setResponsecode(1);
-      res.setBody(result);
       callback(null, res);
+      return;
     } catch (err) {
       const failMessage = 'Failed to process execution request.';
       LoggerService.error(failMessage, err, 'ApplicationService');
       res.setResponsecode(0);
       res.setBody(failMessage);
       callback(null, res);
+      return;
     } finally {
       LoggerService.log('End - Handle execute request');
     }

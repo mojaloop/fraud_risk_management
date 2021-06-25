@@ -7,8 +7,8 @@ functions:
     namespace: frm-meshed
     lang: dockerfile
     handler: .
-    version: 1.3
-    image: frmacr.azurecr.io/off-channel-router-setup-processor:1.3
+    version: 1.8
+    image: frmacr.azurecr.io/off-channel-router-setup-processor:1.8
     annotations:
       com.openfaas.health.http.path: /health
       com.openfaas.health.http.initialDelay: "45s"
