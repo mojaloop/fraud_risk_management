@@ -1,6 +1,5 @@
 import { Context } from 'koa';
-import { IRouterParamContext } from 'koa-router';
-import { ExecuteRequest } from '../classes/execute-request';
+import { CustomerCreditTransferInitiation } from '../classes/iPain001Transaction';
 import { LoggerService } from './logger.service';
 import { LogicService } from './logic.service';
 
@@ -17,10 +16,10 @@ export class ApplicationService {
   }
 
   async execute(ctx: Context) {
-    let request!: ExecuteRequest;
+    let request!: CustomerCreditTransferInitiation;
     LoggerService.log('Start - Handle execute request');
     try {
-      request = new ExecuteRequest(ctx.request.body);
+      request = new CustomerCreditTransferInitiation(ctx.request.body);
     } catch (parseError) {
       const failMessage = 'Failed to parse execution request.';
 

@@ -1,50 +1,50 @@
-import { RedisClientService } from './redis-client.service';
 import http from 'http';
 import { forkJoin } from 'rxjs';
-import { ExecuteRequest } from '../classes/execute-request';
 import { config } from '../config';
 import { RuleRequest } from '../classes/rule-request';
-import { Rule, Typology, TypologyMap } from '../classes/typology-map';
 import { LoggerService } from './logger.service';
+import { CustomerCreditTransferInitiation } from '../classes/iPain001Transaction';
+import { NetworkMap, Rule, Typology } from '../classes/network-map';
+import { ruleEngineService } from '../clients/rule-engine.client';
+import { FlowFileRequest } from '../models/nifi_pb';
 
 export class LogicService {
 
   constructor() {
   }
 
-  async handleTransaction(req: ExecuteRequest) {
+  async handleTransaction(req: CustomerCreditTransferInitiation) {
     const rules: Rule[] = new Array<Rule>();
-    const typologyMap = Object.assign(
-      new Array<TypologyMap>(),
+    const networkMap = Object.assign(
+      new NetworkMap(),
       JSON.parse(config.networkMap),
-    );
-
+    ) as NetworkMap;
     // Deduplicate all rules
-    for (const typology of typologyMap) {
-      if (typology.rules) {
-        for (const rule of typology.rules) {
-          const ruleIndex = rules.findIndex(
-            (r) => r.ruleName === rule.ruleName,
-          );
-          if (ruleIndex > -1) {
-            rules[ruleIndex].typologies.push(
-              new Typology(typology.typologyName, typology.typologyEndpoint),
-            );
-          } else {
-            const tempTypologies = Array<Typology>();
-            tempTypologies.push(
-              new Typology(typology.typologyName, typology.typologyEndpoint),
-            );
-            rule.typologies = tempTypologies;
-            rules.push(rule);
+    const painChannel = networkMap.transactions.find(tran => tran.transaction_type === "pain.001.001.11");
+    if (painChannel && painChannel.channels && painChannel.channels.length > 0)
+      for (const channel of painChannel.channels) {
+        if (channel.typologies && channel.typologies.length > 0)
+          for (const typology of channel.typologies) {
+            if (typology.rules && typology.rules.length > 0)
+              for (const rule of typology.rules) {
+                const ruleIndex = rules.findIndex(
+                  (r: Rule) => `${r.rule_id}${r.rule_name}${r.rule_version}` === `${rule.rule_id}${rule.rule_name}${rule.rule_version}`
+                );
+                if (ruleIndex > -1) {
+                  rules[ruleIndex].typologies.push(
+                    new Typology(typology.typology_id, typology.typology_name, typology.typology_version)
+                  );
+                } else {
+                  const tempTypologies = Array<Typology>();
+                  tempTypologies.push(
+                    new Typology(typology.typology_id, typology.typology_name, typology.typology_version)
+                  );
+                  rule.typologies = tempTypologies;
+                  rules.push(rule);
+                }
+              }
           }
-        }
       }
-    }
-    // typologyMap.forEach((typology: TypologyMap) => {
-    // typology.rules.forEach((rule: Rule) => {
-    //   });
-    // });
 
     let ruleCounter = 0;
     // Send transaction to all rules
@@ -55,21 +55,27 @@ export class LogicService {
       }),
     ).toPromise();
 
-    const result = `[ChannelOrchestrator][Result] ${ruleCounter} rules initiated for transaction ID: ${req.TransactionID}`;
+    const result = `[ChannelOrchestrator][Result] ${ruleCounter} rules initiated for transaction ID: ${req.PaymentInformation.CreditTransferTransactionInformation.PaymentIdentification.EndToEndIdentification}`;
     return result;
   }
 
-  async sendRule(rule: Rule, req: ExecuteRequest) {
-    const ruleEndpoint = rule.ruleEndpoint;
-    const typologies = rule.typologies;
-    const ruleRequest: RuleRequest = new RuleRequest(req, typologies);
+  async sendRule(rule: Rule, req: CustomerCreditTransferInitiation) {
+    const ruleEndpoint = `${config.ruleEndpoint}/${rule.rule_name}/${rule.rule_version}`;// rule.ruleEndpoint;
+    //const ruleRequest: RuleRequest = new RuleRequest(req, rule.typologies);
     const toSend = `{"transaction":${JSON.stringify(
       req,
-    )}, "typologies":${JSON.stringify(typologies)}}`;
+    )}, "typologies":${JSON.stringify(rule.typologies)}}`;
+
+    // Uncomment this to send gRPC request to Rule Engines
+    // let ruleRequest = new FlowFileRequest();
+    // let objJsonB64 = Buffer.from(JSON.stringify(toSend)).toString("base64");
+    // ruleRequest.setContent(objJsonB64);
+    // ruleEngineService.send(ruleRequest);
+
     await this.executePost(ruleEndpoint, toSend);
   }
 
-  // Submit the score to the configured Channel Scoring Engine
+  // Submit the score to the Rule Engine
   private executePost(
     endpoint: string,
     request: string,
@@ -97,7 +103,7 @@ export class LogicService {
 
       req.on('error', (error) => {
         LoggerService.error(`Rule response Error data: ${error}`);
-        LoggerService.error(`Request:\r\n${request}`);
+        LoggerService.trace(`Request:\r\n${request}`);
         resolve(error);
       });
 

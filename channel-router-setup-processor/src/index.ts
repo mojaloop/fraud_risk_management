@@ -8,7 +8,6 @@ import { Server, ServerCredentials } from '@grpc/grpc-js';
 import { LoggerService } from './services/logger.service';
 import Health from './servers/health.server';
 import ChannelRouter from './servers/channel-router.server';
-import RuleEngineServer from './servers/rule-engine.server';
 
 if (config.apmLogging) {
   apm.start({

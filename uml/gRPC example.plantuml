@@ -1,0 +1,17 @@
+@startuml
+participant "Channel Router Setup Processor" as co
+participant "Rule Engine" as re
+participant "Typology Processor" as t
+note over co, re
+Channel Orchestrator is gRPC Server, while
+Rule Engine is gRPC Client.
+end note
+co -> re: Transaction + Typology Information
+re --> co: Response
+note over re, t
+Rule Engine is now gRPC Server, while
+Typology is gRPC Client.
+end note
+re -> t: Transaction + Rule Result
+t --> re: Response
+@enduml
