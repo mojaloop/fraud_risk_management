@@ -14,11 +14,11 @@ class App extends Koa {
   constructor() {
     super();
 
-    // bodyparser needs to be loaded first in order to work
+    // bodyparser needs to be loaded first in order to work - in fact, order for all the below is very import!
     this.servers = [];
     this.use(bodyParser());
-    this.configureRoutes();
     this.configureMiddlewares();
+    this.configureRoutes();
   }
 
   configureMiddlewares(): void {

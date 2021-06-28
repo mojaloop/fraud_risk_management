@@ -34,6 +34,8 @@ export class Amount {
 
 export class Charge {
     Amount = new Amount();
+    Agent = new Agent();
+    
 }
 
 export class DateAndPlaceOfBirth {
@@ -56,6 +58,7 @@ export class PrivateIdentification {
 
 export class Identification {
     PrivateIdentification = new PrivateIdentification();
+    Other = new Other();
 }
 
 export class ContactDetails {
@@ -87,8 +90,7 @@ export class RegulatoryReporting {
 }
 
 export class RemittanceInformation {
-    RemittanceInformation = ""; //Max140Text
-
+    Unstructured = ""; //Max140Text
 }
 
 export class CreditTransferTransactionInformation {
@@ -96,7 +98,7 @@ export class CreditTransferTransactionInformation {
     InterbankSettlementAmount = new InterbankSettlementAmount();
     InstructedAmount = new InstructedAmount();
     ChargeBearer = ""; //ChargeBearerTypeCode
-    Charges: Array<Charge> = new Array<Charge>();
+    ChargesInformation: Array<Charge> = new Array<Charge>();
     InitiatingParty = new Party();
     Debtor = new Party();
     DebtorAccount = new Party();

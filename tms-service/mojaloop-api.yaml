@@ -37,10 +37,10 @@ paths:
             $ref: "#/definitions/Health"
         500:
           $ref: "#/responses/500"
-  /monitor/transaction:
+  /execute:
     post:
-      summary: "Monitor transaction"
-      description: "Mojaloop Transation"
+      summary: "Monitor Quote Transaction"
+      description: "ISO20022 pain.001.001.11 formatted message expected. Historically Mojaloop Quote message."
       consumes:
         - "application/json"
       produces:
@@ -63,116 +63,56 @@ paths:
           $ref: "#/responses/401"
         500:
           $ref: "#/responses/500"
+  /transfer:
+    post:
+      summary: 'Transfer'
+      description: 'ISO20022 pacs.008.001.10 formatted message expected. Historically Mojaloop Transfer message.'
+      consumes:
+        - 'application/json'
+      produces:
+        - 'application/json'
+      parameters:
+        - in: 'body'
+          name: 'body'
+          description: 'Validates request params'
+          required: true
+          schema:
+            $ref: "#/definitions/FIToFICustomerCreditTransferV10"
+      responses:
+        200:
+          description: 'successful operation'
+          schema:
+            $ref: '#/definitions/TransactionResponse'
+        400:
+          $ref: '#/responses/400'
+        401:
+          $ref: '#/responses/401'
+        500:
+          $ref: '#/responses/500'
 
 responses:
   400:
     description: Bad Request
     schema:
-      $ref: "#/definitions/Error"
+      $ref: '#/definitions/Error'
   401:
     description: Unauthorized
     schema:
-      $ref: "#/definitions/Error"
+      $ref: '#/definitions/Error'
   500:
     description: Internal Server Error
     schema:
-      $ref: "#/definitions/Error"
+      $ref: '#/definitions/Error'
 
 definitions:
   Health:
-    type: "object"
-  Transaction:
-    type: "object"
-    required:
-      - AuthenticationType
+    type: 'object'
     properties:
-      AuthenticationType:
-        type: string
-  TransactionType:
-    type: "object"
-    required:
-      - TransactionScenario
-    properties:
-      TransactionScenario:
-        type: string
-      TransactionInitiator:
-        type: string
-      TransactionInitiatorType:
-        type: string
-  partyIdInfo:
-    type: "object"
-    required:
-      - partyIdType
-      - partyIdentifier
-      - fspId
-  complexName:
-    required:
-      - firstName
-      - lastName
-  personalInfo:
-    type: "object"
-    required:
-      - complexName
-      - dateOfBirth
-    properties:
-      complexName:
-        $ref: "#/definitions/complexName"
-      dateOfBirth:
-        type: "string"
-  Payer:
-    type: "object"
-    required:
-      - partyIdInfo
-      - personalInfo
-    properties:
-      partyIdInfo:
-        $ref: "#/definitions/partyIdInfo"
-      personalInfo:
-        $ref: "#/definitions/personalInfo"
-  Payee:
-    type: "object"
-    required:
-      - partyIdInfo
-    properties:
-      partyIdInfo:
-        $ref: "#/definitions/partyIdInfo"
-  amount:
-    type: "object"
-    required:
-      - amount
-      - currency
-  transactionType:
-    type: "object"
-    required:
-      - scenario
-      - initiator
-      - initiatorType
-  mojaloopQuotePostRequest:
-    type: "object"
-    required:
-      - quoteId
-      - transactionId
-      - payer
-      - payee
-      - amountType
-      - amount
-      - transactionType
-    properties:
-      quoteId:
-        type: string
-      transactionId:
-        type: string
-      payer:
-        $ref: "#/definitions/Payer"
-      payee:
-        $ref: "#/definitions/Payee"
-      amountType:
-        type: string
-      amount:
-        $ref: "#/definitions/amount"
-      transactionType:
-        $ref: "#/definitions/transactionType"
-
+      status:
+        type: 'string'
+        enum:
+          - 'UP'
+          - 'DOWN'
   TransactionResponse:
     type: "object"
     properties:
@@ -182,16 +122,401 @@ definitions:
           result:
             type: "string"
             example: "Transaction is valid"
+  FIToFICustomerCreditTransferV10:
+    type: object
+    required:
+      - GroupHeader
+      - CreditTransferTransactionInformation
+    properties:
+      GroupHeader:
+        type: 'object'
+        properties: 
+          MessageIdentification: 
+            type: string
+          CreationDateTime: 
+            type: string
+          NumberOfTransactions: 
+            type: integer
+            format: int32
+          SettlementInformation: 
+            type: object
+            properties: 
+              SettlementMethod: 
+                type: string
+      CreditTransferTransactionInformation:
+        type: object
+        properties: 
+          PaymentIdentification: 
+            type: object
+            properties: 
+              InstructionIdentification: 
+                type: string
+                maxLength: 35
+              EndToEndIdentification: 
+                type: string
+                maxLength: 35
+          InterbankSettlementAmount: 
+            type: object
+            properties: 
+              Amount: 
+                type: integer
+                format: int32
+              Currency: 
+                type: string
+          InstructedAmount: 
+            type: object
+            properties: 
+              Amount: 
+                type: integer
+                format: int32
+              Currency: 
+                type: string
+          ChargeBearer: 
+            type: string
+            enum: [DEBT, CRED, SHAR, SLEV]
+          ChargesInformation: 
+            type: array
+            items:
+              type: object
+              properties: 
+                Amount: 
+                  type: integer
+                  format: int32
+                Currency: 
+                  type: string
+                Agent: 
+                  type: object
+                  properties: 
+                    FinancialInstitutionIdentification: 
+                      type: object
+                      properties:
+                        ClearingSystemMemberIdentification: 
+                          type: object
+                          properties: 
+                            MemberIdentification: 
+                              type: string
+                              maxLength: 35
+          InitiatingParty: 
+            type: object
+            properties: 
+              Name: 
+                type: string
+              Identification: 
+                type: object
+                properties: 
+                  PrivateIdentification: 
+                    type: object
+                    properties: 
+                      DateAndPlaceOfBirth: 
+                        type: object
+                        properties: 
+                          BirthDate: 
+                            type: string
+                      Other: 
+                        type: object
+                        properties: 
+                          Identification: 
+                            type: string
+                          SchemeName: 
+                            type: object
+                            properties: 
+                              Proprietary: 
+                                type: string
+              ContactDetails: 
+                type: object
+                properties: 
+                  MobileNumber: 
+                    type: string
+                    pattern: '\+[0-9]{1,3}-[0-9()+\-]{1,30}'
+          Debtor: 
+            type: object
+            properties: 
+              Name: 
+                type: string
+                maxLength: 140
+              Identification: 
+                type: object
+                properties: 
+                  PrivateIdentification: 
+                    type: object
+                    properties: 
+                      DateAndPlaceOfBirth:
+                        type: object
+                        properties:
+                          Birthdate:
+                            type: string
+                            format: date
+                          ProvinceOfBirth:
+                            type: string
+                          CityOfBirth:
+                            type: string
+                            maxLength: 35
+                          CountryOfBirth:
+                            type: string
+                            pattern: '[A-Z]{2,2}'
+                        required:
+                          - Birthdate
+                          - CityOfBirth
+                          - CountryOfBirth
+                      Other: 
+                        type: object
+                        properties: 
+                          Identification: 
+                            type: string
+                            maxLength: 35
+                          SchemeName: 
+                            type: object
+                            properties: 
+                              Proprietary: 
+                                type: string
+                                maxLength: 35
+              ContactDetails: 
+                type: object
+                properties: 
+                  MobileNumber: 
+                    type: string
+                    pattern: '\+[0-9]{1,3}-[0-9()+\-]{1,30}'
+          DebtorAccount: 
+            type: object
+            properties: 
+              Name: 
+                type: string
+                maxLength: 70
+              Identification: 
+                type: object
+                properties: 
+                  PrivateIdentification: 
+                    type: object
+                    properties: 
+                      DateAndPlaceOfBirth:
+                        type: object
+                        properties:
+                          Birthdate:
+                            type: string
+                            format: date
+                          ProvinceOfBirth:
+                            type: string
+                          CityOfBirth:
+                            type: string
+                            maxLength: 35
+                          CountryOfBirth:
+                            type: string
+                            pattern: '[A-Z]{2,2}'
+                        required:
+                          - Birthdate
+                          - CityOfBirth
+                          - CountryOfBirth
+                      Other: 
+                        type: object
+                        properties: 
+                          Identification: 
+                            type: string
+                          SchemeName: 
+                            type: object
+                            properties: 
+                              Proprietary: 
+                                type: string
+                  Other: 
+                    type: object
+                    properties: 
+                      Identification: 
+                        type: string
+                        maxLength: 34
+                      SchemeName: 
+                        type: object
+                        properties: 
+                          Proprietary: 
+                            type: string
+                            maxLength: 35
+              ContactDetails: 
+                type: object
+                properties: 
+                  MobileNumber: 
+                    type: string
+          DebtorAgent: 
+            type: object
+            properties: 
+              FinancialInstitutionIdentification: 
+                type: object
+                properties: 
+                  ClearingSystemMemberIdentification: 
+                    type: object
+                    properties: 
+                      MemberIdentification: 
+                        type: string
+                        maxLength: 35
+          CreditorAgent: 
+            type: object
+            properties: 
+              FinancialInstitutionIdentification: 
+                type: object
+                properties: 
+                  ClearingSystemMemberIdentification: 
+                    type: object
+                    properties: 
+                      MemberIdentification: 
+                        type: string
+                        maxLength: 35
+          Creditor: 
+            type: object
+            properties: 
+              Name: 
+                type: string
+                maxLength: 140
+              Identification: 
+                type: object
+                properties: 
+                  PrivateIdentification: 
+                    type: object
+                    properties: 
+                      DateAndPlaceOfBirth:
+                        type: object
+                        properties:
+                          Birthdate:
+                            type: string
+                            format: date
+                          ProvinceOfBirth:
+                            type: string
+                          CityOfBirth:
+                            type: string
+                            maxLength: 35
+                          CountryOfBirth:
+                            type: string
+                            pattern: '[A-Z]{2,2}'
+                        required:
+                          - Birthdate
+                          - CityOfBirth
+                          - CountryOfBirth
+                      Other: 
+                        type: object
+                        properties: 
+                          Identification: 
+                            type: string
+                            maxLength: 35
+                          SchemeName: 
+                            type: object
+                            properties: 
+                              Proprietary: 
+                                type: string
+                                maxLength: 35
+              ContactDetails: 
+                type: object
+                properties: 
+                  MobileNumber: 
+                    type: string
+                    pattern: '\+[0-9]{1,3}-[0-9()+\-]{1,30}'
+          CreditorAccount: 
+            type: object
+            properties: 
+              Name: 
+                type: string
+                maxLength: 70
+              Identification: 
+                type: object
+                properties: 
+                  PrivateIdentification: 
+                    type: object
+                    properties: 
+                      DateAndPlaceOfBirth:
+                        type: object
+                        properties:
+                          Birthdate:
+                            type: string
+                            format: date
+                          ProvinceOfBirth:
+                            type: string
+                          CityOfBirth:
+                            type: string
+                            maxLength: 35
+                          CountryOfBirth:
+                            type: string
+                            pattern: '[A-Z]{2,2}'
+                        required:
+                          - Birthdate
+                          - CityOfBirth
+                          - CountryOfBirth
+                      Other: 
+                        type: object
+                        properties: 
+                          Identification: 
+                            type: string
+                          SchemeName: 
+                            type: object
+                            properties: 
+                              Proprietary: 
+                                type: string
+                  Other: 
+                    type: object
+                    properties: 
+                      Identification: 
+                        type: string
+                        maxLength: 34
+                      SchemeName: 
+                        type: object
+                        properties: 
+                          Proprietary: 
+                            type: string
+                            maxLength: 35
+              ContactDetails: 
+                type: object
+                properties: 
+                  MobileNumber: 
+                    type: string
+          Purpose: 
+            type: object
+            properties: 
+              Code: 
+                type: string
+                minLength: 1
+                maxLength: 4
+                pattern: '[0-9]{1,4}'
+              Proprietary:
+                type: string
+                maxLength: 35
+            required:
+              - Code
+              - Proprietary
+          SupplementaryData: 
+            type: object
+            properties:
+              Envelope:
+                type: object
+                properties:
+                  Document.Expiration:
+                    type: string
+            required:
+              - Envelope
+          RegulatoryReporting: 
+            type: object
+            properties: 
+              DebitCreditReportingIndicator: 
+                type: string
+                enum: [CRED, DEBT, BOTH]
+              Details: 
+                type: object
+                properties: 
+                  Type: 
+                    type: string
+                    maxLength: 35
+                  Code: 
+                    type: string
+                    maxLength: 10
+          RemittanceInformation: 
+            type: object
+            properties: 
+              Unstructured: 
+                type: string
+                maxLength: 140
 
   CustomerCreditTransferInitiationV11:
     type: object
     properties:
       GroupHeader:
-        $ref: "#/definitions/GroupHeader"
+        $ref: '#/definitions/GroupHeader'
       PaymentInformation:
-        $ref: "#/definitions/PaymentInformation"
+        $ref: '#/definitions/PaymentInformation'
       SupplementaryData:
-        $ref: "#/definitions/SupplementaryData"
+        $ref: '#/definitions/SupplementaryData'
     required:
       - GroupHeader
       - PaymentInformation
@@ -328,7 +653,7 @@ definitions:
                                 maxLength: 35
                               CountryOfBirth:
                                 type: string
-                                pattern: "[A-Z]{2,2}"
+                                pattern: '[A-Z]{2,2}'
                             required:
                               - Birthdate
                               - CityOfBirth
@@ -369,7 +694,7 @@ definitions:
                 properties:
                   CurrencyOfTransfer:
                     type: string
-                    pattern: "[A-Z]{3,3}"
+                    pattern: '[A-Z]{3,3}'
                   Amount:
                     type: number
                     format: float
@@ -554,7 +879,7 @@ definitions:
                         maxLength: 35
                       CountryOfBirth:
                         type: string
-                        pattern: "[A-Z]{2,2}"
+                        pattern: '[A-Z]{2,2}'
                     required:
                       - Birthdate
                       - CityOfBirth
@@ -602,6 +927,7 @@ definitions:
                 properties:
                   Identification:
                     type: string
+                    maxLength: 35
                   SchemeName:
                     type: object
                     properties:
@@ -647,13 +973,13 @@ definitions:
                     pattern: '\+[0-9]{1,3}-[0-9()+\-]{1,30}'
 
   Error:
-    type: "object"
+    type: 'object'
     properties:
       data:
-        type: "object"
+        type: 'object'
         properties:
           error:
-            type: "string"
+            type: 'string'
 parameters:
   accept:
     in: header
@@ -670,3 +996,4 @@ parameters:
     name: content-type
     type: string
     required: true
+

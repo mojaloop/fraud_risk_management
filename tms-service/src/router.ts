@@ -1,6 +1,6 @@
 import Router from 'koa-router';
 import { healthCheck } from './controllers/healthcheck';
-import { monitorTransaction } from './controllers/execute';
+import { monitorQuote, monitorTransfer } from './controllers/execute';
 
 const router = new Router();
 
@@ -9,6 +9,7 @@ router.get('/', healthCheck);
 router.get('/health', healthCheck);
 
 // execute the service
-router.post('/execute', monitorTransaction);
+router.post('/execute', monitorQuote);
+router.post('/transfer', monitorTransfer);
 
 export default router;
