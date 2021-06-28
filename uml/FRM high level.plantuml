@@ -1,0 +1,39 @@
+@startuml
+Title FRM High Level Design including \rcommunication between processors.
+legend top 
+-> Indicates HTTP request
+--> Indicates gRPC request
+end legend
+
+actor "Payer" as payer 
+queue "Mojaloop" as ml
+queue "Payment Platform Adapter" as ppa
+queue "Transaction Monitoring Service" as tms
+queue "Data Preparation (NiFi)" as nifi
+queue "Transaction Router" as tr
+queue "Channel Router Setup Processor" as crsp
+queue "Rule Engine" as re
+queue "Typology Processor" as tp
+queue "Channel Aggregation and Decisioning Processor" as cadp
+queue "Transaction Aggregation and Decisioning Processor" as tadp
+
+payer -> ml: Initiates transaction
+ml -> ppa: Quote
+ppa -> tms: pain.001.001.11 (pain)
+tms --> nifi: pain + \rtransaction type
+nifi --> tr: pseudonymised pain + \rtransaction type
+nifi -> tms: success
+tms -> ppa: success
+ppa -> ml: success
+tr --> crsp: pseudonymised pain + \rtransaction type + \rnetwork map
+crsp --> re: pseudonymised pain + \rtransaction type + \rnetwork map subset
+re --> tp: pseudonymised pain + \rtransaction type + \rnetwork map subset +\rrule result
+tp --> cadp: pseudonymised pain + \rtransaction type + \rnetwork map subset +\rtypology result
+cadp --> tadp: pseudonymised pain + \rtransaction type + \rnetwork map subset +\rchannel result
+tadp -> cadp: success
+cadp -> tp: success
+tp -> re: success
+re -> crsp: success
+crsp -> tr: success
+tr -> nifi: success
+@enduml

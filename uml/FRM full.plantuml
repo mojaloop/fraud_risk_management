@@ -1,0 +1,185 @@
+'PREVIEW WITH ALT-D >>>
+
+/'*****
+License
+--------------
+Copyright © 2021 LexTego
+--------------
+******'/
+
+@startuml
+legend top 
+-> Indicates HTTP request
+--> Indicates gRPC request
+end legend
+autonumber
+
+skinparam backgroundColor #White
+skinparam handwritten false
+skinparam shadowing false
+
+skinparam sequence {
+    ArrowColor ForestGreen
+    ActorBorderColor Black
+    ActorBackgroundColor DarkGreen
+    ActorFontColor Black
+    ActorFontName Arial
+    ActorFontSize 17
+    ActorFontStyle Bold
+    LifeLineBorderColor ForestGreen
+    LifeLineBackgroundColor Technology
+    ParticipantBorderColor Black
+    ParticipantBackgroundColor ForestGreen
+    ParticipantFontColor White
+    ParticipantFontName Arial
+    ParticipantFontSize 17
+    GroupBodyBackGroundColor transparent
+    BoxFontSize 24
+}
+
+skinparam databaseBorderColor Black
+skinparam databaseBackgroundColor Technology
+skinparam ParticipantPadding 20
+skinparam BoxPadding 10
+
+'hide footbox
+
+' title Hub-initiated Fire & Forget Transaction Monitoring Service Request
+
+' declare actors
+box "\nActio Financial Crime Risk Management Platform\n" #LightGray
+participant "Actio\nTMS\API" as tms
+database "Darkive" as darchive
+participant "Data\nPreparation" as dataprep #Red
+database "Enrichment\nSource" as enrichment #Red
+participant "Transaction\nRouter" as trouter
+participant "Channel\nRouter\n& Setup\nProcessor" as crsp
+participant "Rules\nProcessors" as rules
+participant "Typology\nProcessors" as typologies
+database "Typology\nCache” as typologycache
+participant "Channel\nAggregation\n& Decisioning\nProcessor" as cadp
+database “Channel\nCache” as channelcache
+participant "Transaction\nAggregation\n& Decisioning\nProcessor" as tadp
+database “Transaction\nCache” as transactioncache
+database "History" as history
+end box
+
+participant "Workflow\nOrchestator" as workflow
+
+
+' start flow
+
+
+
+tms -> darchive: Store primeval data
+tms --> dataprep: Prepare data
+deactivate tms
+activate dataprep #Red
+
+
+    dataprep -> enrichment: Retrieve encrichment data
+    activate enrichment #Red
+    enrichment -> dataprep: Encrichment data
+    deactivate enrichment
+    dataprep -> dataprep: Enrich data
+    dataprep --> trouter: Evaluate transaction
+deactivate dataprep
+
+activate trouter
+    trouter -> trouter: Determine channels
+    trouter --> crsp: Evaluate transaction
+deactivate trouter
+
+group For each required channel
+    activate crsp
+        crsp -> crsp: Determine typologies
+        crsp -> typologies: Retrieve rules lists
+        activate typologies
+            typologies -> crsp: rules lists
+        deactivate typologies
+        crsp -> crsp: Normalise rules
+        crsp --> rules: Evaluate transaction
+    deactivate crsp
+
+    group For each required rule processor
+        activate rules
+            rules -> rules: Execute rule
+            rules --> typologies: Submit rule results
+        deactivate rules
+        activate typologies
+    end
+
+    group For each required typology processor
+        group Repeat until all rule results delivered is True
+            alt Number of Associated Rules > 1 condition met
+                typologies -> typologycache: Read Rules results for \n associated transaction
+                typologycache -> typologies: Receive Rules results for \n associated transaction
+                typologies -> typologies: Append current Rule result to \nreceived results from cache
+                alt Evaluate if all \n associated Rules Results are available condition is met
+                    typologies -> typologies: Set all rule results delivered is True
+                else
+                    typologies -> typologycache: Write Rules results for \n associated transaction
+            else
+                typologies -> typologies: Use rule result
+                typologies -> typologies: Set all rule results delivered is True
+            end
+        end
+        typologies -> typologies: Calculate typology score
+            typologies --> cadp: Submit typology score
+        deactivate typologies
+        activate cadp
+    end
+
+    group For each channel aggregation & decisioning processor
+        group Repeat until all typology results submitted is True
+            alt Number of Associated Typologies > 1 condition met
+                cadp -> channelcache: Read Typology results for \n associated transaction
+                channelcache -> cadp: Receive Typology results for \n associated transaction
+                cadp -> cadp: Append current Typology result to \nreceived results from cache
+                alt Evaluate if all \n associated Typology Results are available condition is met
+                    cadp -> cadp: Set all Typology results submitted is True
+                else
+                    cadp -> channelcache: Write Typology results for \n associated transaction
+            else
+                cadp -> cadp: Use Typology result
+                cadp -> cadp: Set all Typology results delivered is True
+            end
+        end
+            alt Interrim alert condition met
+                cadp -> workflow: Handle interrim alert
+            end
+        end
+        cadp -> cadp: Calculate channel result
+        cadp --> tadp: Submit channel results
+        deactivate cadp
+        activate tadp
+    end
+
+    group For each transaction aggregation & decisioning processor
+        group Repeat until all channel results Submitted
+            alt Number of Associated Channels > 1 condition met
+                tadp -> transactioncache: Read Channel results for \n associated transaction
+                transactioncache -> tadp: Receive Channel results for \n associated transaction
+                tadp -> tadp: Append current Channel result to \nreceived results from cache
+                alt Evaluate if all \n associated Channel Results are available condition is met
+                    tadp -> tadp: Set all Channel results submitted is True
+                else
+                    tadp -> transactioncache: Write Channel results for \n associated transaction
+            else
+                tadp -> tadp: Use Channel result
+                tadp -> tadp: Set all Channel results delivered is True
+            end
+        end
+        tadp -> tadp: Calculate transaction result
+        tadp -> history: Submit transaction
+        tadp -> history: Submit transaction results
+        alt Alert conditions met
+            tadp -> workflow: Submit transaction results
+            deactivate tadp
+
+        end
+    end
+
+end
+
+@enduml

@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "org.apache.nifi.processors.grpc";
+option java_outer_classname = "FFSProto";
+option objc_class_prefix = "FFS";
+
+package channelRouterService;
+
+// The FlowFile service definition.
+service FlowFileService {
+    // Sends a FlowFile (blocking rpc)
+    rpc Send (FlowFileRequest) returns (FlowFileReply) {}
+}
+
+// The request message
+message FlowFileRequest {
+    // tags 1-15 require one byte to encode and should be left for commonly occurring tags.
+    // For that reason, tags 3-14 are left available.
+    //
+    // source: https://developers.google.com/protocol-buffers/docs/proto3#assigning-tags
+    int64 id = 1;
+    map<string, string> attributes = 2;
+    bytes content = 15;
+}
+
+// the reply message
+message FlowFileReply {
+    enum ResponseCode {
+        ERROR = 0;
+        SUCCESS = 1;
+        RETRY = 2;
+    }
+
+    ResponseCode responseCode = 1;
+    string body = 2;
+}
