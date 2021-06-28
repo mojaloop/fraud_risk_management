@@ -62,6 +62,12 @@ ENV NIFI_PORT=50051
 ENV LOGSTASH_HOST=127.0.0.1
 ENV LOGSTASH_PORT=3000
 
+ENV APM_LOGGING=true
+ENV APM_SERVICE_NAME=transaction-monitoring-service
+ENV APM_URL=http://apm-server-apm-server.frm:8200
+ENV APM_SECRET_TOKEN=
+
+
 HEALTHCHECK --interval=3s CMD [ -e /tmp/.lock ] || exit 1
 
 # Execute watchdog command

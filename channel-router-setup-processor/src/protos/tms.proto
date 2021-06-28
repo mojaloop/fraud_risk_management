@@ -1,0 +1,445 @@
+syntax = "proto3";
+
+// https://developers.google.com/protocol-buffers/docs/proto3#packages-and-name-resolution
+package tmsservice;
+
+service TMS {
+  // Monitor transaction
+  //
+  // Mojaloop Transation
+  rpc Execute(ExecuteRequest) returns (ExecuteResponse) {}
+}
+
+message Amount {}
+
+message ComplexName {}
+
+message CustomerCreditTransferInitiationV11 {
+    GroupHeader GroupHeader = 1;
+    PaymentInformation PaymentInformation = 2;
+    SupplementaryData SupplementaryData = 3;
+}
+
+message Error {
+    message DataMessage {
+        string error = 1;
+    }
+
+    DataMessage data = 1;
+}
+
+message GroupHeader {
+    message InitiatingPartyMessage {
+        message IdentificationMessage {
+            message ContactDetailsMessage {
+                string MobileNumber = 1;
+            }
+
+            message OtherMessage {
+                message ContactDetailsMessage {
+                    string MobileNumber = 1;
+                }
+
+                message PrivateIdentificationMessage {
+                    message DateAndPlaceOfBirthMessage {
+                        string Birthdate = 1;
+                    }
+
+                    DateAndPlaceOfBirthMessage DateAndPlaceOfBirth = 1;
+                }
+
+                message SchemeNameMessage {
+                    string Proprietary = 1;
+                }
+
+                ContactDetailsMessage ContactDetails = 1;
+                string Identification = 2;
+                PrivateIdentificationMessage PrivateIdentification = 3;
+                SchemeNameMessage SchemeName = 4;
+            }
+
+            message PrivateIdentificationMessage {
+                message DateAndPlaceOfBirthMessage {
+                    string Birthdate = 1;
+                }
+
+                DateAndPlaceOfBirthMessage DateAndPlaceOfBirth = 1;
+            }
+
+            message SchemeNameMessage {
+                string Proprietary = 1;
+            }
+
+            ContactDetailsMessage ContactDetails = 1;
+            string Identification = 2;
+            OtherMessage Other = 3;
+            PrivateIdentificationMessage PrivateIdentification = 4;
+            SchemeNameMessage SchemeName = 5;
+        }
+
+        IdentificationMessage Identification = 1;
+        string Name = 2;
+    }
+
+    InitiatingPartyMessage InitiatingParty = 1;
+}
+
+message Health {}
+
+message MojaloopQuotePostRequest {
+    Amount amount = 1;
+    string amountType = 2;
+    Payee payee = 3;
+    Payer payer = 4;
+    string quoteId = 5;
+    string transactionId = 6;
+    TransactionType transactionType = 7;
+}
+
+message PartyIdInfo {}
+
+message Payee {
+    PartyIdInfo partyIdInfo = 1;
+}
+
+message Payer {
+    PartyIdInfo partyIdInfo = 1;
+    PersonalInfo personalInfo = 2;
+}
+
+message PaymentInformation {
+    message CreditTransferTransactionInformationMessage {
+        message AmountMessage {
+            message EquivalentAmountMessage {
+                float Amount = 1;
+                string CurrencyOfTransfer = 2;
+            }
+
+            message InstructedAmountMessage {}
+
+            EquivalentAmountMessage EquivalentAmount = 1;
+            InstructedAmountMessage InstructedAmount = 2;
+        }
+
+        message CreditorAccountMessage {
+            message IdentificationMessage {
+                message ContactDetailsMessage {
+                    string MobileNumber = 1;
+                }
+
+                message OtherMessage {
+                    message ContactDetailsMessage {
+                        string MobileNumber = 1;
+                    }
+
+                    message PrivateIdentificationMessage {
+                        message DateAndPlaceOfBirthMessage {
+                            string Birthdate = 1;
+                        }
+
+                        DateAndPlaceOfBirthMessage DateAndPlaceOfBirth = 1;
+                    }
+
+                    message SchemeNameMessage {
+                        string Proprietary = 1;
+                    }
+
+                    ContactDetailsMessage ContactDetails = 1;
+                    string Identification = 2;
+                    PrivateIdentificationMessage PrivateIdentification = 3;
+                    SchemeNameMessage SchemeName = 4;
+                }
+
+                message PrivateIdentificationMessage {
+                    message DateAndPlaceOfBirthMessage {
+                        string Birthdate = 1;
+                    }
+
+                    DateAndPlaceOfBirthMessage DateAndPlaceOfBirth = 1;
+                }
+
+                message SchemeNameMessage {
+                    string Proprietary = 1;
+                }
+
+                ContactDetailsMessage ContactDetails = 1;
+                string Identification = 2;
+                OtherMessage Other = 3;
+                PrivateIdentificationMessage PrivateIdentification = 4;
+                SchemeNameMessage SchemeName = 5;
+            }
+
+            IdentificationMessage Identification = 1;
+            string Name = 2;
+            string Proxy = 3;
+        }
+
+        message CreditorAgentMessage {
+            message FinancialInstitutionIdentificationMessage {
+                message ClearingSystemMemberIdentificationMessage {
+                    string MemberIdentification = 1;
+                }
+
+                ClearingSystemMemberIdentificationMessage ClearingSystemMemberIdentification = 1;
+            }
+
+            FinancialInstitutionIdentificationMessage FinancialInstitutionIdentification = 1;
+        }
+
+        message CreditorMessage {
+            message IdentificationMessage {
+                message ContactDetailsMessage {
+                    string MobileNumber = 1;
+                }
+
+                message OtherMessage {
+                    message ContactDetailsMessage {
+                        string MobileNumber = 1;
+                    }
+
+                    message PrivateIdentificationMessage {
+                        message DateAndPlaceOfBirthMessage {
+                            string Birthdate = 1;
+                            string CityOfBirth = 2;
+                            string CountryOfBirth = 3;
+                            string ProvinceOfBirth = 4;
+                        }
+
+                        DateAndPlaceOfBirthMessage DateAndPlaceOfBirth = 1;
+                    }
+
+                    message SchemeNameMessage {
+                        string Proprietary = 1;
+                    }
+
+                    ContactDetailsMessage ContactDetails = 1;
+                    string Identification = 2;
+                    PrivateIdentificationMessage PrivateIdentification = 3;
+                    SchemeNameMessage SchemeName = 4;
+                }
+
+                message PrivateIdentificationMessage {
+                    message DateAndPlaceOfBirthMessage {
+                        string Birthdate = 1;
+                    }
+
+                    DateAndPlaceOfBirthMessage DateAndPlaceOfBirth = 1;
+                }
+
+                message SchemeNameMessage {
+                    string Proprietary = 1;
+                }
+
+                ContactDetailsMessage ContactDetails = 1;
+                string Identification = 2;
+                OtherMessage Other = 3;
+                PrivateIdentificationMessage PrivateIdentification = 4;
+                SchemeNameMessage SchemeName = 5;
+            }
+
+            IdentificationMessage Identification = 1;
+            string Name = 2;
+        }
+
+        message PaymentIdentificationMessage {
+            string EndToEndIdentification = 1;
+        }
+
+        message PaymentTypeInformationMessage {
+            message CategoryPurposeMessage {
+                string Proprietary = 1;
+            }
+
+            CategoryPurposeMessage CategoryPurpose = 1;
+        }
+
+        message RegulatoryReportingMessage {
+            message DetailsMessage {
+                string Code = 1;
+            }
+
+            DetailsMessage Details = 1;
+        }
+
+        message RemittanceInformationMessage {
+            message StructuredMessage {
+                string AdditionalRemittanceInformation = 1;
+            }
+
+            StructuredMessage Structured = 1;
+        }
+
+        message SupplementaryDataMessage {
+            float fees_amount = 1;
+            string fees_currency = 2;
+        }
+
+        AmountMessage Amount = 1;
+        CreditorMessage Creditor = 2;
+        CreditorAccountMessage CreditorAccount = 3;
+        CreditorAgentMessage CreditorAgent = 4;
+        PaymentIdentificationMessage PaymentIdentification = 5;
+        PaymentTypeInformationMessage PaymentTypeInformation = 6;
+        RegulatoryReportingMessage RegulatoryReporting = 7;
+        RemittanceInformationMessage RemittanceInformation = 8;
+        SupplementaryDataMessage SupplementaryData = 9;
+    }
+
+    message DebtorAccountMessage {
+        message IdentificationMessage {
+            message ContactDetailsMessage {
+                string MobileNumber = 1;
+            }
+
+            message OtherMessage {
+                message ContactDetailsMessage {
+                    string MobileNumber = 1;
+                }
+
+                message PrivateIdentificationMessage {
+                    message DateAndPlaceOfBirthMessage {
+                        string Birthdate = 1;
+                    }
+
+                    DateAndPlaceOfBirthMessage DateAndPlaceOfBirth = 1;
+                }
+
+                message SchemeNameMessage {
+                    string Proprietary = 1;
+                }
+
+                ContactDetailsMessage ContactDetails = 1;
+                string Identification = 2;
+                PrivateIdentificationMessage PrivateIdentification = 3;
+                SchemeNameMessage SchemeName = 4;
+            }
+
+            message PrivateIdentificationMessage {
+                message DateAndPlaceOfBirthMessage {
+                    string Birthdate = 1;
+                }
+
+                DateAndPlaceOfBirthMessage DateAndPlaceOfBirth = 1;
+            }
+
+            message SchemeNameMessage {
+                string Proprietary = 1;
+            }
+
+            ContactDetailsMessage ContactDetails = 1;
+            string Identification = 2;
+            OtherMessage Other = 3;
+            PrivateIdentificationMessage PrivateIdentification = 4;
+            SchemeNameMessage SchemeName = 5;
+        }
+
+        IdentificationMessage Identification = 1;
+        string Name = 2;
+        string Proxy = 3;
+    }
+
+    message DebtorAgentMessage {
+        message FinancialInstitutionIdentificationMessage {
+            message ClearingSystemMemberIdentificationMessage {
+                string MemberIdentification = 1;
+            }
+
+            ClearingSystemMemberIdentificationMessage ClearingSystemMemberIdentification = 1;
+        }
+
+        FinancialInstitutionIdentificationMessage FinancialInstitutionIdentification = 1;
+    }
+
+    message DebtorMessage {
+        message IdentificationMessage {
+            message ContactDetailsMessage {
+                string MobileNumber = 1;
+            }
+
+            message OtherMessage {
+                message ContactDetailsMessage {
+                    string MobileNumber = 1;
+                }
+
+                message PrivateIdentificationMessage {
+                    message DateAndPlaceOfBirthMessage {
+                        string Birthdate = 1;
+                    }
+
+                    DateAndPlaceOfBirthMessage DateAndPlaceOfBirth = 1;
+                }
+
+                message SchemeNameMessage {
+                    string Proprietary = 1;
+                }
+
+                ContactDetailsMessage ContactDetails = 1;
+                string Identification = 2;
+                PrivateIdentificationMessage PrivateIdentification = 3;
+                SchemeNameMessage SchemeName = 4;
+            }
+
+            message PrivateIdentificationMessage {
+                message DateAndPlaceOfBirthMessage {
+                    string Birthdate = 1;
+                    string CityOfBirth = 2;
+                    string CountryOfBirth = 3;
+                    string ProvinceOfBirth = 4;
+                }
+
+                DateAndPlaceOfBirthMessage DateAndPlaceOfBirth = 1;
+            }
+
+            message SchemeNameMessage {
+                string Proprietary = 1;
+            }
+
+            ContactDetailsMessage ContactDetails = 1;
+            string Identification = 2;
+            OtherMessage Other = 3;
+            PrivateIdentificationMessage PrivateIdentification = 4;
+            SchemeNameMessage SchemeName = 5;
+        }
+
+        IdentificationMessage Identification = 1;
+        string Name = 2;
+    }
+
+    CreditTransferTransactionInformationMessage CreditTransferTransactionInformation = 1;
+    DebtorMessage Debtor = 2;
+    DebtorAccountMessage DebtorAccount = 3;
+    DebtorAgentMessage DebtorAgent = 4;
+    string PaymentInformationIdentification = 5;
+}
+
+message PersonalInfo {
+    ComplexName complexName = 1;
+    string dateOfBirth = 2;
+}
+
+message ExecuteRequest {
+    // Validates request params
+    CustomerCreditTransferInitiationV11 body = 1;
+}
+
+message SupplementaryData {
+    string geoCode_latitude = 1;
+    string geoCode_longitude = 2;
+    string payee_merchantClassificationCode = 3;
+    string payer_merchantClassificationCode = 4;
+    string transactionType_initiatorType = 5;
+}
+
+message Transaction {
+    string AuthenticationType = 1;
+}
+
+message ExecuteResponse {
+    CustomerCreditTransferInitiationV11 body = 1;
+}
+
+message TransactionType {
+    string TransactionInitiator = 1;
+    string TransactionInitiatorType = 2;
+    string TransactionScenario = 3;
+}
