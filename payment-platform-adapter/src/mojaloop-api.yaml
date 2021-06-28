@@ -63,7 +63,7 @@ paths:
           $ref: '#/responses/401'
         500:
           $ref: '#/responses/500'
-  /transfers:
+  /transfer:
     post:
       summary: 'Transfer'
       description: 'Mojaloop transfer message interpreter'
