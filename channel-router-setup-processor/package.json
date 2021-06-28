@@ -6,6 +6,7 @@
   "types": "build/index.d.ts",
   "scripts": {
     "build:proto": "node bin/proto",
+    "build:protoWin": "node bin/protoWin",
     "build": "tsc --project tsconfig.json",
     "cleanup": "rem -rf build template jest.config.js jest.config.js.map node_modules yarn.lock",
     "start": "node build/index",
