@@ -18,7 +18,7 @@ log4js.configure({
 
 const logger = log4js.getLogger();
 export abstract class LoggerService {
-  private static timeStamp() {
+  static timeStamp(): string {
     const dateObj = new Date();
 
     let date = dateObj.toISOString();
@@ -29,33 +29,29 @@ export abstract class LoggerService {
     return `${date} ${time}`;
   }
 
-  static async trace(message: string, serviceOperation?: string) {
-    logger.trace(
-      `[${LoggerService.timeStamp()}][${config.functionName}${serviceOperation ? ' - ' + serviceOperation : ''}][TRACE] - ${message}`,
-    );
+  static messageStamp(serviceOperation?: string): string {
+    return `[${LoggerService.timeStamp()}][${config.functionName}${serviceOperation ? ' - ' + serviceOperation : ''}]`;
   }
 
-  static async log(message: string, serviceOperation?: string) {
-    logger.info(
-      `[${LoggerService.timeStamp()}][${config.functionName}${serviceOperation ? ' - ' + serviceOperation : ''}][INFO] - ${message}`,
-    );
+  static trace(message: string, serviceOperation?: string) {
+    logger.trace(`${LoggerService.messageStamp(serviceOperation)}[TRACE] - ${message}`);
   }
 
-  static async warn(message: string, serviceOperation?: string) {
-    logger.warn(
-      `[${LoggerService.timeStamp()}][${config.functionName}${serviceOperation ? ' - ' + serviceOperation : ''}][WARN] - ${message}`,
-    );
+  static log(message: string, serviceOperation?: string) {
+    logger.info(`${LoggerService.messageStamp(serviceOperation)}[INFO] - ${message}`);
   }
 
-  static async error(message: string | Error, innerError?: Error, serviceOperation?: string) {
+  static warn(message: string, serviceOperation?: string) {
+    logger.warn(`${LoggerService.messageStamp(serviceOperation)}[WARN] - ${message}`);
+  }
+
+  static error(message: string | Error, innerError?: Error, serviceOperation?: string) {
     let errMessage = typeof message === 'string' ? message : message.stack;
 
     if (innerError) {
       errMessage += `\r\n${innerError.stack}`;
     }
 
-    logger.error(
-      `[${LoggerService.timeStamp()}][${config.functionName}${serviceOperation ? ' - ' + serviceOperation : ''}][ERROR] - ${errMessage}`,
-    );
+    logger.error(`${LoggerService.messageStamp(serviceOperation)}[ERROR] - ${errMessage}`);
   }
 }

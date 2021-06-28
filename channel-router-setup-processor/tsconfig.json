@@ -18,12 +18,13 @@
     "skipLibCheck": true /* Skip type checking of declaration files. */,
     "forceConsistentCasingInFileNames": true /* Disallow inconsistently-cased references to the same file. */
   },
-  "include": ["global.d.ts", "./src/**/*", "__tests__/unit/application.service.spec.ts", "__tests__/unit/execute-request.spec.ts"],
+  "include": ["global.d.ts", "./src/**/*"],
   "exclude": [
     "node_modules",
     "./src/**/*.spec.ts",
     "./src/jest.setup.redis-mock.js",
     "build",
-    "templates"
+    "templates",
+    "__tests__"
   ]
 }

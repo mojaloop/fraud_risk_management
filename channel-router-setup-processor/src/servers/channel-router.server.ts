@@ -4,7 +4,7 @@ import { CustomerCreditTransferInitiation } from '../classes/iPain001Transaction
 import { IFlowFileServiceServer, FlowFileServiceService } from '../models/nifi_grpc_pb';
 import { FlowFileReply, FlowFileRequest } from '../models/nifi_pb';
 import { LoggerService } from '../services/logger.service';
-import { LogicService } from '../services/logic.service';
+import { handleTransaction } from '../services/logic.service';
 
 /**
  * gRPC Health Check
@@ -13,9 +13,7 @@ import { LogicService } from '../services/logic.service';
 class Execute implements IFlowFileServiceServer {
   [method: string]: UntypedHandleCall;
 
-  public send(call: ServerUnaryCall<FlowFileRequest, FlowFileReply>, callback: sendUnaryData<FlowFileReply>): void {
-    const body = call.request.toObject();
-
+  public async send(call: ServerUnaryCall<FlowFileRequest, FlowFileReply>, callback: sendUnaryData<FlowFileReply>): Promise<void> {
     const res: FlowFileReply = new FlowFileReply();
 
     let request!: CustomerCreditTransferInitiation;
@@ -35,11 +33,7 @@ class Execute implements IFlowFileServiceServer {
     }
 
     try {
-      const logicService = new LogicService();
-      logicService.handleTransaction(request, callback);
-      res.setResponsecode(1);
-      callback(null, res);
-      return;
+      await handleTransaction(request, callback);
     } catch (err) {
       const failMessage = 'Failed to process execution request.';
       LoggerService.error(failMessage, err, 'ApplicationService');
