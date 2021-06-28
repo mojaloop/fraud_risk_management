@@ -54,4 +54,9 @@ process.on('unhandledRejection', (err) => {
   LoggerService.error(`process on unhandledRejection error: ${err}`);
 });
 
-runServer();
+try {
+  runServer();
+}
+catch (err) {
+  LoggerService.error('Error while starting gRPC server', err);
+}
