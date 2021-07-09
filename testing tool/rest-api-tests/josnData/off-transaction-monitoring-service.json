@@ -1,0 +1,246 @@
+{
+    "GroupHeader": {
+        "InitiatingParty": {
+            "Name": "payerfirstName payermiddleName payerlastname",
+            "Identification": {
+                "Identification": "",
+                "Other": {
+                    "Identification": "",
+                    "SchemeName": {
+                        "Proprietary": ""
+                    },
+                    "PrivateIdentification": {
+                        "DateAndPlaceOfBirth": {
+                            "Birthdate": "2021-06-07",
+                            "ProvinceOfBirth": "Uknown",
+                            "CityOfBirth": "",
+                            "CountryOfBirth": "ZAR"
+                        }
+                    },
+                    "ContactDetails": {
+                        "MobileNumber": ""
+                    }
+                },
+                "SchemeName": {
+                    "Proprietary": ""
+                },
+                "PrivateIdentification": {
+                    "DateAndPlaceOfBirth": {
+                        "Birthdate": "2021-06-07",
+                        "ProvinceOfBirth": "Uknown",
+                        "CityOfBirth": "",
+                        "CountryOfBirth": "ZAR"
+                    }
+                },
+                "ContactDetails": {
+                    "MobileNumber": "+277-23748020"
+                }
+            }
+        }
+    },
+    "PaymentInformation": {
+        "PaymentInformationIdentification": "ABC123",
+        "CreditTransferTransactionInformation": {
+            "PaymentIdentification": {
+                "EndToEndIdentification": "asdf1234"
+            },
+            "CreditorAccount": {
+                "Identification": {
+                    "Identification": "",
+                    "Other": {
+                        "Identification": "+27723748019",
+                        "SchemeName": {
+                            "Proprietary": "MSISDN"
+                        },
+                        "PrivateIdentification": {
+                            "DateAndPlaceOfBirth": {
+                                "Birthdate": "2021-06-07",
+                                "ProvinceOfBirth": "Uknown",
+                                "CityOfBirth": "",
+                                "CountryOfBirth": "ZAR"
+                            }
+                        },
+                        "ContactDetails": {
+                            "MobileNumber": ""
+                        }
+                    },
+                    "SchemeName": {
+                        "Proprietary": ""
+                    },
+                    "PrivateIdentification": {
+                        "DateAndPlaceOfBirth": {
+                            "Birthdate": "2021-06-07",
+                            "ProvinceOfBirth": "Uknown",
+                            "CityOfBirth": "",
+                            "CountryOfBirth": "ZAR"
+                        }
+                    },
+                    "ContactDetails": {
+                        "MobileNumber": "+277-23748019"
+                    }
+                },
+                "Proxy": "",
+                "Name": ""
+            },
+            "CreditorAgent": {
+                "FinancialInstitutionIdentification": {
+                    "ClearingSystemMemberIdentification": {
+                        "MemberIdentification": "bank1"
+                    }
+                }
+            },
+            "Creditor": {
+                "Name": "payeefirstName payeemiddleName payeelastname",
+                "Identification": {
+                    "Identification": "",
+                    "Other": {
+                        "Identification": "",
+                        "SchemeName": {
+                            "Proprietary": ""
+                        },
+                        "PrivateIdentification": {
+                            "DateAndPlaceOfBirth": {
+                                "Birthdate": "2021-06-07",
+                                "ProvinceOfBirth": "Uknown",
+                                "CityOfBirth": "",
+                                "CountryOfBirth": "ZAR"
+                            }
+                        },
+                        "ContactDetails": {
+                            "MobileNumber": ""
+                        }
+                    },
+                    "SchemeName": {
+                        "Proprietary": ""
+                    },
+                    "PrivateIdentification": {
+                        "DateAndPlaceOfBirth": {
+                            "Birthdate": "2021-05-28",
+                            "ProvinceOfBirth": "Uknown",
+                            "CityOfBirth": "",
+                            "CountryOfBirth": "ZAR"
+                        }
+                    },
+                    "ContactDetails": {
+                        "MobileNumber": ""
+                    }
+                }
+            },
+            "Amount": {
+                "InstructedAmount": {},
+                "EquivalentAmount": {
+                    "CurrencyOfTransfer": "USD",
+                    "Amount": 123.45
+                }
+            },
+            "SupplementaryData": {
+                "fees.currency": "USD",
+                "fees.amount": 12.34
+            },
+            "PaymentTypeInformation": {
+                "CategoryPurpose": {
+                    "Proprietary": "DEPOSIT"
+                }
+            },
+            "RegulatoryReporting": {
+                "Details": {
+                    "Code": "string"
+                }
+            },
+            "RemittanceInformation": {
+                "Structured": {
+                    "AdditionalRemittanceInformation": "string"
+                }
+            }
+        },
+        "DebtorAccount": {
+            "Identification": {
+                "Identification": "",
+                "Other": {
+                    "Identification": "+27723748020",
+                    "SchemeName": {
+                        "Proprietary": "MSISDN"
+                    },
+                    "PrivateIdentification": {
+                        "DateAndPlaceOfBirth": {
+                            "Birthdate": "2021-06-07",
+                            "ProvinceOfBirth": "Uknown",
+                            "CityOfBirth": "",
+                            "CountryOfBirth": "ZAR"
+                        }
+                    },
+                    "ContactDetails": {
+                        "MobileNumber": ""
+                    }
+                },
+                "SchemeName": {
+                    "Proprietary": ""
+                },
+                "PrivateIdentification": {
+                    "DateAndPlaceOfBirth": {
+                        "Birthdate": "2021-06-07",
+                        "ProvinceOfBirth": "Uknown",
+                        "CityOfBirth": "",
+                        "CountryOfBirth": "ZAR"
+                    }
+                },
+                "ContactDetails": {
+                    "MobileNumber": ""
+                }
+            },
+            "Proxy": "string",
+            "Name": ""
+        },
+        "DebtorAgent": {
+            "FinancialInstitutionIdentification": {
+                "ClearingSystemMemberIdentification": {
+                    "MemberIdentification": "string"
+                }
+            }
+        },
+        "Debtor": {
+            "Name": "payerfirstName payermiddleName payerlastname",
+            "Identification": {
+                "Identification": "",
+                "Other": {
+                    "Identification": "",
+                    "SchemeName": {
+                        "Proprietary": ""
+                    },
+                    "PrivateIdentification": {
+                        "DateAndPlaceOfBirth": {
+                            "Birthdate": "2021-06-07",
+                            "ProvinceOfBirth": "Uknown",
+                            "CityOfBirth": "",
+                            "CountryOfBirth": "ZAR"
+                        }
+                    },
+                    "ContactDetails": {
+                        "MobileNumber": ""
+                    }
+                },
+                "SchemeName": {
+                    "Proprietary": ""
+                },
+                "PrivateIdentification": {
+                    "DateAndPlaceOfBirth": {
+                        "Birthdate": "2021-05-28",
+                        "ProvinceOfBirth": "Uknown",
+                        "CityOfBirth": "",
+                        "CountryOfBirth": "ZAR"
+                    }
+                },
+                "ContactDetails": {
+                    "MobileNumber": "+277-23748020"
+                }
+            }
+        }
+    },
+    "SupplementaryData": {
+        "payee.merchantClassificationCode": "merchCode",
+        "payer.merchantClassificationCode": "merchCode",
+        "transactionType.initiatorType": "CONSUMER",
+        "geoCode.latitude": "string",
+        "geoCode.longitude": "string"
+    }
+}

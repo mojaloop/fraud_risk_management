@@ -1,0 +1,63 @@
+{
+    "TransactionID": "025f8eca-693f-4fcf-83ea-8392837e1b25",
+    "ILPSourceAccountAddress": "g.tz.fsp001.msisdn.2558617728568",
+    "ILPDestinationAccountAddress": "g.tz.fsp002.msisdn.2558799634560",
+    "Payer": {
+        "PartyIDType": "MSISDN",
+        "PartyID": "22507008181",
+        "PartyName": [
+            "Mats",
+            "Hagman"
+        ],
+        "PersonalIdentifierType": "NATIONAL_ID_CARD"
+    },
+    "FSPIOPSource": "payerfsp",
+    "FSPIOPDestination": "payeefsp",
+    "TransactionType": {
+        "AmountType": "SEND",
+        "TransactionScenario": "TRANSFER",
+        "TransactionInitiator": "PAYER",
+        "TransactionInitiatorType": "CONSUMER"
+    },
+    "Amount": "100",
+    "additionalFields": [
+        "quoteId",
+        "payer.persoanlInfo.complexName.lastName",
+        "payer.personalInfo.dateOfBirth",
+        "payee.partyIdInfo.partyIdType",
+        "payee.partyIdInfo.partyIdentifier",
+        "amount.currency",
+        "note"
+    ],
+    "TransactionAuthenticationType": "OTP",
+    "SourceAccountBalance": "20000.00",
+    "SourceAccountDailyLimit": "2000.00",
+    "PayerContactNo": "+2558617728568",
+    "SourceAccountPINDate": "Mon, 14 Dec 2020 8:42:35 GMT",
+    "Location": "35.591818, 17.57770",
+    "Fee": "1.00",
+    "PayeeContactNo": "+2558799634560",
+    "Payee": {
+        "PartyName": "Donte Kirwan"
+    },
+    "HTTPTransactionDate": "1619003809685",
+    "PayerDeviceIMEI": "353258077919061",
+    "SourceAccountTransactionLimit": "1000.00",
+    "missingFields": [
+        "ILPSourceAccountAddress",
+        "ILPDestinationAccountAddress",
+        "PayerContactNo",
+        "PayeeContactNo",
+        "Fee",
+        "Payer.PersonalIdentifierType",
+        "Payee.PartyName",
+        "SourceAccountBalance",
+        "SourceAccountTransactionLimit",
+        "SourceAccountDailyLimit",
+        "SourceAccountPINDate",
+        "PayerDeviceIMEI",
+        "PayerICCID",
+        "Location",
+        "TransactionAuthenticationType"
+    ]
+}
