@@ -6,9 +6,9 @@ import { config } from '../config';
 /**
  * gRPC Rule Engine Client Service
  */
-class RuleEngineService {
+class TypologyEngineService {
   private readonly client: FlowFileServiceClient = new FlowFileServiceClient(
-    `${config.ruleEndpoint}:${config.restPort}`,
+    `${config.typologyEndpoint}:${config.grpcPort}`,
     credentials.createInsecure(),
   );
 
@@ -25,4 +25,4 @@ class RuleEngineService {
   }
 }
 
-export const ruleEngineService: RuleEngineService = new RuleEngineService();
+export const ruleEngineService: TypologyEngineService = new TypologyEngineService();
