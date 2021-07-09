@@ -3,12 +3,12 @@ provider:
   name: openfaas
   gateway: http://20.90.137.195:8080
 functions:
-  off-channel-router-setup-processor:
+  off-rule-003:
     namespace: frm-meshed
     lang: dockerfile
     handler: .
     version: 1.8
-    image: frmacr.azurecr.io/off-channel-router-setup-processor:1.8
+    image: frmacr.azurecr.io/off-rule-003:1.8
     annotations:
       com.openfaas.health.http.path: /health
       com.openfaas.health.http.initialDelay: "45s"

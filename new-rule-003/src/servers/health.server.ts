@@ -7,7 +7,7 @@ const { ServingStatus } = HealthCheckResponse;
 const healthStatus: Map<string, HealthCheckResponse.ServingStatus> = new Map(
   Object.entries({
     '': ServingStatus.SERVING,
-    'channel-router-setup-processor': ServingStatus.SERVING,
+    'rule-003': ServingStatus.SERVING,
   }),
 );
 
