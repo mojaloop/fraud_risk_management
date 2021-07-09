@@ -16,13 +16,12 @@ export const handleTransaction = async (req: CustomerCreditTransferInitiation, c
 
   let ruleCounter = 0;
   // Send transaction to all rules
-  console.log(rules);
-  await forkJoin(
-    rules.map(async (rule) => {
-      ruleCounter++;
-      return await sendRule(rule, req);
-    }),
-  );
+  let promises: Array<Promise<void>> = [];
+  rules.map((rule) => {
+    ruleCounter++;
+    promises.push(sendRule(rule, req))
+  })
+  await Promise.all(promises);
   const result = `${ruleCounter} rules initiated for transaction ID: ${req.PaymentInformation.CreditTransferTransactionInformation.PaymentIdentification.EndToEndIdentification}`;
   LoggerService.log(result);
   const res: FlowFileReply = new FlowFileReply();
@@ -39,7 +38,7 @@ const sendRule = async (rule: Rule, req: CustomerCreditTransferInitiation) => {
   // console.log(JSON.parse(toSend).typologies);
   // Uncomment this to send gRPC request to Rule Engines
   // let ruleRequest = new FlowFileRequest();
-  // let objJsonB64 = Buffer.from(JSON.stringify(toSend)).toString("base64");
+  let objJsonB64 = Buffer.from(JSON.stringify(toSend)).toString("base64");
   // ruleRequest.setContent(objJsonB64);
   // ruleEngineService.send(ruleRequest);
 
