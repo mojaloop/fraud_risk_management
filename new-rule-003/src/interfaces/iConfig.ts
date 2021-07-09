@@ -14,4 +14,10 @@ export interface IConfig {
   apmSecretToken: string;
   apmURL: string;
   dev: string;
+  dbURL: string,
+  dbName: string,
+  dbUser: string,
+  dbPassword: string,
+  graphName: string,
+  collectionName: string
 }

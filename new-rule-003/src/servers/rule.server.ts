@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 import { sendUnaryData, ServerUnaryCall, UntypedHandleCall } from '@grpc/grpc-js';
-import { CustomerCreditTransferInitiation } from '../classes/iPain001Transaction';
-import { IFlowFileServiceServer, FlowFileServiceService } from '../models/isomessage_grpc_pb';
-import { FlowFileReply, FlowFileRequest } from '../models/isomessage_pb';
+import { RuleRequest } from '../classes/rule-request';
+import { IFlowFileServiceServer, FlowFileServiceService } from '../models/nifi_grpc_pb';
+import { FlowFileReply, FlowFileRequest } from '../models/nifi_pb';
 import { LoggerService } from '../services/logger.service';
 import { handleTransaction } from '../services/logic.service';
 
@@ -16,12 +16,13 @@ class Execute implements IFlowFileServiceServer {
   public async send(call: ServerUnaryCall<FlowFileRequest, FlowFileReply>, callback: sendUnaryData<FlowFileReply>): Promise<void> {
     const res: FlowFileReply = new FlowFileReply();
 
-    let request!: CustomerCreditTransferInitiation;
+    let request!: RuleRequest;
     LoggerService.log('Start - Handle execute request');
     try {
       const reqData = Buffer.from(call.request.getContent_asB64(), 'base64').toString();
       LoggerService.log(`gRPC string request received with data: ${reqData ?? ''}`);
-      request = new CustomerCreditTransferInitiation(JSON.parse(reqData));
+      const message = JSON.parse(reqData);
+      request = new RuleRequest(message.transaction, message.typologies);
     } catch (parseError) {
       const failMessage = 'Failed to parse execution request.';
       LoggerService.error(failMessage, parseError, 'ApplicationService');

@@ -1,5 +1,5 @@
-// package: org.apache.isomessage.processors.grpc
-// file: isomessage.proto
+// package: org.apache.nifi.processors.grpc
+// file: nifi.proto
 
 /* tslint:disable */
 /* eslint-disable */

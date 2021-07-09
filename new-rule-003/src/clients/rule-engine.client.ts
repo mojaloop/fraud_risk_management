@@ -1,6 +1,6 @@
 import { credentials, Metadata, ServiceError } from '@grpc/grpc-js';
-import { FlowFileServiceClient } from '../models/isomessage_grpc_pb';
-import { FlowFileReply, FlowFileRequest } from '../models/isomessage_pb';
+import { FlowFileServiceClient } from '../models/nifi_grpc_pb';
+import { FlowFileReply, FlowFileRequest } from '../models/nifi_pb';
 import { config } from '../config';
 
 /**

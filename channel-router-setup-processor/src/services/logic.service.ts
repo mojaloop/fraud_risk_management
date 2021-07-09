@@ -6,6 +6,7 @@ import { CustomerCreditTransferInitiation } from '../classes/iPain001Transaction
 import { NetworkMap, Rule, Typology } from '../classes/network-map';
 import { FlowFileReply, FlowFileRequest } from '../models/nifi_pb';
 import { sendUnaryData } from '@grpc/grpc-js';
+import { ruleEngineService } from '../clients/rule-engine.client';
 
 export const handleTransaction = async (req: CustomerCreditTransferInitiation, callback: sendUnaryData<FlowFileReply>) => {
   const networkMap = Object.assign(new NetworkMap(), JSON.parse(config.networkMap)) as NetworkMap;
@@ -15,6 +16,7 @@ export const handleTransaction = async (req: CustomerCreditTransferInitiation, c
 
   let ruleCounter = 0;
   // Send transaction to all rules
+  console.log(rules);
   await forkJoin(
     rules.map(async (rule) => {
       ruleCounter++;
@@ -33,7 +35,8 @@ const sendRule = async (rule: Rule, req: CustomerCreditTransferInitiation) => {
   const ruleEndpoint = `${config.ruleEndpoint}/${rule.rule_name}/${rule.rule_version}`; // rule.ruleEndpoint;
   // const ruleRequest: RuleRequest = new RuleRequest(req, rule.typologies);
   const toSend = `{"transaction":${JSON.stringify(req)}, "typologies":${JSON.stringify(rule.typologies)}}`;
-
+  // console.log('-----');
+  // console.log(JSON.parse(toSend).typologies);
   // Uncomment this to send gRPC request to Rule Engines
   // let ruleRequest = new FlowFileRequest();
   // let objJsonB64 = Buffer.from(JSON.stringify(toSend)).toString("base64");
