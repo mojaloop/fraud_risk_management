@@ -1,0 +1,35 @@
+@startuml gRPC+OpenFaas scaling
+queue "service 1" as s1
+box "\nOpenFaaS\n" #LightGray
+queue "openfaas-gateway" as ofg
+database "openfaas-metrics\n(Prometheus)" as ofm
+control "alert-manager" as am
+end box
+queue "service 2" as s2
+
+group HTTP Flow 
+    s1->ofg: HTTP Request eg. \nhttp://of/function/service2
+    ofg->ofm: Metrics
+    ofg->s2: HTTP Request \n(to configured "upstream-url")
+    note over am
+        Monitor metrics and
+        scale service 2 as necessary
+    end note
+    am->am
+    am->ofm: Get Metrics
+end
+
+group #LightPink gRPC Flow - failure
+    s1-->ofg: gRPC Request
+    note over s1, ofg
+    The OpenFaas gateway does
+    not understand gRPC requests
+    - it only speaks HTTP
+    end note
+end
+
+group #LightGreen gRPC Flow - success
+    s1->s2: gRPC Request
+end
+
+@enduml

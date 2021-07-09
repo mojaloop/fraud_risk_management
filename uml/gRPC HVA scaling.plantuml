@@ -1,0 +1,28 @@
+@startuml gRPC+HPA scaling
+queue "Service 1" as s1
+control "Linkerd Proxy" as lp
+database "LinkerD Control\nPane" as cp
+queue "Service 2" as s2
+control Kubernetes as k8s
+
+s1->lp: gRPC request
+note over lp
+Linkerd will know all 
+Pods that's been created
+with the same deployment 
+file. It will then do 
+Load Balancing to all 
+the Service 2 instances 
+running.
+end note
+lp->cp: Telementry + \ncontrol signals
+lp->s2: gRPC request
+k8s-->k8s: monitor s1 and \ns2 resources
+note over k8s
+If CPU reaches x% or 
+RAM use reaches x%, 
+k8s will use the 
+deployment file to 
+deploy another pod.
+end note
+@enduml
