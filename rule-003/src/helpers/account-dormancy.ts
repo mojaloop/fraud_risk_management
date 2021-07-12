@@ -1,22 +1,21 @@
 /* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/indent, no-console */
-import { ITransaction } from '../interfaces/iTransaction';
-
+import { CustomerCreditTransferInitiation } from '../classes/iPain001Transaction';
 export const handleAccountDormancy = (
-  transaction: ITransaction,
+  transaction: CustomerCreditTransferInitiation,
   payeeHistoricalData: any,
 ): boolean => {
   if (payeeHistoricalData.length < 1 && payeeHistoricalData.length < 1)
     return false;
 
-  const currentTransferDate = new Date(transaction.HTTPTransactionDate);
+  const currentTransferDate = new Date(transaction.GroupHeader.CreationDateTime);
 
   const lastTransferReceivedDate =
     payeeHistoricalData.length >= 1
       ? payeeHistoricalData.reduce((latestDate: any, transaction: any) => {
           if (!latestDate) {
-            return new Date(transaction.HTTPTransactionDate);
+            return new Date(transaction.GroupHeader.CreationDateTime);
           }
-          const transactionDate = new Date(transaction.HTTPTransactionDate);
+          const transactionDate = new Date(transaction.GroupHeader.CreationDateTime);
           return transactionDate > latestDate ? transactionDate : latestDate;
         }, false)
       : false;
@@ -25,9 +24,9 @@ export const handleAccountDormancy = (
     payeeHistoricalData.length >= 1
       ? payeeHistoricalData.reduce((latestDate: any, transaction: any) => {
           if (!latestDate) {
-            return new Date(transaction.HTTPTransactionDate);
+            return new Date(transaction.GroupHeader.CreationDateTime);
           }
-          const transactionDate = new Date(transaction.HTTPTransactionDate);
+          const transactionDate = new Date(transaction.GroupHeader.CreationDateTime);
           return transactionDate > latestDate ? transactionDate : latestDate;
         }, false)
       : false;
