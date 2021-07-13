@@ -26,7 +26,9 @@ class App extends Koa {
     this.use(async (ctx, next) => {
       await next();
       const rt = ctx.response.get('X-Response-Time');
-      LoggerService.log(`${ctx.method} ${ctx.url} - ${rt}`);
+      if (ctx.path !== 'Health') {
+        LoggerService.log(`${ctx.method} ${ctx.url} - ${rt}`);
+      }
     });
 
     // x-response-time

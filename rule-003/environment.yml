@@ -1,6 +1,0 @@
-REDIS_AUTH: TjEmUWes67
-REDIS_HOST: 20.49.232.215
-REDIS_PORT: 6379
-REDIS_DB: 0
-TYPOLOGY_MAP: [{"typology28": "http://127.0.0.1:3000/execute", "rules": [{"rule2": "http://127.0.0.1:3000/execute"}]},{"typology32": "http://127.0.0.1:3000/execute", "rules": [{"rule2": "http://127.0.0.1:3000/execute"}, {"rule3": "http://127.0.0.1:3000/execute"}]}]
-HOST_PORT: 3000

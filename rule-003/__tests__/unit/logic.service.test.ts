@@ -16,10 +16,6 @@ const getMockRequest = () => {
 };
 
 describe('Logic Service', () => {
-  // let logicServiceExecutePostSpy: jest.SpyInstance;
-  // beforeEach(() => {
-  //   logicServiceExecutePostSpy = jest.spyOn(LogicService, 'executePost').mockImplementation();
-  // });
 
   describe('Handle Legacy Transaction', () => {
     it('should handle successful request, with a unmatched number', async () => {

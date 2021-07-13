@@ -1,7 +1,7 @@
 version: 1.0
 provider:
   name: openfaas
-  gateway: http://20.90.137.195:8080
+  gateway: http://openfaas:8080
 functions:
   off-rule-003:
     namespace: frm-meshed
