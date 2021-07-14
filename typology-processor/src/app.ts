@@ -5,8 +5,8 @@ import { ui, validate } from 'swagger2-koa';
 import bodyParser from 'koa-bodyparser';
 import { Server } from 'http';
 import router from './router';
-import { LoggerService } from './utils';
 import path from 'path';
+import { LoggerService } from './services/logger.service';
 
 class App extends Koa {
   public servers: Server[];
@@ -14,25 +14,19 @@ class App extends Koa {
   constructor() {
     super();
 
-    // bodyparser needs to be loaded first in order to work - in fact, order for all the below is very import!
+    // bodyparser needs to be loaded first in order to work
     this.servers = [];
     this.use(bodyParser());
-    this.configureMiddlewares();
     this.configureRoutes();
+    this.configureMiddlewares();
   }
 
   configureMiddlewares(): void {
-    const readSwagger = swagger.loadDocumentSync(path.join(__dirname, 'mojaloop-api.yaml'));
-    const swaggerDocument: swagger.Document = readSwagger as swagger.Document;
-    this.use(ui(swaggerDocument, '/swagger'));
-    this.use(validate(swaggerDocument));
-
     // LoggerService Middleware
     this.use(async (ctx, next) => {
       await next();
       const rt = ctx.response.get('X-Response-Time');
-      if (ctx.path !== 'Health')
-        LoggerService.log(`${ctx.method} ${ctx.url} - ${rt}`);
+      LoggerService.log(`${ctx.method} ${ctx.url} - ${rt}`);
     });
 
     // x-response-time
