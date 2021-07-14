@@ -1,11 +1,24 @@
-/* eslint-disable @typescript-eslint/no-explicit-any, no-console */
-import { configuration } from '../config';
+import { config } from '../config';
+import log4js from 'log4js';
 
-const isDebugging = configuration.dev === 'dev';
+log4js.configure({
+  appenders: {
+    logstash: {
+      type: '@log4js-node/logstash-http',
+      url: `http://${config.logstashHost}:${config.logstashPort}/_bulk`,
+      application: 'logstash-log4js',
+      logType: 'application',
+      logChannel: config.functionName,
+    },
+  },
+  categories: {
+    default: { appenders: ['logstash'], level: 'info' },
+  },
+});
 
+const logger = log4js.getLogger();
 export abstract class LoggerService {
-  private static source = 'frm-rule-003';
-  private static timeStamp() {
+  static timeStamp(): string {
     const dateObj = new Date();
 
     let date = dateObj.toISOString();
@@ -16,40 +29,29 @@ export abstract class LoggerService {
     return `${date} ${time}`;
   }
 
-  static log(message: string, serviceOperation?: string): Promise<void> | any {
-    isDebugging &&
-      console.log(
-        `[${LoggerService.timeStamp()}][${LoggerService.source}${
-          serviceOperation ? ' - ' + serviceOperation : ''
-        }][INFO] - ${message}`,
-      );
+  static messageStamp(serviceOperation?: string): string {
+    return `[${LoggerService.timeStamp()}][${config.functionName}${serviceOperation ? ' - ' + serviceOperation : ''}]`;
   }
 
-  static warn(message: string, serviceOperation?: string): Promise<void> | any {
-    isDebugging &&
-      console.warn(
-        `[${LoggerService.timeStamp()}][${LoggerService.source}${
-          serviceOperation ? ' - ' + serviceOperation : ''
-        }][WARN] - ${message}`,
-      );
+  static trace(message: string, serviceOperation?: string) {
+    logger.trace(`${LoggerService.messageStamp(serviceOperation)}[TRACE] - ${message}`);
   }
 
-  static error(
-    message: string | Error,
-    innerError?: Error,
-    serviceOperation?: string,
-  ): Promise<void> | any {
+  static log(message: string, serviceOperation?: string) {
+    logger.info(`${LoggerService.messageStamp(serviceOperation)}[INFO] - ${message}`);
+  }
+
+  static warn(message: string, serviceOperation?: string) {
+    logger.warn(`${LoggerService.messageStamp(serviceOperation)}[WARN] - ${message}`);
+  }
+
+  static error(message: string | Error, innerError?: Error, serviceOperation?: string) {
     let errMessage = typeof message === 'string' ? message : message.stack;
 
     if (innerError) {
       errMessage += `\r\n${innerError.stack}`;
     }
 
-    isDebugging &&
-      console.error(
-        `[${LoggerService.timeStamp()}][${LoggerService.source}${
-          serviceOperation ? ' - ' + serviceOperation : ''
-        }][ERROR] - ${errMessage}`,
-      );
+    logger.error(`${LoggerService.messageStamp(serviceOperation)}[ERROR] - ${errMessage}`);
   }
 }

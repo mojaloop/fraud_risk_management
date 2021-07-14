@@ -1,4 +1,4 @@
-import { ExecuteRequest } from './execute-request';
+import { ExecuteRequest } from '../../src/classes/execute-request';
 
 const getMockRequest = () => {
   return {
@@ -21,11 +21,10 @@ describe('Execute Request', () => {
     });
 
     it('should validate a malformed request, no init passed', () => {
-      const expectedErrorMessage =
-        'Execution request was not received in the request body';
+      const expectedErrorMessage = 'Execution request was not received in the request body';
       let expectedError!: Error;
       try {
-        const init = (null as unknown) as Partial<ExecuteRequest>;
+        const init = null as unknown as Partial<ExecuteRequest>;
         const result = new ExecuteRequest(init);
         fail('Test should have thrown and handled an exception');
       } catch (error) {
@@ -38,8 +37,7 @@ describe('Execute Request', () => {
     it('should validate a malformed request, no transaction ID', () => {
       const mockInit = getMockRequest();
       mockInit.TransactionID = '';
-      const expectedErrorMessage =
-        'Transaction ID is not present in execution request.';
+      const expectedErrorMessage = 'Transaction ID is not present in execution request.';
       let expectedError!: Error;
       try {
         const result = new ExecuteRequest(mockInit);
@@ -54,8 +52,7 @@ describe('Execute Request', () => {
     it('should validate a malformed request, no payer contact no', () => {
       const mockInit = getMockRequest();
       mockInit.PayerContactNo = '';
-      const expectedErrorMessage =
-        'PayerContactNo is not present in execution request.';
+      const expectedErrorMessage = 'PayerContactNo is not present in execution request.';
       let expectedError!: Error;
       try {
         const result = new ExecuteRequest(mockInit);
@@ -70,8 +67,7 @@ describe('Execute Request', () => {
     it('should validate a malformed request, no payee contact no', () => {
       const mockInit = getMockRequest();
       mockInit.PayeeContactNo = '';
-      const expectedErrorMessage =
-        'PayeeContactNo is not present in execution request.';
+      const expectedErrorMessage = 'PayeeContactNo is not present in execution request.';
       let expectedError!: Error;
       try {
         const result = new ExecuteRequest(mockInit);

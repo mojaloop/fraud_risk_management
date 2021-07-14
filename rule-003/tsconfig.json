@@ -1,6 +1,8 @@
 {
   "compilerOptions": {
-    "target": "es6" /* Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', 'ES2018', 'ES2019', 'ES2020', or 'ESNEXT'. */,
+    "declaration": true,
+    "importHelpers": true,
+    "target": "ES2018" /* Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', 'ES2018', 'ES2019', 'ES2020', or 'ESNEXT'. */,
     "module": "commonjs" /* Specify module code generation: 'none', 'commonjs', 'amd', 'system', 'umd', 'es2015', 'es2020', or 'ESNext'. */,
     "lib": [
       "es6"
@@ -16,5 +18,13 @@
     "skipLibCheck": true /* Skip type checking of declaration files. */,
     "forceConsistentCasingInFileNames": true /* Disallow inconsistently-cased references to the same file. */
   },
-  "exclude": ["node_modules", "src/**/*.spec.ts", "jest.config.ts"]
+  "include": ["global.d.ts", "./src/**/*"],
+  "exclude": [
+    "node_modules",
+    "./src/**/*.spec.ts",
+    "./src/jest.setup.redis-mock.js",
+    "build",
+    "templates",
+    "__tests__"
+  ]
 }

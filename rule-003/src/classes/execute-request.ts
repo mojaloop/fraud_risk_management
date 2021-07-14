@@ -1,7 +1,6 @@
 import { ITransaction } from '../interfaces/iTransaction';
 
 export class ExecuteRequest implements ITransaction {
-  // Populate with the structure that you expect to receive, the blow is just the default transaction that we would receive
   additionalFields!: string[];
   Amount!: string;
   Fee!: string;

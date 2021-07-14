@@ -1,18 +1,18 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Database } from 'arangojs';
-import { configuration } from '../config';
-import { LoggerService } from './logger.service';
+import { config } from '../config';
+import { LoggerService } from '../services/logger.service';
 
 export class ArangoDBService {
   client: Database;
 
   constructor() {
     this.client = new Database({
-      url: configuration.dbURL,
-      databaseName: configuration.dbName,
+      url: config.dbURL,
+      databaseName: config.dbName,
       auth: {
-        username: configuration.dbUser,
-        password: configuration.dbPassword,
+        username: config.dbUser,
+        password: config.dbPassword,
       },
     });
 
