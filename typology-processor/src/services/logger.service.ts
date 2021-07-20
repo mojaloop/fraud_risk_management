@@ -49,7 +49,7 @@ export abstract class LoggerService {
     let errMessage = typeof message === 'string' ? message : message.stack;
 
     if (innerError) {
-      errMessage += `\r\n${innerError.stack}`;
+      errMessage += `\r\n${innerError.message}${innerError.stack ? '\r\n' + innerError.stack : ''}`;
     }
 
     logger.error(`${LoggerService.messageStamp(serviceOperation)}[ERROR] - ${errMessage}`);

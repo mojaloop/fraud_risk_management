@@ -6,6 +6,7 @@ import { LoggerService } from './services/logger.service';
 import Health from './servers/health.server';
 import ChannelRouter from './servers/channel-router.server';
 import App from './app';
+import { initializeRedis } from './clients/redis-client';
 
 if (config.apmLogging) {
   apm.start({
@@ -32,7 +33,7 @@ export const runServer = async (): Promise<void> => {
   });
 
   server.addService(Health.service, Health.handler);
-  server.addService(ChannelRouter.service, ChannelRouter.handler);
+  server.addService(TypologyRouter.service, ChannelRouter.handler);
 
   await server.bindAsync(`0.0.0.0:${config.grpcport}`, ServerCredentials.createInsecure(), (err: Error | null, bindPort: number) => {
     if (err) {
@@ -58,6 +59,7 @@ process.on('unhandledRejection', (err) => {
 
 try {
   runServer();
+  initializeRedis(config.redisDB, config.redisHost, config.redisPort, config.redisAuth);
 } catch (err) {
   LoggerService.error('Error while starting gRPC server', err);
 }

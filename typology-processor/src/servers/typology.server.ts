@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 import { sendUnaryData, ServerUnaryCall, UntypedHandleCall } from '@grpc/grpc-js';
 import { CustomerCreditTransferInitiation } from '../classes/iPain001Transaction';
-import { Typology } from '../classes/network-map';
+import { NetworkMap, Typology } from '../classes/network-map';
+import { RuleResult } from '../classes/rule-result';
 import { IFlowFileServiceServer, FlowFileServiceService } from '../models/nifi_grpc_pb';
 import { FlowFileReply, FlowFileRequest } from '../models/nifi_pb';
 import { LoggerService } from '../services/logger.service';
@@ -17,13 +18,15 @@ class Execute implements IFlowFileServiceServer {
   public async send(call: ServerUnaryCall<FlowFileRequest, FlowFileReply>, callback: sendUnaryData<FlowFileReply>): Promise<void> {
     const res: FlowFileReply = new FlowFileReply();
     LoggerService.log('Start - Handle execute request');
-    let typologies: Typology[] = [];
-    let req: CustomerCreditTransferInitiation;
+    let networkMap: NetworkMap = new NetworkMap();
+    let ruleResult: RuleResult = new RuleResult();
+    let req: CustomerCreditTransferInitiation = new CustomerCreditTransferInitiation({});
     try {
       const reqData = Buffer.from(call.request.getContent_asB64(), 'base64').toString();
       LoggerService.log(`gRPC string request received with data: ${reqData ?? ''}`);
       const request = JSON.parse(reqData);
-      typologies = request.typologies;
+      networkMap = request.networkMap;
+      ruleResult = request.rule;
     } catch (parseError) {
       const failMessage = 'Failed to parse execution request.';
       LoggerService.error(failMessage, parseError, 'ApplicationService');
@@ -35,7 +38,7 @@ class Execute implements IFlowFileServiceServer {
     }
 
     try {
-      await handleTransaction(req, typologies, callback);
+      await handleTransaction(req, networkMap,ruleResult, callback);
     } catch (err) {
       const failMessage = 'Failed to process execution request.';
       LoggerService.error(failMessage, err, 'ApplicationService');

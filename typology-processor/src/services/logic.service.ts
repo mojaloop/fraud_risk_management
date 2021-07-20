@@ -6,19 +6,83 @@ import { CustomerCreditTransferInitiation } from '../classes/iPain001Transaction
 import { NetworkMap, Rule, Typology } from '../classes/network-map';
 import { FlowFileReply, FlowFileRequest } from '../models/nifi_pb';
 import { sendUnaryData } from '@grpc/grpc-js';
+import { redisAppendJson, redisGetJson } from '../clients/redis-client';
+import { RuleResult } from '../classes/rule-result';
 
-export const handleTransaction = async (req: CustomerCreditTransferInitiation, typologies: Typology[], callback: sendUnaryData<FlowFileReply>) => {
+export const handleTransaction = async (req: CustomerCreditTransferInitiation, networkMap: NetworkMap, ruleResult: RuleResult, callback: sendUnaryData<FlowFileReply>) => {
   let typologyCounter = 0;
-  for (const typololgy of typologies) {
-    typologyCounter++;''
+  for (const channel of networkMap.transactions[0].channels) {
+    for (const typoplogy of channel.typologies.filter(typo => typo.rules.some(r => r.rule_name === ruleResult.name))) {
+      // will loop through every Typology here
+      typologyCounter++;
+      for (const rule of typoplogy.rules) {
+        // determine rule completion
+
+      }
+    }
   }
-  const result = `${typologyCounter} rules initiated for transaction ID: ${req.PaymentInformation.CreditTransferTransactionInformation.PaymentIdentification.EndToEndIdentification}`;
+
+  const result = `${typologyCounter} typologies initiated for transaction ID: ${req.PaymentInformation.CreditTransferTransactionInformation.PaymentIdentification.EndToEndIdentification}`;
   LoggerService.log(result);
   const res: FlowFileReply = new FlowFileReply();
   res.setBody(result);
   res.setResponsecode(1);
   callback(null, res);
 };
+
+const executeRequest = async (
+  request: CustomerCreditTransferInitiation,
+  typology: Typology,
+  ruleResult: RuleResult
+): Promise<void> => {
+
+  try {
+    let score: string = '';
+    try {
+      const transactionID = request.PaymentInformation.CreditTransferTransactionInformation.PaymentIdentification.EndToEndIdentification;
+      const cacheKey = `${transactionID}_${typology.typology_id}`
+      var ruleResults = await redisGetJson(cacheKey);
+
+      if (!ruleResults || ruleResults.length === 0)
+        ruleResults = [`{"name": "${ruleResult.name}", "result": ${ruleResult.result}}`];
+      else
+        ruleResults.push(`{"name": "${ruleResult.name}", "result": ${ruleResult.result}}`);
+
+      // check if all results for this typology are found 
+      if (ruleResults.length < typology.rules.length) {
+        var saveResult = await redisAppendJson(cacheKey, ruleResults);
+        //response.status(200).send('All rules not yet processed for Typology 28');
+        return;
+      }
+
+      // Convert rule results to Score object
+      const scores: Typology28Type = {};
+      ruleResults.forEach((rule: string) => {
+        const jRule = JSON.parse(rule);
+        scores[jRule.name] = jRule.result;
+      });
+
+      // Calculate score for Typology-28
+      // See https://lextego.atlassian.net/browse/ACTIO-197
+      score = this.handleScores(scores, transfer.transaction.TransactionID, transfer.transaction.HTTPTransactionDate);
+    } catch (e) {
+      console.error(e);
+    }
+
+    var res = await this.sendScore(score);
+
+    response.status(200).send(`${score}\r\nChannel Score Response:\r\n${res}`);
+  } catch (error) {
+    const processError = new Error(
+      'Failed to process Typology-28 request',
+    );
+    processError.message += `\n${error.message}`;
+
+    LoggerService.error(`[ERROR] ${processError.message}`);
+    response.status(500).send(processError.message);
+    return;
+  }
+}
 
 const sendRule = async (rule: Rule, req: CustomerCreditTransferInitiation) => {
   const ruleEndpoint = `${config.ruleEndpoint}/${rule.rule_name}/${rule.rule_version}`; // rule.ruleEndpoint;
