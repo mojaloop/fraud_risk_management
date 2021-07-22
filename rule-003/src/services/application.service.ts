@@ -80,22 +80,26 @@ export class ApplicationService {
             );
 
             result.rule = {
+              rule_id: '',
+              rule_version: '',
               rule: 'Rule-003',
               result: ruleCondition,
             };
-
-            const response = await axios.post(typology.endpoint, {
-              transaction: request.transaction,
-            });
-
-            LoggerService.log(`\nResponse ${JSON.stringify(response)}`);
           }
         } else {
           result.rule = {
+            rule_id: '',
+            rule_version: '',
             rule: 'Rule-003',
             result: false,
           };
         }
+        const response = await axios.post(typology.endpoint, {
+          transaction: request.transaction,
+        });
+
+        LoggerService.log(`\nResponse ${JSON.stringify(response)}`);
+
         ctx.body = result;
         ctx.status = 200;
       } else {

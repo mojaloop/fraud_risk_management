@@ -1,6 +1,8 @@
 import { ITransaction } from './iTransaction';
 
 interface Rule {
+  rule_id: string;
+  rule_version: string;
   rule: string;
   result: boolean;
 }
